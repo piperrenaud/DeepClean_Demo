@@ -167,4 +167,3 @@ public class ToolBehavior : MonoBehaviour
             light.enabled = false;
     }
 }
-
