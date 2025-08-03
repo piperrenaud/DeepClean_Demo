@@ -11,7 +11,6 @@ public class DirtSpot : MonoBehaviour
     [Header("Visual Components")]
     public SpriteRenderer dirtRenderer;
     public Slider progressBar; 
-    public ParticleSystem cleaningParticles; 
     
     private float currentDirtiness;
     private bool isBeingCleaned = false;
@@ -43,12 +42,6 @@ public class DirtSpot : MonoBehaviour
         {
             progressBar.gameObject.SetActive(true);
         }
-        
-        if (cleaningParticles != null)
-        {
-            cleaningParticles.Play();
-        }
-        
 
         AudioManager.Instance?.PlayCleaningSound();
     }
@@ -57,11 +50,6 @@ public class DirtSpot : MonoBehaviour
     {
         isBeingCleaned = false;
         currentTool = null;
-        
-        if (cleaningParticles != null)
-        {
-            cleaningParticles.Stop();
-        }
         
         AudioManager.Instance?.StopCleaningSound();
     }
@@ -109,13 +97,6 @@ public class DirtSpot : MonoBehaviour
     private void OnDirtCleaned()
     {
         StopCleaning();
-        
-        if (cleaningParticles != null)
-        {
-            cleaningParticles.Stop();
-            //completion particle burst
-            cleaningParticles.Emit(20);
-        }
         
         AudioManager.Instance?.PlayCleanCompleteSound();
         

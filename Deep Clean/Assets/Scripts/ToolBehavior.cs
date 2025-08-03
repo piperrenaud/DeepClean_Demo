@@ -142,8 +142,10 @@ public class ToolBehavior : MonoBehaviour
     void StartUsing(int index)
     {
         ToolData tool = tools[index];
+
+
         Animator animator = tool.toolObject.GetComponent<Animator>();
-        if (animator != null)
+        if (animator != null && index==0)
             animator.SetBool("Using", true);
         tool.state = ToolState.Using;
 
@@ -156,8 +158,9 @@ public class ToolBehavior : MonoBehaviour
     void StopUsing(int index)
     {
         ToolData tool = tools[index];
+
         Animator animator = tool.toolObject.GetComponent<Animator>();
-        if (animator != null)
+        if (animator != null && index==0)
             animator.SetBool("Using", false);
         tool.state = ToolState.Idle;
 

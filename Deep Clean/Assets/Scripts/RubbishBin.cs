@@ -3,21 +3,24 @@ using UnityEngine;
 public class RubbishBin : MonoBehaviour
 {
     public Transform rubbishFill;
-    public int maxCapacity = 5;
+    public int maxCapacity = 15;
     public Camera playerCamera;
     public float pickupRange = 3f;
     public LayerMask rubbishLayer;
-    private int currentAmount = 0;
-    public float fillStep = 0.08f;
+    public int currentAmount = 0;
+    public float fillStep = 0.025f;
+    private float currentRotation = 0.0f;
 
-    public bool AddRubbish()
+    public bool AddRubbish(int weight)
     {
         if (currentAmount >= maxCapacity)
             return false;
 
-        currentAmount++;
+        currentAmount += weight;
+        currentRotation += 45.0f;
         Vector3 pos = rubbishFill.localPosition;
         rubbishFill.localPosition = new Vector3(pos.x, currentAmount * fillStep, pos.z);
+        rubbishFill.transform.localRotation = Quaternion.Euler(0.0f, currentRotation, 0.0f);
         return true;
     }
 
@@ -26,23 +29,15 @@ public class RubbishBin : MonoBehaviour
         return currentAmount >= maxCapacity;
     }
 
-    void Update()
+    public bool IsEmpty()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            Ray ray = playerCamera.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit hit, pickupRange, rubbishLayer))
-            {
-                if (!IsFull())
-                {
-                    Destroy(hit.collider.gameObject);
-                    AddRubbish();
-                }
-                else
-                {
-                    Debug.Log("Bin is Full!!");
-                }
-            }
-        }
+        return currentAmount == 0;
+    }
+
+    public void EmptyBin()
+    {
+        currentAmount = 0;
+        Vector3 pos = rubbishFill.localPosition;
+        rubbishFill.localPosition = new Vector3(0.0219f,-0.1209f,0.0049f);
     }
 }
