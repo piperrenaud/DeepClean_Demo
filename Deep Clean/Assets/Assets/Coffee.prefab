@@ -55,5 +55,31 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 41f0becb11d63cf46bf526826443712f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 275097341190196826}
   m_SourcePrefab: {fileID: 100100000, guid: 41f0becb11d63cf46bf526826443712f, type: 3}
+--- !u!1 &6045373953416112058 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 41f0becb11d63cf46bf526826443712f, type: 3}
+  m_PrefabInstance: {fileID: 6855624621799578347}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &275097341190196826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6045373953416112058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87fb38b488b1c4e46a642bb1adb8c97a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  highlightIntensity: 10
+  showInteractionPrompt: 0
+  interactionText: {fileID: 0}
+  holdDistance: 1.5
+  rotationSpeed: 100
+  objectID: Coffee

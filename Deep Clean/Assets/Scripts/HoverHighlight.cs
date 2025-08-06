@@ -25,6 +25,11 @@ public class HoverHighlight : MonoBehaviour
                 if (currentInteractable != null)
                     currentInteractable.Highlight(true);
             }
+
+            if (Input.GetMouseButtonDown(1) && interact != null) //handle right click when hovering
+            {
+                interact.PickUpObject();
+            }
         }
         else
         {
