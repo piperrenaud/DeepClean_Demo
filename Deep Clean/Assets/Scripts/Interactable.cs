@@ -14,7 +14,7 @@ public class Interactable : MonoBehaviour
     public GameObject interactionText;
 
     [Header("Pickup Settings")]
-    public float holdDistance = 1.5f;
+    public float holdDistance = 2.5f;
     public float rotationSpeed = 100f;
     
     [Header("UniqueID")]
@@ -22,6 +22,7 @@ public class Interactable : MonoBehaviour
 
     private bool isHeld = false;
     private Camera mainCamera;
+    private Transform originalParent;
     private Vector3 originalPosition;
     private Quaternion originalRotation;
 
@@ -46,11 +47,7 @@ public class Interactable : MonoBehaviour
     {
         if (isHeld)
         {
-            HoldObject();
             RotateObject();
-
-            if (Input.GetMouseButtonUp(1))
-                DropObject();
         }
 
         if ((isHeld || IsHighlighted()) && Input.GetKeyDown(KeyCode.Return))
@@ -89,40 +86,36 @@ public class Interactable : MonoBehaviour
         }
     }
 
-    public void PickUpObject()
+    public void PickUpObject(Transform playerTransform)
     {
         isHeld = true;
-        originalPosition = transform.position;
-        originalRotation = transform.rotation;
+
+        //safe og parent and position/rotation
+        originalParent = transform.parent;
+        originalPosition = transform.localPosition;
+        originalRotation = transform.localRotation;
+
+        //parent to player and pos in front
+        transform.SetParent(playerTransform);
+        transform.localPosition = new Vector3(0, -0.5f, holdDistance);
+        transform.localRotation = Quaternion.identity;
     }
 
     public void DropObject()
     {
         isHeld = false;
-        transform.position = originalPosition;
-        transform.rotation = originalRotation;
-    }
-
-    void HoldObject()
-    {
-        Vector3 mousePos = Input.mousePosition;
-        mousePos.z = holdDistance;
-
-        Vector3 targetPos = mainCamera.ScreenToWorldPoint(mousePos);
-        transform.position = targetPos;
+        
+        //return to og parent and transform
+        transform.SetParent(originalParent);
+        transform.localPosition = originalPosition;
+        transform.localRotation = originalRotation;
     }
 
     void RotateObject()
     {
-        float rotateX = 0f;
-        float rotateY = 0f;
-
-        if (Input.GetKey(KeyCode.UpArrow)) rotateX = 1f;
-        if (Input.GetKey(KeyCode.DownArrow)) rotateX = -1f;
-        if (Input.GetKey(KeyCode.LeftArrow)) rotateY = -1f;
-        if (Input.GetKey(KeyCode.RightArrow)) rotateY = 1f;
-
-        transform.Rotate(Vector3.right * rotateX * rotationSpeed * Time.deltaTime, Space.World);
-        transform.Rotate(Vector3.up * rotateY * rotationSpeed * Time.deltaTime, Space.World);
+        //rotate left/right with shift
+        if (Input.GetKey(KeyCode.LeftShift)) {
+            transform.Rotate(Vector3.up * rotationSpeed * Time.deltaTime, Space.Self);
+        }
     }
 }

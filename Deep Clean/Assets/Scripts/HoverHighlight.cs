@@ -6,6 +6,7 @@ public class HoverHighlight : MonoBehaviour
     public float range = 3f;
 
     private Interactable currentInteractable;
+    private Interactable heldInteractable;
 
 
     void Update()
@@ -26,9 +27,18 @@ public class HoverHighlight : MonoBehaviour
                     currentInteractable.Highlight(true);
             }
 
-            if (Input.GetMouseButtonDown(1) && interact != null) //handle right click when hovering
+            if (Input.GetMouseButtonDown(1) && interact != null) //pickup when left mouse is held
             {
-                interact.PickUpObject();
+                if (heldInteractable == null)
+                {
+                    heldInteractable = interact;
+                    heldInteractable.PickUpObject(cam.transform);
+                }
+                else 
+                {
+                    heldInteractable.DropObject();
+                    heldInteractable = null;
+                }
             }
         }
         else
