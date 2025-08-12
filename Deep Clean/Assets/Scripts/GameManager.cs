@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
+using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
@@ -13,35 +14,65 @@ public class GameManager : MonoBehaviour
     
     private List<DirtSpot> allDirtSpots = new List<DirtSpot>();
     private int cleanedSpots = 0;
+    private float totalDirtAmount = 0f;
+    private float totalDirtCleaned = 0f;
     
     void Awake()
     {
         Instance = this;
     }
     
-    void Start()
+    IEnumerator Start()
     {
         DirtSpot[] spots = FindObjectsOfType<DirtSpot>();
         allDirtSpots.AddRange(spots);
         
+        totalDirtAmount = 0f;
+        foreach (var spot in allDirtSpots)
+        {
+            totalDirtAmount += spot.maxDirtiness;
+        }
+
+        if (overallProgressBar != null)
+        {
+            overallProgressBar.minValue = 0f;
+            overallProgressBar.maxValue = totalDirtAmount;
+            overallProgressBar.value = 0f;
+        }
+
+        yield return null;
+
         UpdateUI();
     }
     
     public void OnDirtSpotCleaned(DirtSpot dirtSpot)
     {
-        cleanedSpots++;        
+        cleanedSpots++;    
+        totalDirtCleaned += dirtSpot.maxDirtiness;
+
         UpdateUI();
         CheckGameComplete();
     }
     
     private void UpdateUI()
     {
-        if (progressText != null)
-            progressText.text = $"Progress: {cleanedSpots}/{allDirtSpots.Count}";
-        
-        if (overallProgressBar != null && allDirtSpots.Count > 0)
+        totalDirtCleaned = 0f;
+
+        foreach (var spot in allDirtSpots)
         {
-            overallProgressBar.value = (float)cleanedSpots / allDirtSpots.Count;
+            if (spot != null)
+                totalDirtCleaned += spot.GetAmountCleaned();
+        }
+
+        if (progressText != null)
+        {
+            float progressPercent = (totalDirtAmount > 0) ? (totalDirtCleaned / totalDirtAmount) * 100f : 0f;
+            progressText.text = $"{progressPercent:0.0}%";
+        }
+        
+        if (overallProgressBar != null)
+        {
+            overallProgressBar.value = totalDirtCleaned;
         }
     }
     

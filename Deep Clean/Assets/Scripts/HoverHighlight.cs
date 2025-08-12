@@ -4,6 +4,8 @@ public class HoverHighlight : MonoBehaviour
 {
     public Camera cam;
     public float range = 3f;
+    public PlayerMovement playerMovement;
+    public PlayerCam playerCam;
 
     private Interactable currentInteractable;
     private Interactable heldInteractable;
@@ -11,42 +13,57 @@ public class HoverHighlight : MonoBehaviour
 
     void Update()
     {
-        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hit, range))
+        if (heldInteractable == null)
         {
-            Interactable interact = hit.collider.GetComponent<Interactable>();
-
-            if (interact != currentInteractable)
+            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hit, range))
             {
-                if (currentInteractable != null)
-                    currentInteractable.Highlight(false);
+                Interactable interact = hit.collider.GetComponent<Interactable>();
 
-                currentInteractable = interact;
-
-                if (currentInteractable != null)
-                    currentInteractable.Highlight(true);
-            }
-
-            if (Input.GetMouseButtonDown(1) && interact != null) //pickup when left mouse is held
-            {
-                if (heldInteractable == null)
+                if (interact != currentInteractable)
                 {
+                    if (currentInteractable != null)
+                        currentInteractable.Highlight(false);
+
+                    currentInteractable = interact;
+
+                    if (currentInteractable != null)
+                        currentInteractable.Highlight(true);
+                }
+
+                if (Input.GetMouseButtonDown(1) && interact != null) //right click pickup
+                {
+
                     heldInteractable = interact;
                     heldInteractable.PickUpObject(cam.transform);
+
+                    //turn off movement
+                    playerMovement.enabled = false;
+                    playerCam.enabled = false;
                 }
-                else 
+            }
+            else
+            {
+                if (currentInteractable != null)
                 {
-                    heldInteractable.DropObject();
-                    heldInteractable = null;
+                    currentInteractable.Highlight(false);
+                    currentInteractable = null;
                 }
             }
         }
-        else
+        else 
         {
-            if (currentInteractable != null)
+            //already holding something
+            heldInteractable.RotateObject();
+
+            if (Input.GetMouseButtonDown(1)) //rightclick to drop
             {
-                currentInteractable.Highlight(false);
-                currentInteractable = null;
+                heldInteractable.DropObject();
+                heldInteractable = null;
+
+                //enalbe movement again
+                playerMovement.enabled = true;
+                playerCam.enabled = true;
             }
         }
     }

@@ -6,7 +6,7 @@ public class DirtSpot : MonoBehaviour
     [Header("Dirt Settings")]
     public float maxDirtiness = 100f;
     public float cleaningRate = 20f; 
-    public float requiredToolDistance = 2f; 
+    public float requiredToolDistance = 3f; 
     
     [Header("Visual Components")]
     public SpriteRenderer dirtRenderer;
@@ -32,6 +32,7 @@ public class DirtSpot : MonoBehaviour
     
     public void StartCleaning(CleaningTool tool)
     {
+        Debug.Log("cleaning");
         if (currentDirtiness <= 0) return;
         
         currentTool = tool;
@@ -115,5 +116,10 @@ public class DirtSpot : MonoBehaviour
     public bool IsFullyCleaned()
     {
         return currentDirtiness <= 0;
+    }
+
+    public float GetAmountCleaned()
+    {
+        return maxDirtiness - currentDirtiness;
     }
 }

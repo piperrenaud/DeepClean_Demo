@@ -12,6 +12,7 @@ public class Interactable : MonoBehaviour
     [Header("Interaction Settings")]
     public bool showInteractionPrompt = false;
     public GameObject interactionText;
+    public GameObject interactionUI;
 
     [Header("Pickup Settings")]
     public float holdDistance = 2.5f;
@@ -20,6 +21,8 @@ public class Interactable : MonoBehaviour
     [Header("UniqueID")]
     public string objectID;
 
+    private ToolManager toolManager;
+    private int savedToolIndex = -1;
     private bool isHeld = false;
     private Camera mainCamera;
     private Transform originalParent;
@@ -41,6 +44,8 @@ public class Interactable : MonoBehaviour
             interactionText.SetActive(false);
 
         mainCamera = Camera.main;
+
+        toolManager = FindFirstObjectByType<ToolManager>();
     }
 
     void Update()
@@ -48,12 +53,13 @@ public class Interactable : MonoBehaviour
         if (isHeld)
         {
             RotateObject();
-        }
 
-        if ((isHeld || IsHighlighted()) && Input.GetKeyDown(KeyCode.Return))
-        {
-            InventoryManager.Instance.AddItem(objectID);
-            gameObject.SetActive(false);
+            //can only take whiile inspecting
+            if (Input.GetKeyDown(KeyCode.Return))
+            {
+                InventoryManager.Instance.AddItem(objectID);
+                gameObject.SetActive(false);
+            }
         }
     }
 
@@ -88,12 +94,24 @@ public class Interactable : MonoBehaviour
 
     public void PickUpObject(Transform playerTransform)
     {
+        //if tool is active put it away first
+        if (toolManager != null)
+        {
+            savedToolIndex = toolManager.GetCurrentToolIndex();
+            if (savedToolIndex != -1) //tool is active
+            {
+                toolManager.ForcePutAwayCurrentTool();
+            }
+        }
+
+        interactionUI.SetActive(true);
+
         isHeld = true;
 
         //safe og parent and position/rotation
         originalParent = transform.parent;
-        originalPosition = transform.localPosition;
-        originalRotation = transform.localRotation;
+        originalPosition = transform.position;
+        originalRotation = transform.rotation;
 
         //parent to player and pos in front
         transform.SetParent(playerTransform);
@@ -103,19 +121,34 @@ public class Interactable : MonoBehaviour
 
     public void DropObject()
     {
+        interactionUI.SetActive(false);
+
         isHeld = false;
         
         //return to og parent and transform
         transform.SetParent(originalParent);
-        transform.localPosition = originalPosition;
-        transform.localRotation = originalRotation;
+        transform.position = originalPosition;
+        transform.rotation = originalRotation;
+
+        //get tool back if active
+        if (toolManager != null && savedToolIndex != -1)
+        {
+            toolManager.ForcePickUpTool(savedToolIndex);
+            savedToolIndex = -1;
+        }
     }
 
-    void RotateObject()
+    public void RotateObject()
     {
-        //rotate left/right with shift
-        if (Input.GetKey(KeyCode.LeftShift)) {
-            transform.Rotate(Vector3.up * rotationSpeed * Time.deltaTime, Space.Self);
+        //hold left mouse button to rotate object
+        if (Input.GetMouseButton(0))
+        {
+            float mouseX = Input.GetAxis("Mouse X") * rotationSpeed * Time.deltaTime;
+            float mouseY = Input.GetAxis("Mouse Y") * rotationSpeed * Time.deltaTime;
+
+            //rotate around axis
+            transform.Rotate(Vector3.up, -mouseX, Space.Self);
+            transform.Rotate(Vector3.right, -mouseY, Space.Self);
         }
     }
 }
