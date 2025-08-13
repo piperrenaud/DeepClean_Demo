@@ -177,4 +177,23 @@ public class EnemyWander : MonoBehaviour
         agent.isStopped = true;
         animator.SetBool("Walking", false);
     }
+
+    void OnDrawGizmos()
+    {
+        if (agent == null || agent.path == null) return;
+
+        Gizmos.color = Color.green;
+
+        Vector3[] corners = agent.path.corners;
+        for (int i = 0; i < corners.Length - 1; i++)
+        {
+            Gizmos.DrawLine(corners[i], corners[i + 1]);
+            Gizmos.DrawSphere(corners[i], 0.2f);
+        }
+
+        if (corners.Length > 0)
+        {
+            Gizmos.DrawSphere(corners[corners.Length - 1], 0.2f);
+        }
+    }
 }
