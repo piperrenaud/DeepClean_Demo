@@ -2,29 +2,46 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class EnemyWander : MonoBehaviour
 {
-    public List<Transform> wanderPoints;
-    public float waitTime = 2f;
+    [System.Serializable]
+    public class TaskPoint
+    {
+        public Transform transform;
+        public string taskName;
+        public int roomID;
+    }
+
+
+    [Header("Waypoints/Tasks")]
+    public List<TaskPoint> taskPoints;
+    public float minTaskTime = 3f;
+    public float maxTaskTime = 24f;
+
+    [Header("Movement")]
     public float turnSpeed = 120f; //degrees/sec
+
+    [Header("References")]
     public Animator animator;
+    public float suspicion = 0f;
+    public int playerRoomID;
 
     private NavMeshAgent agent;
-    private Transform currentTarget;
+    private TaskPoint currentTargetPoint;
     private float timer;
     private bool isTurning = false;
     private Quaternion targetRotation;
     private string turnAnimParam = "";
-
     private bool isPaused = false;
     private float pauseTimer = 0f;
-
     private DoorController targetDoor;
 
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        PickNextTask();
     }
 
     void Update()
@@ -44,7 +61,6 @@ public class EnemyWander : MonoBehaviour
         {
             //rotate towards next waypoint
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, turnSpeed * Time.deltaTime);
-
             //check if done turning
             if (Quaternion.Angle(transform.rotation, targetRotation) < 1f)
             {
@@ -55,28 +71,69 @@ public class EnemyWander : MonoBehaviour
             return;
         }
 
-        //movement state
-        if (!agent.pathPending && agent.remainingDistance < 0.5f)
+        //patrol randomly if suspicion is 0
+        if (suspicion == 0f)
         {
-            animator.SetBool("Walking", false);
-            timer += Time.deltaTime;
-            if (timer >= waitTime)
+            if (!agent.pathPending && agent.remainingDistance < 0.5f && currentTargetPoint != null)
             {
-                PrepareTurnToNewDestination();
-                timer = 0;
+                animator.SetBool("Walking", false);
+                
+                StartCoroutine(DoTaskRoutine(currentTargetPoint.taskName));
+                currentTargetPoint = null;
             }
         }
     }
 
-    void PrepareTurnToNewDestination()
+    IEnumerator DoTaskRoutine(string taskName)
     {
-        if (wanderPoints.Count == 0) return;
+        //use turning anims to face task points forward dir
+        Vector3 forwardDir = currentTargetPoint.transform.forward;
+        FaceDirection(forwardDir);
 
-        currentTarget = wanderPoints[Random.Range(0, wanderPoints.Count)];
+        //wait for tunring to finish
+        while (isTurning)
+            yield return null;
+
+        //start task anim
+        animator.SetBool(taskName, true);
+        float waitTime = Random.Range(minTaskTime, maxTaskTime);
+        yield return new WaitForSeconds(waitTime);
+        //stop anim
+        animator.SetBool(taskName, false);
+
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        while (!stateInfo.IsName("Breathing_idle"))
+        {
+            yield return null;
+            stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        }
+
+        yield return new WaitForSeconds(0.5f);
+        PickNextTask();
+    }
+
+    void PickNextTask(bool preferNearPlayer = false)
+    {
+        if (taskPoints.Count == 0) return;
+
+        float biasChance = Mathf.Clamp01(suspicion);
+        List<TaskPoint> candidates;
+
+        if (Random.value < biasChance)
+        {
+            candidates = taskPoints.Where(p => p.roomID == playerRoomID).ToList();
+            if (candidates.Count == 0) candidates = taskPoints;
+        }
+        else 
+        {
+            candidates = taskPoints;
+        }
+
+        currentTargetPoint = candidates[Random.Range(0, candidates.Count)];
 
         //get navmesh path
         NavMeshPath path = new NavMeshPath();
-        agent.CalculatePath(currentTarget.position, path);
+        agent.CalculatePath(currentTargetPoint.transform.position, path);
 
         //check if door between here and target
         targetDoor = FindDoorAlongPath(path);
@@ -89,7 +146,7 @@ public class EnemyWander : MonoBehaviour
         if (path.corners.Length < 2)
         {
             //no path, just face target
-            FaceDirection(currentTarget.position - transform.position);
+            FaceDirection(currentTargetPoint.transform.position - transform.position);
             return;
         }
 
@@ -101,10 +158,10 @@ public class EnemyWander : MonoBehaviour
     IEnumerator HandleDoorInteraction(DoorController door)
     {
         float waitDistance = 3.5f; // how far from the door to stop while opening
-
         // Move toward door until at wait distance
         agent.SetDestination(door.transform.position);
         animator.SetBool("Walking", true);
+
         while (Vector3.Distance(transform.position, door.transform.position) > waitDistance)
         {
             yield return null;
@@ -119,11 +176,11 @@ public class EnemyWander : MonoBehaviour
 
         // Resume moving through the door
         agent.isStopped = false;
-        agent.SetDestination(currentTarget.position);
+        agent.SetDestination(currentTargetPoint.transform.position);
         animator.SetBool("Walking", true);
 
         // Wait until the enemy has moved fully past the door before closing
-        while (Vector3.Distance(transform.position, door.transform.position) < waitDistance + 1f)
+        while (Vector3.Distance(transform.position, door.transform.position) < waitDistance)
         {
             yield return null;
         }
@@ -134,14 +191,25 @@ public class EnemyWander : MonoBehaviour
 
     DoorController FindDoorAlongPath(NavMeshPath path)
     {
-        foreach (var door in FindObjectsOfType<DoorController>())
+        DoorController nearestDoor = null;
+        float nearestDist = Mathf.Infinity;
+
+        foreach (Vector3 corner in path.corners)
         {
-            if (Vector3.Distance(transform.position, door.transform.position) < 5f)
+            foreach (var door in FindObjectsOfType<DoorController>())
             {
-                return door;
+                float dist = Vector3.Distance(corner, door.transform.position);
+                if (dist < 2.5f)
+                {
+                    if (dist < nearestDist)
+                    {
+                        nearestDoor = door;
+                        nearestDist = dist;
+                    }
+                }
             }
         }
-        return null;
+        return nearestDoor;
     }
 
     void FaceDirection(Vector3 direction)
@@ -155,18 +223,15 @@ public class EnemyWander : MonoBehaviour
             return;
         }
 
-        if (signedAngle > 0)
-            turnAnimParam = "TurningLeft";
-        else
-            turnAnimParam = "TurningRight";
-
+        turnAnimParam = signedAngle > 0 ? "TurningLeft" : "TurningRight";
         animator.SetBool(turnAnimParam, true);
         isTurning = true;
     }
 
     void StartWalking()
     {
-        agent.SetDestination(currentTarget.position);
+        if (currentTargetPoint == null) return;
+        agent.SetDestination(currentTargetPoint.transform.position);
         animator.SetBool("Walking", true);
     }
 
@@ -183,14 +248,12 @@ public class EnemyWander : MonoBehaviour
         if (agent == null || agent.path == null) return;
 
         Gizmos.color = Color.green;
-
         Vector3[] corners = agent.path.corners;
         for (int i = 0; i < corners.Length - 1; i++)
         {
             Gizmos.DrawLine(corners[i], corners[i + 1]);
             Gizmos.DrawSphere(corners[i], 0.2f);
         }
-
         if (corners.Length > 0)
         {
             Gizmos.DrawSphere(corners[corners.Length - 1], 0.2f);

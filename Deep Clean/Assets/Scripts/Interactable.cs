@@ -21,6 +21,12 @@ public class Interactable : MonoBehaviour
     [Header("UniqueID")]
     public string objectID;
 
+    [Header("Door Settings")]
+    public Animator doorAnimator;
+    
+    private bool isDoorOpen = false;
+    private bool isHovering = false;
+
     private ToolManager toolManager;
     private int savedToolIndex = -1;
     private bool isHeld = false;
@@ -44,7 +50,6 @@ public class Interactable : MonoBehaviour
             interactionText.SetActive(false);
 
         mainCamera = Camera.main;
-
         toolManager = FindFirstObjectByType<ToolManager>();
     }
 
@@ -61,6 +66,44 @@ public class Interactable : MonoBehaviour
                 gameObject.SetActive(false);
             }
         }
+
+        if (isHovering && Input.GetKeyDown(KeyCode.E) && doorAnimator != null)
+        {
+            ToggleDoor();
+        }
+    }
+
+    public void ToggleDoor()
+    {
+        if (isDoorOpen)
+        {
+            //close the door
+            doorAnimator.SetBool("Opening", false);
+            doorAnimator.SetBool("Opened", false);
+            doorAnimator.SetBool("Closing", true);
+            doorAnimator.SetBool("Closed", false);
+        }
+        else 
+        {
+            //open the door
+            doorAnimator.SetBool("Opening", true);
+            doorAnimator.SetBool("Opened", false);
+            doorAnimator.SetBool("Closing", false);
+            doorAnimator.SetBool("Closed", false);
+        }
+        isDoorOpen = !isDoorOpen;
+    }
+
+    void OnMouseOver()
+    {
+        isHovering = true;
+        Highlight(true);
+    }
+
+    void OnMouseExit()
+    {
+        isHovering = false;
+        Highlight(false);
     }
 
     public bool IsHighlighted()
