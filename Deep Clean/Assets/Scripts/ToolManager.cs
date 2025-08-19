@@ -49,9 +49,16 @@ public class ToolManager : MonoBehaviour
 
     void SwitchTool(Tool newTool)
     {
-        if (isSwitching || currentTool == newTool) return;
+        if (isSwitching) return;
 
-        StartCoroutine(SwitchRoutine(newTool));
+        if (currentTool == newTool)
+        {
+            StartCoroutine(SwitchRoutine(Tool.None));
+        }
+        else
+        {
+            StartCoroutine(SwitchRoutine(newTool));
+        }
     }
 
     IEnumerator SwitchRoutine(Tool newTool)
@@ -64,7 +71,7 @@ public class ToolManager : MonoBehaviour
             currentDirtSpot.StopCleaning();
             currentDirtSpot = null;
         }
-
+        
         //play putaway current
         yield return PlayPutAway(currentTool);
         SetToolActive(Tool.None);
