@@ -1,0 +1,76 @@
+CRIME
+the homeowner in involved in illegal human traffixking/smuggling. he's beeing preparing to leave town because the police are 
+tightening surveilance. his house contains traces of his involvement, but he's careful, so most of what you find is 
+circumstantial unless you dig deeper.
+
+EVIDENCE
+1. Strong Evidence (must steal): physical objects that directly implicate him. riskier to obatain cuz he'll notice 
+2. Circumstantial Evidence (can photograph): suspicious but not damning alone. builds a case when with stronger items
+3. Red Herrings: looks suspicious at first but either have normal explanations or are explained by another item in the house
+
+MUST STEAL EVIDENCE
+1. Ledger hidden in drawer
+    - handwritten notes with initials, dates, and amounts, looks like payments. some entries reference coded temrs like "cargo"
+      and "transit" (photo isn't enough because it could get destroyed by homeowner later)
+2. USB taped under table
+    - contains encrypted files. if player finds computer later, can use it to see it contains a doc called "transport schedules"
+      (must steal since photographing wont capture data)
+3. Key with strange tag
+    - A storage unit number written on it (Final "aha" clue. ties homeowner to offsite location where ppl/evidence is held)
+      (must steal, photo of keys proves nothing)
+
+PHOTO EVIDENCE
+1. Large sum of cash in diffenrent curriencies
+    - suspicious but could be explained as business dealings (photo cause will be noticed if stolen)
+2. One way ticket to another country
+    - shows intent to flee (photo because he'll notice if missing)
+3. Handwritten note in foreign language 
+    - reminder from an accomplice
+4. Multiple burner phones 
+
+RED HERRINGS
+1. Large stained tarp
+    - at first it looks like blood but nearby are paint buckets that match the stain
+    - if you ask homeowner he explains he used it to comer furniture when repainting
+2. Prescription bottles with other peaoples names
+    - suggest stolen meds or drug dealings
+    - later you find a get well card from cousin thanking him for picking up prescriptions
+3. rope and duct tape 
+    - looks suspicious
+    - later you find shipping boxes and furniture wrappings, showing its just for moving
+4. Kitchen knife set with one missing
+    - suggests violence
+    - later you find the missing knife somewhere else in the house.
+5. shredded documents in the bin
+    - looks like hes hiding something
+    - putting them together reveals they're just old bank statements
+
+QUESTIONS TO ask
+1. ask about tarp - "Oh, thats just from painting. Look in the garage, you'll see the cans"
+2. ask about burner phones - "i repair and resell phones sometimes"
+3. ask about foreign note - "oh just a recipe from a friend"
+4. ask about rope and tape - "for packing up the furniture, obviously"
+
+AT HOME
+- photos pinned to corkboard
+- stolen objects laid on the desk
+- each pieve has a short description and maybe the homeowners explanation attatch if the player asked for it
+
+EVIDENCE SORTING
+- three folders: Hard evidence, Circumstantial, Not relevent
+- drag each piece into the folder they think it belongs in
+- Accuracy = how well they categorize items.
+
+ANSWER QUESTIONS
+- after reviewing evidence, game asks:
+    - "What was the homeowners crime?" 
+    - "Which 3 pieces prove it beyond doubt?" (ledger, USB, key)
+    - "Which items were distractions?"
+- answers determine the ending.
+
+GOOD ENDING (90-100%)
+- player chooses ledger, USB, and ley as primary proof AND correctly discarded most red Herrings
+NEUTRAL ENDING (50-89%)
+- player only identified some real evidence but got distracted by red herrings / missed key pieces
+BAD ENDING (0-49%)
+- player failed to highlight true core evidence or leaned too heavily on red herrings

@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using System.IO;
 
 public class PhotoCapture : MonoBehaviour
 {
@@ -24,9 +25,20 @@ public class PhotoCapture : MonoBehaviour
     private Texture2D screenCapture;
     private bool viewingPhoto;
 
+    private static int photoCounter = 0;
+
 
     void Start()
     {
+        photoCounter = 0;
+        //delete old photos when play mode starts
+        string[] files = Directory.GetFiles(Application.persistentDataPath, "photo_*.png");
+        foreach (string file in files)
+        {
+            File.Delete(file);
+        }
+        Debug.Log("Cleared old photos.");
+
         screenCapture = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
         photoFrame.SetActive(false);
     }
@@ -58,6 +70,8 @@ public class PhotoCapture : MonoBehaviour
 
         screenCapture.ReadPixels(regionToRead, 0, 0, false);
         screenCapture.Apply();
+
+        SavePhoto(screenCapture);
         ShowPhoto();
     }
 
@@ -86,5 +100,17 @@ public class PhotoCapture : MonoBehaviour
         photoFrame.SetActive(false);
         cameraUI.SetActive(true);
         crossHair.SetActive(true);
+    }
+
+    void SavePhoto(Texture2D texture)
+    {
+        byte[] bytes = texture.EncodeToPNG();
+        string fileName = $"photo_{photoCounter}.png";
+        string filePath = Path.Combine(Application.persistentDataPath, fileName);
+
+        File.WriteAllBytes(filePath, bytes);
+        Debug.Log("Saved photo to: "+ filePath);
+
+        photoCounter++;
     }
 }
