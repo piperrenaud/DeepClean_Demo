@@ -1,4 +1,15 @@
 using UnityEngine;
+using System.Collections;
+using TMPro;
+
+public enum EvidenceType
+{
+    None,
+    Take,
+    Photo,
+    RedHerring,
+    Nothing
+}
 
 public class Interactable : MonoBehaviour
 {
@@ -6,13 +17,20 @@ public class Interactable : MonoBehaviour
     private Material material;
     private Color originalEmission;
 
+    [Header("Evidence Settings")]
+    public EvidenceType evidenceType = EvidenceType.None;
+    [TextArea] public string evidenceDescription;
+    [TextArea] public string homeownerExplanation; 
+
     [Header("Highlight Settings")]
     public float highlightIntensity = 10f;
 
     [Header("Interaction Settings")]
     public bool showInteractionPrompt = false;
     public GameObject interactionText;
-    public GameObject interactionUI;
+    public GameObject inspectionUI;
+
+    private TMP_Text inspectionUIText;
 
     [Header("Pickup Settings")]
     public float holdDistance = 2.5f;
@@ -23,6 +41,16 @@ public class Interactable : MonoBehaviour
 
     [Header("Door Settings")]
     public Animator doorAnimator;
+
+    [Header("Dialogue Settings")]
+    public GameObject dialogueBox;
+    public TMP_Text dialogueText;
+    public float typingSpeed = 0.01f;
+    public float dialogueDuration = 5f;
+
+    private Coroutine dialogueRoutine;
+    private bool isTyping = false;
+    private string currentFullText;
     
     private bool isDoorOpen = false;
     private bool isHovering = false;
@@ -49,6 +77,9 @@ public class Interactable : MonoBehaviour
         if (interactionText != null)
             interactionText.SetActive(false);
 
+        if (inspectionUI != null)
+            inspectionUIText = inspectionUI.GetComponentInChildren<TMP_Text>();
+
         mainCamera = Camera.main;
         toolManager = FindFirstObjectByType<ToolManager>();
     }
@@ -66,10 +97,114 @@ public class Interactable : MonoBehaviour
             }
         }
 
+        if (isHovering && Input.GetKeyDown(KeyCode.E) && doorAnimator == null)
+        {
+            if (isTyping)
+            {
+                FinishTypingInstantly();
+            }
+            else
+            {
+                ShowDialogue();
+            }
+        }
+
         if (isHovering && Input.GetKeyDown(KeyCode.E) && doorAnimator != null)
         {
             ToggleDoor();
         }
+    }
+
+    private void ShowDialogueOnUI()
+    {
+        if (inspectionUI == null || inspectionUIText == null) return;
+
+        inspectionUI.SetActive(true);
+        currentFullText = evidenceDescription;
+
+        if (dialogueRoutine != null)
+        {
+            StopCoroutine(dialogueRoutine);
+        }
+
+        dialogueRoutine = StartCoroutine(TypeTextOnUI(currentFullText));
+    }
+
+    private IEnumerator TypeTextOnUI(string fullText)
+    {
+        isTyping = true;
+        inspectionUIText.text = string.Empty;
+
+        foreach (char letter in fullText)
+        {
+            inspectionUIText.text += letter;
+            yield return new WaitForSeconds(typingSpeed);
+
+            if (!isTyping) yield break;
+        }
+
+        isTyping = false;
+        yield return new WaitForSeconds(dialogueDuration);
+        inspectionUI.SetActive(false);
+        dialogueRoutine = null;
+    }
+
+    private void ShowDialogue()
+    {
+        if (dialogueBox == null || dialogueText == null) return;
+        
+        dialogueBox.SetActive(true);
+
+        string fullText = evidenceDescription;
+
+        if (dialogueRoutine != null)
+        {
+            StopCoroutine(dialogueRoutine);
+        }
+
+        dialogueRoutine = StartCoroutine(TypeText(fullText));
+    }
+
+    private IEnumerator TypeText(string fullText)
+    {
+        isTyping = true;
+        dialogueText.text = string.Empty;
+
+        foreach (char letter in fullText)
+        {
+            dialogueText.text += letter;
+            yield return new WaitForSeconds(typingSpeed);
+
+            if (!isTyping) yield break;
+        }
+
+        isTyping = false;
+
+        yield return new WaitForSeconds(dialogueDuration);
+
+        dialogueBox.SetActive(false);
+        dialogueRoutine = null;
+    }
+
+    private void FinishTypingInstantly()
+    {
+        isTyping = false;
+        dialogueText.text = currentFullText;
+
+        if (dialogueRoutine != null)
+        {
+            StopCoroutine(dialogueRoutine);
+        }
+        dialogueRoutine = StartCoroutine(HideAfterDelay());
+    }
+
+    private IEnumerator HideAfterDelay()
+    {
+        yield return new WaitForSeconds(dialogueDuration);
+        dialogueBox.SetActive(false);
+        dialogueRoutine = null;
+
+        if (inspectionUI != null) inspectionUI.SetActive(false);
     }
 
     public void ToggleDoor()
@@ -146,7 +281,8 @@ public class Interactable : MonoBehaviour
             }
         }
 
-        interactionUI.SetActive(true);
+        inspectionUI.SetActive(true);
+        ShowDialogueOnUI();
 
         isHeld = true;
 
@@ -163,7 +299,7 @@ public class Interactable : MonoBehaviour
 
     public void DropObject()
     {
-        interactionUI.SetActive(false);
+        inspectionUI.SetActive(false);
 
         isHeld = false;
         
@@ -201,11 +337,17 @@ public class Interactable : MonoBehaviour
         if (InventoryManager.Instance != null)
         {
             // Store this object’s prefab reference
-            InventoryManager.Instance.AddItem(objectID);
+            InventoryManager.Instance.AddItem(
+                objectID,
+                evidenceType,
+                evidenceDescription,
+                homeownerExplanation,
+                false
+            );
         }
 
         gameObject.SetActive(false);
         isHeld = false;
-        interactionUI.SetActive(false);
+        inspectionUI.SetActive(false);
     }
 }

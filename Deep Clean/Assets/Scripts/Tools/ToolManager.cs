@@ -3,29 +3,32 @@ using System.Collections;
 
 public class ToolManager : MonoBehaviour
 {
+    [Header("Tools")]
     public GameObject mop;
     public GameObject vaccum;
     public GameObject rubbishBinObject;
     public RubbishBin rubbishBinScript;
     public GameObject cameraObject;
+
+    [Header("Camera others")]
     public GameObject photoManager;
     public GameObject cameraUI;
     public GameObject screenUI;
 
+    [Header("Animators")]
     public Animator mopAnimator;
     public Animator vacuumAnimator;
     public Animator rubbishBinAnimator;
     public Animator cameraAnimator;
 
+    [Header("Others")]
     public LayerMask dirtLayer;
 
     private CleaningTool mopTool;
     private CleaningTool vaccumTool;
-
     private enum Tool {None, Mop, Vaccum, RubbishBin, Camera }
     private Tool currentTool = Tool.None;
     private bool isSwitching = false;
-
     private DirtSpot currentDirtSpot = null;
 
     void Start()
@@ -34,6 +37,7 @@ public class ToolManager : MonoBehaviour
 
         mopTool = mop.GetComponent<CleaningTool>();
         vaccumTool = vaccum.GetComponent<CleaningTool>();
+
     }
 
     void Update()

@@ -5,8 +5,18 @@ public class InventoryManager : MonoBehaviour
 {
     public static InventoryManager Instance;
 
+    [System.Serializable]
+    public class CollectedEntry
+    {
+        public string itemID;
+        public EvidenceType type;
+        public string description;
+        public string explanation;
+        public bool isPhoto;
+    }
+
     // Keep track of collected items
-    private HashSet<string> collectedItems = new HashSet<string>();
+    private List<CollectedEntry> collectedItems = new List<CollectedEntry>();
 
     void Awake()
     {
@@ -21,21 +31,20 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    public void AddItem(string itemID)
+    public void AddItem(string itemID, EvidenceType type, string description, string explanation, bool isPhoto = false)
     {
-        if (!collectedItems.Contains(itemID))
-        {
-            collectedItems.Add(itemID);
-            Debug.Log("Collected: " + itemID);
-        }
+       collectedItems.Add(new CollectedEntry
+       {
+        itemID = itemID,
+        type = type,
+        description = description,
+        explanation = explanation,
+        isPhoto = isPhoto
+       });
+       Debug.Log("Collected evidence: " + itemID + "(" + type + ")");
     }
 
-    public bool HasItem(string itemID)
-    {
-        return collectedItems.Contains(itemID);
-    }
-
-    public HashSet<string> GetAllItems()
+    public List<CollectedEntry> GetAllItems()
     {
         return collectedItems;
     }

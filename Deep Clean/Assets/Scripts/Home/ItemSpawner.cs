@@ -21,12 +21,13 @@ public class ItemSpawner : MonoBehaviour
             return;
         }
 
-        HashSet<string> collected = InventoryManager.Instance.GetAllItems();
+        List<InventoryManager.CollectedEntry> collected = InventoryManager.Instance.GetAllItems();
         Debug.Log("Items in inventory at scene load: " + collected.Count);
 
         foreach (var entry in itemsToSpawn)
         {
-            if (collected.Contains(entry.itemID))
+            bool hasItem = collected.Exists(c => c.itemID == entry.itemID && !c.isPhoto);
+            if (hasItem)
             {
                 Debug.Log("Spawning: " + entry.itemID);
                 Instantiate(entry.prefab, entry.spawnPoint.position, entry.spawnPoint.rotation);
