@@ -10,6 +10,11 @@ public class PlayerRoomTracker : MonoBehaviour
         if (room != null)
         {
             currentRoomID = room.roomID;
+
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.UpdateUI();
+            }
         }
     }
 }

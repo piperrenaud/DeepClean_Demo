@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
 using System.Collections;
+using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,11 +12,15 @@ public class GameManager : MonoBehaviour
     [Header("Game Settings")]
     public TMP_Text progressText;
     public Slider overallProgressBar;
-    
+    public Slider roomProgressBar;
+    public TMP_Text roomProgressText;
+
     private List<DirtSpot> allDirtSpots = new List<DirtSpot>();
     private int cleanedSpots = 0;
     private float totalDirtAmount = 0f;
     private float totalDirtCleaned = 0f;
+
+    private PlayerRoomTracker playerRoomTracker;
     
     void Awake()
     {
@@ -26,12 +31,10 @@ public class GameManager : MonoBehaviour
     {
         DirtSpot[] spots = FindObjectsOfType<DirtSpot>();
         allDirtSpots.AddRange(spots);
+
+        playerRoomTracker = FindObjectOfType<PlayerRoomTracker>();
         
-        totalDirtAmount = 0f;
-        foreach (var spot in allDirtSpots)
-        {
-            totalDirtAmount += spot.maxDirtiness;
-        }
+        totalDirtAmount = allDirtSpots.Sum(s => s.maxDirtiness);
 
         if (overallProgressBar != null)
         {
@@ -54,15 +57,10 @@ public class GameManager : MonoBehaviour
         CheckGameComplete();
     }
     
-    private void UpdateUI()
+    public void UpdateUI()
     {
-        totalDirtCleaned = 0f;
-
-        foreach (var spot in allDirtSpots)
-        {
-            if (spot != null)
-                totalDirtCleaned += spot.GetAmountCleaned();
-        }
+        //overall
+        totalDirtCleaned = allDirtSpots.Sum(s => s.GetAmountCleaned());
 
         if (progressText != null)
         {
@@ -73,6 +71,29 @@ public class GameManager : MonoBehaviour
         if (overallProgressBar != null)
         {
             overallProgressBar.value = totalDirtCleaned;
+        }
+
+        //per room
+        if (playerRoomTracker != null)
+        {
+            int currentRoom = playerRoomTracker.currentRoomID;
+            var roomSpots = allDirtSpots.Where(s => s.roomID == currentRoom).ToList();
+
+            float roomTotal = roomSpots.Sum(s => s.GetMaxDirt());
+            float roomCleaned = roomSpots.Sum(s => s.GetAmountCleaned());
+
+            if (roomProgressBar != null)
+            {
+                roomProgressBar.minValue = 0f;
+                roomProgressBar.maxValue = roomTotal;
+                roomProgressBar.value = roomCleaned;
+            }
+
+            if (roomProgressText != null)
+            {
+                float roomPercent = (roomTotal > 0) ? (roomCleaned / roomTotal) * 100f : 0f;
+                roomProgressText.text = $"{roomPercent:0.0}%";
+            }
         }
     }
     

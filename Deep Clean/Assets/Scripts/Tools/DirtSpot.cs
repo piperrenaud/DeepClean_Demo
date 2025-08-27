@@ -3,6 +3,9 @@ using UnityEngine.UI;
 
 public class DirtSpot : MonoBehaviour
 {
+    [Header("Room Assignment")]
+    public int roomID;
+
     [Header("Dirt Settings")]
     public float maxDirtiness = 100f;
     public float cleaningRate = 20f; 
@@ -11,7 +14,7 @@ public class DirtSpot : MonoBehaviour
     [Header("Visual Components")]
     public SpriteRenderer dirtRenderer;
     public Slider progressBar; 
-    
+
     private float currentDirtiness;
     private bool isBeingCleaned = false;
     private CleaningTool currentTool;
@@ -108,18 +111,9 @@ public class DirtSpot : MonoBehaviour
         gameObject.SetActive(false);
     }
     
-    public float GetCleaningProgress()
-    {
-        return 1f - (currentDirtiness / maxDirtiness);
-    }
-    
-    public bool IsFullyCleaned()
-    {
-        return currentDirtiness <= 0;
-    }
-
-    public float GetAmountCleaned()
-    {
-        return maxDirtiness - currentDirtiness;
-    }
+    public float GetCleaningProgress() { return 1f - (currentDirtiness / maxDirtiness); }
+    public bool IsFullyCleaned() { return currentDirtiness <= 0; }
+    public float GetAmountCleaned() { return maxDirtiness - currentDirtiness; }
+    public float GetRemainingDirt() { return currentDirtiness; }
+    public float GetMaxDirt() { return maxDirtiness; }
 }
