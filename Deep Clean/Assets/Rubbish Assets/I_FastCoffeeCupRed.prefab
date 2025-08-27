@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 6333952125311838464}
   - component: {fileID: 8071084606316223946}
   - component: {fileID: 2624703192043318131}
+  - component: {fileID: 2386559781597956358}
+  - component: {fileID: 7081328107659644834}
   m_Layer: 0
   m_Name: I_FastCoffeeCupRed
   m_TagString: Untagged
@@ -99,11 +101,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87fb38b488b1c4e46a642bb1adb8c97a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  objectID: I_FastCoffeeCupRed
+  evidenceType: 0
+  evidenceDescription: this is a fast food drink
+  explanation: 
+  holdDistance: 2.5
+  rotationSpeed: 100
+  doorAnimator: {fileID: 0}
+--- !u!114 &2386559781597956358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7710933181888052255}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6caa89ac6cbd3e645bcd1c4b10f72e44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   highlightIntensity: 10
   showInteractionPrompt: 0
   interactionText: {fileID: 0}
-  interactionUI: {fileID: 0}
-  holdDistance: 1.5
-  rotationSpeed: 100
-  objectID: DastCoffeeCupRed
-  doorAnimator: {fileID: 0}
+--- !u!114 &7081328107659644834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7710933181888052255}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcf0b4d321651a441bb703db55c81496, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inspectionUI: {fileID: 0}
+  typingSpeed: 0.01

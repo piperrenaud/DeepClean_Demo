@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &865487932778594624
+--- !u!1 &3863253787088592551
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,50 +8,50 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 524955353831939066}
-  - component: {fileID: 3523749540821242975}
-  - component: {fileID: 1657932418998886549}
-  - component: {fileID: 5293801087362134779}
-  - component: {fileID: 4652381379992604938}
-  - component: {fileID: 5028783148418804313}
-  - component: {fileID: 3171011984259464877}
-  m_Layer: 8
-  m_Name: I_Nails
+  - component: {fileID: 4528044473500386333}
+  - component: {fileID: 682581079200517048}
+  - component: {fileID: 3359109907771473778}
+  - component: {fileID: 2708623412228233771}
+  - component: {fileID: 2346155498278454025}
+  - component: {fileID: -7482497899422859743}
+  - component: {fileID: 8995140952824130521}
+  m_Layer: 0
+  m_Name: I_WaterBottle_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &524955353831939066
+--- !u!4 &4528044473500386333
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 865487932778594624}
+  m_GameObject: {fileID: 3863253787088592551}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
-  m_LocalScale: {x: 1.5430542, y: 1.5430542, z: 1.5430542}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &3523749540821242975
+--- !u!33 &682581079200517048
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 865487932778594624}
-  m_Mesh: {fileID: 1526772235586685655, guid: bdbf4ac4b7acd9f4d8d600b619ddf357, type: 3}
---- !u!23 &1657932418998886549
+  m_GameObject: {fileID: 3863253787088592551}
+  m_Mesh: {fileID: -1913694535179016590, guid: 3f10244ac2b50fa4da46b3da357f3462, type: 3}
+--- !u!23 &3359109907771473778
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 865487932778594624}
+  m_GameObject: {fileID: 3863253787088592551}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -90,13 +90,13 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &5293801087362134779
+--- !u!64 &2708623412228233771
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 865487932778594624}
+  m_GameObject: {fileID: 3863253787088592551}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -111,33 +111,33 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 1
   m_CookingOptions: 30
-  m_Mesh: {fileID: 1526772235586685655, guid: bdbf4ac4b7acd9f4d8d600b619ddf357, type: 3}
---- !u!114 &4652381379992604938
+  m_Mesh: {fileID: -1913694535179016590, guid: 3f10244ac2b50fa4da46b3da357f3462, type: 3}
+--- !u!114 &2346155498278454025
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 865487932778594624}
+  m_GameObject: {fileID: 3863253787088592551}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 87fb38b488b1c4e46a642bb1adb8c97a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectID: I_Nails
+  objectID: WaterBottle_02
   evidenceType: 0
-  evidenceDescription: these are nails
+  evidenceDescription: 
   explanation: 
-  holdDistance: 2.5
+  holdDistance: 1.5
   rotationSpeed: 100
   doorAnimator: {fileID: 0}
---- !u!114 &5028783148418804313
+--- !u!114 &-7482497899422859743
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 865487932778594624}
+  m_GameObject: {fileID: 3863253787088592551}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6caa89ac6cbd3e645bcd1c4b10f72e44, type: 3}
@@ -146,13 +146,13 @@ MonoBehaviour:
   highlightIntensity: 10
   showInteractionPrompt: 0
   interactionText: {fileID: 0}
---- !u!114 &3171011984259464877
+--- !u!114 &8995140952824130521
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 865487932778594624}
+  m_GameObject: {fileID: 3863253787088592551}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bcf0b4d321651a441bb703db55c81496, type: 3}

@@ -10,7 +10,8 @@ public class InventoryManager : MonoBehaviour
     {
         public string itemID;
         public EvidenceType type;
-        public string description;
+        public string itemDescription;
+        public string playerDialogue;
         public string explanation;
         public bool isPhoto;
     }
@@ -31,13 +32,14 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    public void AddItem(string itemID, EvidenceType type, string description, string explanation, bool isPhoto = false)
+    public void AddItem(string itemID, EvidenceType type, string description, string dialogue, string explanation, bool isPhoto = false)
     {
        collectedItems.Add(new CollectedEntry
        {
         itemID = itemID,
         type = type,
-        description = description,
+        itemDescription = description,
+        playerDialogue = dialogue,
         explanation = explanation,
         isPhoto = isPhoto
        });

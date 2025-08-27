@@ -12,9 +12,13 @@ GameObject:
   - component: {fileID: 4429300438776920042}
   - component: {fileID: 1917686825675604768}
   - component: {fileID: 7363018695717307614}
+  - component: {fileID: 5369386888545100503}
+  - component: {fileID: 6330469660267856516}
+  - component: {fileID: 8383027193762050774}
+  - component: {fileID: 5745420700803599806}
   m_Layer: 0
   m_Name: Tape_02
-  m_TagString: Untagged
+  m_TagString: Evidence
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -26,12 +30,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 115970378055607029}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2509366062729213461}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4429300438776920042
 MeshFilter:
@@ -52,11 +58,15 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -90,9 +100,148 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 115970378055607029}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 4
+  serializedVersion: 5
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4561278781928834783, guid: cb39fbe53b665f144b8a93fa6f54e397, type: 3}
+--- !u!114 &5369386888545100503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 115970378055607029}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87fb38b488b1c4e46a642bb1adb8c97a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectID: Tape_02
+  evidenceType: 3
+  itemDescription: This is a roll of tape
+  playerDialogue: Why does he need so much tape?
+  explanation: 
+  holdDistance: 2.5
+  rotationSpeed: 100
+  doorAnimator: {fileID: 0}
+--- !u!114 &6330469660267856516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 115970378055607029}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac194aacf98199f4db7f31a3205a2ff6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogueBox: {fileID: 0}
+  dialogueText: {fileID: 0}
+  typingSpeed: 0.01
+  dialogueDuration: 5
+--- !u!114 &8383027193762050774
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 115970378055607029}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6caa89ac6cbd3e645bcd1c4b10f72e44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  highlightIntensity: 10
+  showInteractionPrompt: 0
+  interactionText: {fileID: 0}
+--- !u!114 &5745420700803599806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 115970378055607029}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcf0b4d321651a441bb703db55c81496, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inspectionUI: {fileID: 0}
+  typingSpeed: 0.01
+--- !u!1001 &8703542345398225294
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 781324908591888463}
+    m_Modifications:
+    - target: {fileID: 5859726451386705185, guid: c89dbddf35c49094e9561dbbc3fcacd6, type: 3}
+      propertyPath: m_Name
+      value: Tape_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 5859726451386705185, guid: c89dbddf35c49094e9561dbbc3fcacd6, type: 3}
+      propertyPath: m_TagString
+      value: Evidence
+      objectReference: {fileID: 0}
+    - target: {fileID: 6492570557340270491, guid: c89dbddf35c49094e9561dbbc3fcacd6, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.074337006
+      objectReference: {fileID: 0}
+    - target: {fileID: 6492570557340270491, guid: c89dbddf35c49094e9561dbbc3fcacd6, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.08289194
+      objectReference: {fileID: 0}
+    - target: {fileID: 6492570557340270491, guid: c89dbddf35c49094e9561dbbc3fcacd6, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.009623051
+      objectReference: {fileID: 0}
+    - target: {fileID: 6492570557340270491, guid: c89dbddf35c49094e9561dbbc3fcacd6, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6492570557340270491, guid: c89dbddf35c49094e9561dbbc3fcacd6, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6492570557340270491, guid: c89dbddf35c49094e9561dbbc3fcacd6, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6492570557340270491, guid: c89dbddf35c49094e9561dbbc3fcacd6, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6492570557340270491, guid: c89dbddf35c49094e9561dbbc3fcacd6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6492570557340270491, guid: c89dbddf35c49094e9561dbbc3fcacd6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6492570557340270491, guid: c89dbddf35c49094e9561dbbc3fcacd6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c89dbddf35c49094e9561dbbc3fcacd6, type: 3}
+--- !u!4 &2509366062729213461 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6492570557340270491, guid: c89dbddf35c49094e9561dbbc3fcacd6, type: 3}
+  m_PrefabInstance: {fileID: 8703542345398225294}
+  m_PrefabAsset: {fileID: 0}

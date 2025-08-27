@@ -73,6 +73,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6256df9314d1dc94e88e9b32efe72011, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4886791593627637389}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6256df9314d1dc94e88e9b32efe72011, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6312491891523006878}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6256df9314d1dc94e88e9b32efe72011, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5117947616118672164}
   m_SourcePrefab: {fileID: 100100000, guid: 6256df9314d1dc94e88e9b32efe72011, type: 3}
 --- !u!1 &7674373047706971284 stripped
 GameObject:
@@ -91,13 +97,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87fb38b488b1c4e46a642bb1adb8c97a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  highlightIntensity: 10
-  showInteractionPrompt: 0
-  interactionText: {fileID: 0}
-  interactionUI: {fileID: 0}
+  objectID: I_Drink
+  evidenceType: 0
+  evidenceDescription: this is a fast food drink
+  explanation: 
   holdDistance: 2.5
   rotationSpeed: 100
-  objectID: Drink
   doorAnimator: {fileID: 0}
 --- !u!65 &2322693149887715871
 BoxCollider:
@@ -141,3 +146,32 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.16700935, y: 0.28211057, z: 0.16700959}
   m_Center: {x: 0.0020934865, y: -0.049059935, z: 0.000073082745}
+--- !u!114 &6312491891523006878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7674373047706971284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6caa89ac6cbd3e645bcd1c4b10f72e44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  highlightIntensity: 10
+  showInteractionPrompt: 0
+  interactionText: {fileID: 0}
+--- !u!114 &5117947616118672164
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7674373047706971284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcf0b4d321651a441bb703db55c81496, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inspectionUI: {fileID: 0}
+  typingSpeed: 0.01

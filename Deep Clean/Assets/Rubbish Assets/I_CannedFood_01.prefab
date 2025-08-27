@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 4540299880061826583}
   - component: {fileID: 5757869682788042316}
   - component: {fileID: 4949607475629042727}
+  - component: {fileID: 5250247846342666652}
+  - component: {fileID: 3201337435382374586}
   m_Layer: 0
   m_Name: I_CannedFood_01
   m_TagString: Untagged
@@ -122,11 +124,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87fb38b488b1c4e46a642bb1adb8c97a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  objectID: I_CannedFood_01
+  evidenceType: 0
+  evidenceDescription: this is canned food
+  explanation: 
+  holdDistance: 2.5
+  rotationSpeed: 100
+  doorAnimator: {fileID: 0}
+--- !u!114 &5250247846342666652
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2594811017049069506}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6caa89ac6cbd3e645bcd1c4b10f72e44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   highlightIntensity: 10
   showInteractionPrompt: 0
   interactionText: {fileID: 0}
-  interactionUI: {fileID: 0}
-  holdDistance: 1.5
-  rotationSpeed: 100
-  objectID: CannedFood_01
-  doorAnimator: {fileID: 0}
+--- !u!114 &3201337435382374586
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2594811017049069506}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcf0b4d321651a441bb703db55c81496, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inspectionUI: {fileID: 0}
+  typingSpeed: 0.01

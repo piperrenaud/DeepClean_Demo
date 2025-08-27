@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 8339391933050194724}
   - component: {fileID: 2656790825721088785}
   - component: {fileID: -1991494118002627694}
+  - component: {fileID: -5811647237322781676}
+  - component: {fileID: 4337166385673348066}
   m_Layer: 0
   m_Name: I_Prop_TrashBag_01
   m_TagString: Untagged
@@ -122,11 +124,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87fb38b488b1c4e46a642bb1adb8c97a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  objectID: Prop_TrashBag_01
+  evidenceType: 0
+  evidenceDescription: 
+  explanation: 
+  holdDistance: 1.5
+  rotationSpeed: 100
+  doorAnimator: {fileID: 0}
+--- !u!114 &-5811647237322781676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7546771523220581105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6caa89ac6cbd3e645bcd1c4b10f72e44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   highlightIntensity: 10
   showInteractionPrompt: 0
   interactionText: {fileID: 0}
-  interactionUI: {fileID: 0}
-  holdDistance: 1.5
-  rotationSpeed: 100
-  objectID: Prop_TrashBag_01
-  doorAnimator: {fileID: 0}
+--- !u!114 &4337166385673348066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7546771523220581105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcf0b4d321651a441bb703db55c81496, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inspectionUI: {fileID: 0}
+  typingSpeed: 0.01

@@ -904,61 +904,61 @@ MonoBehaviour:
   - itemID: CannedFood_01
     prefab: {fileID: 2594811017049069506, guid: 75dcd397f18ec974abb407f6a8a10047, type: 3}
     spawnPoint: {fileID: 1980907053}
-  - itemID: CannedFood_02
+  - itemID: I_CannedFood_02
     prefab: {fileID: 5189122848560752486, guid: da840f8de93098c458b7604bbcf97246, type: 3}
     spawnPoint: {fileID: 1980907053}
-  - itemID: Coffee
+  - itemID: I_Coffee
     prefab: {fileID: 6045373953416112058, guid: 4185b328d4b08204bb929ff34f16a956, type: 3}
     spawnPoint: {fileID: 1980907053}
-  - itemID: Drink
+  - itemID: I_Drink
     prefab: {fileID: 7674373047706971284, guid: 99ff7f4228519c24aac0d651070e41f3, type: 3}
     spawnPoint: {fileID: 1980907053}
-  - itemID: DastCoffeeCupRed
+  - itemID: I_DastCoffeeCupRed
     prefab: {fileID: 7710933181888052255, guid: 60fed3e3b4b5d154b9c43cbc9e8fcf9e, type: 3}
     spawnPoint: {fileID: 1980907053}
-  - itemID: FastFoodCupBlue
+  - itemID: I_FastFoodCupBlue
     prefab: {fileID: 4488846065006818894, guid: d6f26c385193c44479a097dd991f76ed, type: 3}
     spawnPoint: {fileID: 1980907053}
-  - itemID: Milk
+  - itemID: I_Milk
     prefab: {fileID: 6650426121929096099, guid: 55806676c5f5a2c4498bc7a821d7c7ab, type: 3}
     spawnPoint: {fileID: 1980907053}
-  - itemID: Food_Milk Bottle
+  - itemID: I_Food_Milk Bottle
     prefab: {fileID: 5697800158797286517, guid: e27740dc0f71e6242933939d6050fd41, type: 3}
     spawnPoint: {fileID: 1980907053}
-  - itemID: Nails
+  - itemID: I_Nails
     prefab: {fileID: 865487932778594624, guid: 04992538188a1044dbde8d644d263c0b, type: 3}
     spawnPoint: {fileID: 1980907053}
-  - itemID: OpenPizzaBox
+  - itemID: I_OpenPizzaBox
     prefab: {fileID: 8594852926190349526, guid: eb70ce600d1d80641bf565e5d7f9297e, type: 3}
     spawnPoint: {fileID: 1980907053}
-  - itemID: Prop_TrashBag_01
+  - itemID: I_Prop_TrashBag_01
     prefab: {fileID: 7546771523220581105, guid: 90f04355ba51ba74e8446c8a05abd7cd, type: 3}
     spawnPoint: {fileID: 1980907053}
-  - itemID: Prod_TrashBag_02
+  - itemID: I_Prod_TrashBag_02
     prefab: {fileID: 1321557082916968712, guid: 881b67db361f8c143a38219d59804bd9, type: 3}
     spawnPoint: {fileID: 1980907053}
-  - itemID: Prop_TrashBag_03
+  - itemID: I_Prop_TrashBag_03
     prefab: {fileID: 3839937426720405642, guid: 589b98b3e53a1954a8c97c5ade8db01b, type: 3}
     spawnPoint: {fileID: 1980907053}
-  - itemID: SodaBottleVar2
+  - itemID: I_SodaBottleVar2
     prefab: {fileID: 327855116534747814, guid: d9f736bd066e06f479f1030256e6976d, type: 3}
     spawnPoint: {fileID: 1980907053}
-  - itemID: SodaCan
+  - itemID: I_SodaCan
     prefab: {fileID: 5959593607201024461, guid: 470ee8eaccfe2344eb4bc3bf501d2383, type: 3}
     spawnPoint: {fileID: 1980907053}
-  - itemID: ToiletPaper
+  - itemID: I_ToiletPaper
     prefab: {fileID: 2307974719821530922, guid: 8f54ddc249cdd0b4d8bc8b95149d516a, type: 3}
     spawnPoint: {fileID: 1980907053}
-  - itemID: WaterBottle_01
+  - itemID: I_WaterBottle_01
     prefab: {fileID: 662950319340615440, guid: 44636cb9be102a2448a904ac6a1bcb66, type: 3}
     spawnPoint: {fileID: 1980907053}
-  - itemID: Bottle1
+  - itemID: I_Bottle1
     prefab: {fileID: 6077379039964380128, guid: e1b446070dd325d4b91368103e801e98, type: 3}
     spawnPoint: {fileID: 1980907053}
-  - itemID: Bottle2
+  - itemID: I_Bottle2
     prefab: {fileID: 5237383866485150801, guid: 69279df67a555c54eb2fa4d2b058f581, type: 3}
     spawnPoint: {fileID: 1980907053}
-  - itemID: Bottle3
+  - itemID: I_Bottle3
     prefab: {fileID: 533784423316795687, guid: e72a7b599e40e6442be4ecac77d5b794, type: 3}
     spawnPoint: {fileID: 1980907053}
 --- !u!4 &310021657
@@ -5168,6 +5168,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 3
   orientation: {fileID: 864508139}
+  currentSpeed: 0
 --- !u!4 &2110313095
 Transform:
   m_ObjectHideFlags: 0

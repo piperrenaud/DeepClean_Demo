@@ -13,7 +13,9 @@ GameObject:
   - component: {fileID: 4253490108472551167}
   - component: {fileID: 48832290662643276}
   - component: {fileID: 732092164916956980}
-  m_Layer: 0
+  - component: {fileID: 7711196480095016316}
+  - component: {fileID: 7409588691893816627}
+  m_Layer: 8
   m_Name: I_ToiletPaper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28,9 +30,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2307974719821530922}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.1679001, y: 1.1679, z: 1.1679001}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -122,11 +124,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87fb38b488b1c4e46a642bb1adb8c97a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  objectID: ToiletPaper
+  evidenceType: 0
+  evidenceDescription: this is toilet paper
+  explanation: 
+  holdDistance: 2.5
+  rotationSpeed: 100
+  doorAnimator: {fileID: 0}
+--- !u!114 &7711196480095016316
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2307974719821530922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6caa89ac6cbd3e645bcd1c4b10f72e44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   highlightIntensity: 10
   showInteractionPrompt: 0
   interactionText: {fileID: 0}
-  interactionUI: {fileID: 0}
-  holdDistance: 1.5
-  rotationSpeed: 100
-  objectID: ToiletPaper
-  doorAnimator: {fileID: 0}
+--- !u!114 &7409588691893816627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2307974719821530922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcf0b4d321651a441bb703db55c81496, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inspectionUI: {fileID: 0}
+  typingSpeed: 0.01

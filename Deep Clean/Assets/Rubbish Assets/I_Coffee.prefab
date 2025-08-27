@@ -91,6 +91,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 41f0becb11d63cf46bf526826443712f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4462711823468567579}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 41f0becb11d63cf46bf526826443712f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8214991855109559782}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 41f0becb11d63cf46bf526826443712f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8467740498939443803}
   m_SourcePrefab: {fileID: 100100000, guid: 41f0becb11d63cf46bf526826443712f, type: 3}
 --- !u!1 &6045373953416112058 stripped
 GameObject:
@@ -109,13 +115,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87fb38b488b1c4e46a642bb1adb8c97a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  highlightIntensity: 10
-  showInteractionPrompt: 0
-  interactionText: {fileID: 0}
-  interactionUI: {fileID: 0}
+  objectID: I_Coffee
+  evidenceType: 0
+  evidenceDescription: this is a coffee
+  explanation: 
   holdDistance: 2.5
   rotationSpeed: 100
-  objectID: Coffee
   doorAnimator: {fileID: 0}
 --- !u!65 &3894919964240567129
 BoxCollider:
@@ -201,3 +206,32 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.17299652, y: 0.22195587, z: 0.17299604}
   m_Center: {x: -0.002056241, y: -0.03743862, z: -0.0018166378}
+--- !u!114 &8214991855109559782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6045373953416112058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6caa89ac6cbd3e645bcd1c4b10f72e44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  highlightIntensity: 10
+  showInteractionPrompt: 0
+  interactionText: {fileID: 0}
+--- !u!114 &8467740498939443803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6045373953416112058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcf0b4d321651a441bb703db55c81496, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inspectionUI: {fileID: 0}
+  typingSpeed: 0.01

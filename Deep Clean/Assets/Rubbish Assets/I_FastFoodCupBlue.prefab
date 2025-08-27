@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 2687357904508131227}
   - component: {fileID: 8957629193077022588}
   - component: {fileID: 8514586751509155286}
+  - component: {fileID: 9010713203153299430}
+  - component: {fileID: 8041169233641784743}
   m_Layer: 8
   m_Name: I_FastFoodCupBlue
   m_TagString: Untagged
@@ -100,13 +102,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87fb38b488b1c4e46a642bb1adb8c97a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  highlightIntensity: 10
-  showInteractionPrompt: 0
-  interactionText: {fileID: 0}
-  interactionUI: {fileID: 0}
+  objectID: I_FastFoodCupBlue (1)
+  evidenceType: 0
+  evidenceDescription: this is a fast food drink
+  explanation: 
   holdDistance: 2.5
   rotationSpeed: 100
-  objectID: FastFoodCupBlue
   doorAnimator: {fileID: 0}
 --- !u!65 &8514586751509155286
 BoxCollider:
@@ -129,3 +130,32 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.155118, y: 0.33394423, z: 0.15511799}
   m_Center: {x: 0, y: 0.16726144, z: -0.000000011175871}
+--- !u!114 &9010713203153299430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4488846065006818894}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6caa89ac6cbd3e645bcd1c4b10f72e44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  highlightIntensity: 10
+  showInteractionPrompt: 0
+  interactionText: {fileID: 0}
+--- !u!114 &8041169233641784743
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4488846065006818894}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcf0b4d321651a441bb703db55c81496, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inspectionUI: {fileID: 0}
+  typingSpeed: 0.01

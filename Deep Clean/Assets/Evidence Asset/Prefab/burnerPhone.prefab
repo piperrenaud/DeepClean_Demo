@@ -22,35 +22,35 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0f09620a600006f4eac3a8094a4da3da, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.824072
+      value: -5.637
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0f09620a600006f4eac3a8094a4da3da, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.1115276
+      value: -1.549
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0f09620a600006f4eac3a8094a4da3da, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -2.1112823
+      value: -3.89
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0f09620a600006f4eac3a8094a4da3da, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.6353234
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0f09620a600006f4eac3a8094a4da3da, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0.6353234
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0f09620a600006f4eac3a8094a4da3da, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: -0.3104259
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0f09620a600006f4eac3a8094a4da3da, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0.3104259
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0f09620a600006f4eac3a8094a4da3da, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0f09620a600006f4eac3a8094a4da3da, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
@@ -58,11 +58,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0f09620a600006f4eac3a8094a4da3da, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
+      value: 52.081
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 0f09620a600006f4eac3a8094a4da3da, type: 3}
       propertyPath: m_Name
       value: burnerPhone
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 0f09620a600006f4eac3a8094a4da3da, type: 3}
+      propertyPath: m_TagString
+      value: Evidence
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -74,6 +78,15 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 0f09620a600006f4eac3a8094a4da3da, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4384742105801982529}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 0f09620a600006f4eac3a8094a4da3da, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5450572323078344997}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 0f09620a600006f4eac3a8094a4da3da, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7843058516487217163}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 0f09620a600006f4eac3a8094a4da3da, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8253656339291695096}
   m_SourcePrefab: {fileID: 100100000, guid: 0f09620a600006f4eac3a8094a4da3da, type: 3}
 --- !u!1 &8283697678642014592 stripped
 GameObject:
@@ -113,14 +126,58 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87fb38b488b1c4e46a642bb1adb8c97a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  objectID: burnerPhone
   evidenceType: 2
-  evidenceDescription: 
-  homeownerExplanation: 
+  itemDescription: 'this is a burner phone
+
+'
+  playerDialogue: hmm, why does he have so many burner phones?
+  explanation: 
+  holdDistance: 2.5
+  rotationSpeed: 100
+  doorAnimator: {fileID: 0}
+--- !u!114 &5450572323078344997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8283697678642014592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac194aacf98199f4db7f31a3205a2ff6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogueBox: {fileID: 0}
+  dialogueText: {fileID: 0}
+  typingSpeed: 0.01
+  dialogueDuration: 5
+--- !u!114 &7843058516487217163
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8283697678642014592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6caa89ac6cbd3e645bcd1c4b10f72e44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   highlightIntensity: 10
   showInteractionPrompt: 0
   interactionText: {fileID: 0}
-  interactionUI: {fileID: 0}
-  holdDistance: 2.5
-  rotationSpeed: 100
-  objectID: burnerPhone
-  doorAnimator: {fileID: 0}
+--- !u!114 &8253656339291695096
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8283697678642014592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcf0b4d321651a441bb703db55c81496, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inspectionUI: {fileID: 0}
+  typingSpeed: 0.01
