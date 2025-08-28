@@ -4,6 +4,13 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using System.IO;
 
+[System.Serializable]
+public class PhotoData
+{
+    public string fileName;
+    public bool isEvidence;
+}
+
 public class PhotoCapture : MonoBehaviour
 {
     [Header("Photo Taker")]
@@ -104,7 +111,20 @@ public class PhotoCapture : MonoBehaviour
         screenCapture.ReadPixels(regionToRead, 0, 0, false);
         screenCapture.Apply();
 
-        SavePhoto(screenCapture);
+        //check if object in center is evidence
+        bool isEvidence = false;
+        Camera mainCam = Camera.main;
+        Ray ray = mainCam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+        if (Physics.Raycast(ray, out RaycastHit hit, 100f))
+        {
+            if (hit.collider.CompareTag("Evidence"))
+            {
+                isEvidence = true;
+                Debug.Log("Captured photo of Evidence!");
+            }
+        }
+
+        SavePhoto(screenCapture, isEvidence);
         ShowPhoto();
     }
 
@@ -135,7 +155,7 @@ public class PhotoCapture : MonoBehaviour
         crossHair.SetActive(true);
     }
 
-    void SavePhoto(Texture2D texture)
+    void SavePhoto(Texture2D texture, bool isEvidence)
     {
         byte[] bytes = texture.EncodeToPNG();
         string fileName = $"photo_{photoCounter}.png";
@@ -143,6 +163,16 @@ public class PhotoCapture : MonoBehaviour
 
         File.WriteAllBytes(filePath, bytes);
         Debug.Log("Saved photo to: "+ filePath);
+
+        //save metadata
+        PhotoData data = new PhotoData
+        {
+            fileName = fileName,
+            isEvidence = isEvidence
+        };
+
+        string json = JsonUtility.ToJson(data);
+        File.WriteAllText(Path.Combine(Application.persistentDataPath, fileName + ".json"), json);
 
         photoCounter++;
     }

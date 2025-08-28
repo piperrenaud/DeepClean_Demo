@@ -96,6 +96,15 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
+    public float GetRoomCleanliness(int roomID)
+    {
+        var roomSpots = allDirtSpots.Where(s => s.roomID == roomID).ToList();
+        float roomTotal = roomSpots.Sum(s => s.GetMaxDirt());
+        float roomCleaned = roomSpots.Sum(s => s.GetAmountCleaned());
+
+        return (roomTotal > 0f) ? (roomCleaned / roomTotal) * 100f : 100f;
+    }
     
     private void CheckGameComplete()
     {

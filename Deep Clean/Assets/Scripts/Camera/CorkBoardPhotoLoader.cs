@@ -25,6 +25,8 @@ public class CorkBoardPhotoLoader : MonoBehaviour
         int index = 0;
         foreach (string file in files)
         {
+            if (!file.EndsWith(".png")) continue; //skip JSON files
+
             byte[] bytes = File.ReadAllBytes(file);
             Texture2D tex = new Texture2D(2, 2);
             tex.LoadImage(bytes);
@@ -47,6 +49,18 @@ public class CorkBoardPhotoLoader : MonoBehaviour
             int col = index % photosPerRow;
 
             rt.anchoredPosition = new Vector2(col * spacing, -row * spacing);
+
+            //load metadata
+            string jsonFile = file + ".json";
+            if (File.Exists(jsonFile))
+            {
+                string json = File.ReadAllText(jsonFile);
+                PhotoData data = JsonUtility.FromJson<PhotoData>(json);
+                if (data.isEvidence)
+                {
+                    photoObj.tag = "Evidence";
+                }
+            }
 
             index++;
         }

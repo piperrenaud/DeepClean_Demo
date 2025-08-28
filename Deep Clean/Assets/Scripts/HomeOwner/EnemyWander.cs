@@ -27,6 +27,7 @@ public class EnemyWander : MonoBehaviour
     public Animator animator;
     public float suspicion = 0f;
     public int playerRoomID;
+    public PlayerRoomTracker playerTracker;
 
     private NavMeshAgent agent;
     private TaskPoint currentTargetPoint;
@@ -37,6 +38,7 @@ public class EnemyWander : MonoBehaviour
     private bool isPaused = false;
     private float pauseTimer = 0f;
     private DoorController targetDoor;
+
 
     void Start()
     {
@@ -71,16 +73,18 @@ public class EnemyWander : MonoBehaviour
             return;
         }
 
-        //patrol randomly if suspicion is 0
-        if (suspicion == 0f)
+
+        if (!agent.pathPending && agent.remainingDistance < 0.5f && currentTargetPoint != null)
         {
-            if (!agent.pathPending && agent.remainingDistance < 0.5f && currentTargetPoint != null)
-            {
-                animator.SetBool("Walking", false);
-                
-                StartCoroutine(DoTaskRoutine(currentTargetPoint.taskName));
-                currentTargetPoint = null;
-            }
+            animator.SetBool("Walking", false);
+            
+            StartCoroutine(DoTaskRoutine(currentTargetPoint.taskName));
+            currentTargetPoint = null;
+        }
+
+        if (playerTracker != null)
+        {
+            playerRoomID = playerTracker.currentRoomID;
         }
     }
 
@@ -97,6 +101,7 @@ public class EnemyWander : MonoBehaviour
         //start task anim
         animator.SetBool(taskName, true);
         float waitTime = Random.Range(minTaskTime, maxTaskTime);
+        Debug.Log("[EnemyWander] Performing task '" + taskName + "' for " + waitTime + "s");
         yield return new WaitForSeconds(waitTime);
         //stop anim
         animator.SetBool(taskName, false);
@@ -112,19 +117,46 @@ public class EnemyWander : MonoBehaviour
         PickNextTask();
     }
 
-    void PickNextTask(bool preferNearPlayer = false)
+    void PickNextTask()
     {
-        if (taskPoints.Count == 0) return;
-
-        float biasChance = Mathf.Clamp01(suspicion);
-        List<TaskPoint> candidates;
-
-        if (Random.value < biasChance)
+        if (taskPoints.Count == 0)
         {
-            candidates = taskPoints.Where(p => p.roomID == playerRoomID).ToList();
-            if (candidates.Count == 0) candidates = taskPoints;
+            return;
         }
-        else 
+
+        List<TaskPoint> candidates = new List<TaskPoint>();
+
+        if (suspicion >= 100f)
+        {
+            //always pick players current room
+            candidates = taskPoints.Where(p => p.roomID == playerRoomID).ToList();
+            Debug.Log("[EnemyWander] Suspicion 100 → Following player. Candidates: " + candidates.Count);
+        }
+        else if (suspicion >= 71f)
+        {
+            //bias towards players room but still slightly random
+            float chanceStayNearPlayer = Mathf.InverseLerp(41f, 70f, suspicion); //0-1 scale
+            if (Random.value < chanceStayNearPlayer)
+            {
+                candidates = taskPoints.Where(p => p.roomID == playerRoomID).ToList();
+                Debug.Log("[EnemyWander] Suspicion 41–70 → Chose player’s room. Candidates: " + candidates.Count);
+
+            }
+            else
+            {
+                candidates = taskPoints;
+                Debug.Log("[EnemyWander] Suspicion 41–70 → Random patrol. Candidates: " + candidates.Count);
+            }
+        }
+        else
+        {
+            //0-40 = rnadom
+            candidates = taskPoints;
+            Debug.Log("[EnemyWander] Suspicion 0–40 → Random patrol. Candidates: " + candidates.Count);
+        }
+
+        //if no valid points found
+        if (candidates.Count == 0)
         {
             candidates = taskPoints;
         }

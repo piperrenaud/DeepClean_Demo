@@ -961,6 +961,39 @@ MonoBehaviour:
   - itemID: I_Bottle3
     prefab: {fileID: 533784423316795687, guid: e72a7b599e40e6442be4ecac77d5b794, type: 3}
     spawnPoint: {fileID: 1980907053}
+  - itemID: burnerPhone
+    prefab: {fileID: 8283697678642014592, guid: 3b5607abb26301f4d87d234446e63701, type: 3}
+    spawnPoint: {fileID: 1980907053}
+  - itemID: Cash
+    prefab: {fileID: 4093399174604689418, guid: 155552abfb948eb4abbdb801bb9e741f, type: 3}
+    spawnPoint: {fileID: 1980907053}
+  - itemID: Ledger
+    prefab: {fileID: 6677228676846240653, guid: e1fabdf13ced40c4abdce4f17ea59217, type: 3}
+    spawnPoint: {fileID: 1980907053}
+  - itemID: Note
+    prefab: {fileID: 8601528696772159562, guid: 9281297ee844b5b438878378caa9e830, type: 3}
+    spawnPoint: {fileID: 1980907053}
+  - itemID: StorageUnitKey
+    prefab: {fileID: 6971541255312276151, guid: 05f3013e76204b94e863675dfba4aca2, type: 3}
+    spawnPoint: {fileID: 1980907053}
+  - itemID: ThankYou card
+    prefab: {fileID: 6455322989660219038, guid: 2acc91060bac54d42be73f18a9f8e076, type: 3}
+    spawnPoint: {fileID: 1980907053}
+  - itemID: USB
+    prefab: {fileID: 1779205387239090011, guid: aecfedda6da505f4d80842e1975bda09, type: 3}
+    spawnPoint: {fileID: 1980907053}
+  - itemID: PlaneTicket
+    prefab: {fileID: 7840079365953930034, guid: 38030432627a2f348a9e039afe7ceed7, type: 3}
+    spawnPoint: {fileID: 1980907053}
+  - itemID: Pill Bottle
+    prefab: {fileID: 272462128171097715, guid: 594b86076e3421d4398f4b8744a00f2e, type: 3}
+    spawnPoint: {fileID: 1980907053}
+  - itemID: Tape_02
+    prefab: {fileID: 698798351310019415, guid: 5c16e5aafac33974280b7e3d411ed313, type: 3}
+    spawnPoint: {fileID: 1980907053}
+  - itemID: Missing Knife
+    prefab: {fileID: 4207705383501698777, guid: 1df0f0391b6fa0a47be52cd7f5cc9357, type: 3}
+    spawnPoint: {fileID: 1980907053}
 --- !u!4 &310021657
 Transform:
   m_ObjectHideFlags: 0

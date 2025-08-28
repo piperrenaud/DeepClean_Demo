@@ -12,6 +12,9 @@ public class Interactable : MonoBehaviour
     [TextArea] public string playerDialogue;
     [TextArea] public string explanation;
 
+    [Header("Interaction Settings")]
+    public bool canBeInspected = true;
+
     [Header("Pickup Settings")]
     public float holdDistance = 2.5f;
     public float rotationSpeed = 100f;
@@ -78,7 +81,7 @@ public class Interactable : MonoBehaviour
             if (savedToolIndex != -1) toolManager.ForcePutAwayCurrentTool();
         }
 
-        inspection.ShowUI(itemDescription);
+        if (canBeInspected && inspection != null) inspection.ShowUI(itemDescription);
 
         isHeld = true;
 
@@ -93,7 +96,7 @@ public class Interactable : MonoBehaviour
 
     public void DropObject()
     {
-        inspection.HideUI();
+        if (inspection != null) inspection.HideUI();
         isHeld = false;
 
         transform.SetParent(originalParent);
@@ -136,9 +139,16 @@ public class Interactable : MonoBehaviour
             );
         }
 
+        if (inspection != null) inspection.HideUI();
+
+        if (toolManager != null && savedToolIndex != -1)
+        {
+            toolManager.ForcePickUpTool(savedToolIndex);
+            savedToolIndex = -1;
+        }
+
         gameObject.SetActive(false);
         isHeld = false;
-        inspection.HideUI();
     }
 
     public void ToggleDoor()

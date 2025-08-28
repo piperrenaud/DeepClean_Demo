@@ -35,7 +35,6 @@ public class DirtSpot : MonoBehaviour
     
     public void StartCleaning(CleaningTool tool)
     {
-        Debug.Log("cleaning");
         if (currentDirtiness <= 0) return;
         
         currentTool = tool;

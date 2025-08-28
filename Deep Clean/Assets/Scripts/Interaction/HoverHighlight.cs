@@ -34,12 +34,16 @@ public class HoverHighlight : MonoBehaviour
                 if (Input.GetMouseButtonDown(1) && interact != null) //right click pickup
                 {
 
-                    heldInteractable = interact;
-                    heldInteractable.PickUpObject(cam.transform);
+                    //only pick up the object if it can be inspected
+                    if (interact.GetComponent<InteractableInspection>() != null)
+                    {
+                        heldInteractable = interact;
+                        heldInteractable.PickUpObject(cam.transform);
 
-                    //turn off movement
-                    playerMovement.enabled = false;
-                    playerCam.enabled = false;
+                        //turn off movement while inspecting
+                        playerMovement.enabled = false;
+                        playerCam.enabled = false;
+                    }
                 }
             }
             else
