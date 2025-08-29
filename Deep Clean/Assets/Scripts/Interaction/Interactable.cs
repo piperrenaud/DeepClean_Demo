@@ -3,8 +3,9 @@ using UnityEditor;
 
 public class Interactable : MonoBehaviour
 {
-    [Header("UniqueID")]
+    [Header("Inventory Settings")]
     public string objectID;
+    public Sprite itemIcon;
 
     [Header("Evidence Settings")]
     public EvidenceType evidenceType = EvidenceType.None;
@@ -35,6 +36,8 @@ public class Interactable : MonoBehaviour
     private InteractableDialogue dialogue;
     private InteractableInspection inspection;
 
+    private BoxCollider boxCollider;
+
     void Start()
     {
         toolManager = FindFirstObjectByType<ToolManager>();
@@ -42,6 +45,7 @@ public class Interactable : MonoBehaviour
         highlighter = GetComponent<InteractableHighlighter>();
         dialogue = GetComponent<InteractableDialogue>();
         inspection = GetComponent<InteractableInspection>();
+        boxCollider = GetComponent<BoxCollider>();
 
         originalScale = transform.localScale;
     }
@@ -92,6 +96,8 @@ public class Interactable : MonoBehaviour
         transform.SetParent(playerTransform);
         transform.localPosition = new Vector3(0, -0.5f, holdDistance);
         transform.localRotation = Quaternion.identity;
+
+        if (boxCollider != null) boxCollider.enabled = false;
     }
 
     public void DropObject()
@@ -109,6 +115,8 @@ public class Interactable : MonoBehaviour
             toolManager.ForcePickUpTool(savedToolIndex);
             savedToolIndex = -1;
         }
+
+        if (boxCollider != null) boxCollider.enabled = true;
     }
 
     public void RotateObject()
@@ -135,7 +143,8 @@ public class Interactable : MonoBehaviour
                 itemDescription,
                 playerDialogue,
                 explanation,
-                false
+                false,
+                itemIcon
             );
         }
 
@@ -146,6 +155,8 @@ public class Interactable : MonoBehaviour
             toolManager.ForcePickUpTool(savedToolIndex);
             savedToolIndex = -1;
         }
+
+        if (boxCollider != null) boxCollider.enabled = true;
 
         gameObject.SetActive(false);
         isHeld = false;

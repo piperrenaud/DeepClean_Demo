@@ -326,12 +326,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectID: burnerPhone
+  itemIcon: {fileID: 21300000, guid: 6e34dce11c298354ba1d565d99d31f6d, type: 3}
   evidenceType: 2
   itemDescription: 'this is a burner phone
 
 '
   playerDialogue: hmm, why does he have so many burner phones?
   explanation: 
+  canBeInspected: 1
   holdDistance: 2.5
   rotationSpeed: 100
   doorAnimator: {fileID: 0}

@@ -508,10 +508,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectID: 
+  itemIcon: {fileID: 0}
   evidenceType: 3
   itemDescription: These are pants
   playerDialogue: Are these pants covered in blood?
   explanation: 
+  canBeInspected: 0
   holdDistance: 2.5
   rotationSpeed: 100
   doorAnimator: {fileID: 0}
@@ -530,7 +532,7 @@ MonoBehaviour:
   dialogueBox: {fileID: 0}
   dialogueText: {fileID: 0}
   typingSpeed: 0.01
-  dialogueDuration: 5
+  dialogueDuration: 3
 --- !u!114 &5383455337447558065
 MonoBehaviour:
   m_ObjectHideFlags: 0

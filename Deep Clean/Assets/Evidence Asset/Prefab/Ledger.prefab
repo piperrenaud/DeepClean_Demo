@@ -304,10 +304,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectID: Ledger
+  itemIcon: {fileID: 21300000, guid: 1a4a4b893f55b164fb066c662e00c747, type: 3}
   evidenceType: 1
   itemDescription: this is a ledger
   playerDialogue: This ledger says a lot about "cargo" and "transit"...
   explanation: 
+  canBeInspected: 1
   holdDistance: 2.5
   rotationSpeed: 100
   doorAnimator: {fileID: 0}

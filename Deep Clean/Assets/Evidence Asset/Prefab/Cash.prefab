@@ -310,10 +310,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectID: Cash
+  itemIcon: {fileID: 21300000, guid: 0c439310ea95ba04a8723513e57d5289, type: 3}
   evidenceType: 2
   itemDescription: this is a bunch of foreign cash
   playerDialogue: Hmm, why does he need this much cash from other countries?
   explanation: 
+  canBeInspected: 1
   holdDistance: 2.5
   rotationSpeed: 100
   doorAnimator: {fileID: 0}

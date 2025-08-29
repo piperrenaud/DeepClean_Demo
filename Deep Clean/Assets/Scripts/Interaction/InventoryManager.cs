@@ -5,6 +5,8 @@ public class InventoryManager : MonoBehaviour
 {
     public static InventoryManager Instance;
 
+    public int maxItems = 32;
+
     [System.Serializable]
     public class CollectedEntry
     {
@@ -14,6 +16,7 @@ public class InventoryManager : MonoBehaviour
         public string playerDialogue;
         public string explanation;
         public bool isPhoto;
+        public Sprite itemIcon;
     }
 
     // Keep track of collected items
@@ -32,8 +35,14 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    public void AddItem(string itemID, EvidenceType type, string description, string dialogue, string explanation, bool isPhoto = false)
+    public bool AddItem(string itemID, EvidenceType type, string description, string dialogue, string explanation, bool isPhoto = false, Sprite itemIcon = null)
     {
+        if (collectedItems.Count >= maxItems)
+        {
+            Debug.Log("Inventory full! cannot take more items.");
+            return false; //reject adding
+        }
+
        collectedItems.Add(new CollectedEntry
        {
         itemID = itemID,
@@ -41,9 +50,13 @@ public class InventoryManager : MonoBehaviour
         itemDescription = description,
         playerDialogue = dialogue,
         explanation = explanation,
-        isPhoto = isPhoto
+        isPhoto = isPhoto,
+        itemIcon = itemIcon != null ? itemIcon : null
        });
+
        Debug.Log("Collected evidence: " + itemID + "(" + type + ")");
+       InventoryUIController.Instance.RefreshUI(); //update UI with new item
+       return true;
     }
 
     public List<CollectedEntry> GetAllItems()
