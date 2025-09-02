@@ -6,6 +6,7 @@ public class Interactable : MonoBehaviour
     [Header("Inventory Settings")]
     public string objectID;
     public Sprite itemIcon;
+    public string questionName;
 
     [Header("Evidence Settings")]
     public EvidenceType evidenceType = EvidenceType.None;
@@ -38,6 +39,8 @@ public class Interactable : MonoBehaviour
 
     private BoxCollider boxCollider;
 
+    private bool isDiscovered = false;
+
     void Start()
     {
         toolManager = FindFirstObjectByType<ToolManager>();
@@ -67,7 +70,16 @@ public class Interactable : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.E) && doorAnimator == null)
             {
                 if (dialogue.IsTyping()) dialogue.FinishTypingInstantly();
-                else dialogue.ShowDialogue(playerDialogue);
+                else 
+                {
+                    dialogue.ShowDialogue(playerDialogue);
+
+                    if (!isDiscovered)
+                    {
+                        isDiscovered = true;
+                        DiscoveryManager.Instance.RegisterDiscovery(this);
+                    }
+                }
             }
 
             if (Input.GetKeyDown(KeyCode.E) && doorAnimator != null)
@@ -188,5 +200,15 @@ public class Interactable : MonoBehaviour
         {
             highlighter.Highlight(state);
         }
+    }
+
+    public string GetExplanation()
+    {
+        return explanation;
+    }
+
+    public string GetObjectID()
+    {
+        return objectID;
     }
 }

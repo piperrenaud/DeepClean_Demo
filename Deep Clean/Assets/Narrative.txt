@@ -29,7 +29,7 @@ PHOTO EVIDENCE
 4. Multiple burner phones 
 
 RED HERRINGS
-1. bloodstained shirt
+1. bloodstained pants
     - suggests violence
     - actually from hunting trip. player can find hunting license and photos.
 2. Prescription bottles with other peaoples names
@@ -43,7 +43,7 @@ RED HERRINGS
     - later you find the missing knife somewhere else in the house.
 
 QUESTIONS TO ask
-1. ask about bloodstained shirt - "that just from a hunting trip. I think i have some photos around here somewhere."
+1. ask about bloodstained pants - "that just from a hunting trip. I think i have some photos around here somewhere."
 2. ask about burner phones - "i repair and resell them sometimes"
 3. ask about foreign note - "oh just a recipe from a friend"
 4. ask about rope and tape - "for packing up the furniture, obviously"

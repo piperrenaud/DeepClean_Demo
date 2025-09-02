@@ -7,6 +7,7 @@ TagManager:
   - RoomZone
   - Enemy
   - Evidence
+  - PersistentButton
   layers:
   - Default
   - TransparentFX
