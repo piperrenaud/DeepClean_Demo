@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 using System.Collections.Generic;
+using System.Collections;
 
 public class EnemyInteraction : MonoBehaviour
 {
@@ -13,10 +14,22 @@ public class EnemyInteraction : MonoBehaviour
     public GameObject dialogueUI;
     public Transform lookTarget;
     public EnemyDialogue enemyDialogue;
+    public GameObject gameUI;
 
     [Header("UI Settings")]
     public Transform buttonContainer;
     public GameObject questionButtonPrefab;
+    public GameObject scrollPanel;
+
+    [Header("Dialogue References")]
+    public GameObject enemyDialogueBox;
+    public TMPro.TMP_Text enemyDialogueText;
+    public float typingSpeed = 0.02f;
+    public float dialogueDuration = 4f;
+
+    private Coroutine typingRoutine;
+    private bool isTyping;
+    private string currentFullText;
 
     [Header("Settings")]
     public float interactRange = 2f;
@@ -40,11 +53,28 @@ public class EnemyInteraction : MonoBehaviour
             FacePlayer();
             ForceIdle();
         }
+
+        if (enemyDialogueBox != null && enemyDialogueBox.activeSelf && Input.GetMouseButtonDown(0))
+        {
+            if (isTyping)
+            {
+                FinishTypingInstantly();
+            }
+            else
+            {
+                enemyDialogueBox.SetActive(false);
+                if (scrollPanel != null)
+                    scrollPanel.SetActive(true);
+            }
+        }
     }
 
     void StartInteraction()
     {
         inConversation = true;
+
+        //disable gameUI
+        gameUI.SetActive(false);
 
         //stop enemy movement
         enemyWander.enabled = false;
@@ -59,6 +89,10 @@ public class EnemyInteraction : MonoBehaviour
 
         //show dialogue UI
         dialogueUI.SetActive(true);
+
+        //show question scroll panel
+        if (scrollPanel != null)
+            scrollPanel.SetActive(true);
 
         //spawn question buttons
         SpawnQuestionButtons();
@@ -104,20 +138,143 @@ public class EnemyInteraction : MonoBehaviour
 
     private void AskAboutObject(Interactable obj)
     {
-        //show enemy response in same dialogue ui
-        InteractableDialogue dialogueComponent = dialogueUI.GetComponent<InteractableDialogue>();
-        if (dialogueComponent != null)
+        //hide scroll panel while dialogue players
+        if (scrollPanel != null)
+            scrollPanel.SetActive(false);
+        
+        //show enemy response 
+        ShowEnemyDialogue(obj.GetExplanation());
+
+        //update interactable
+        if (!string.IsNullOrEmpty(obj.explanation))
         {
-            dialogueComponent.ShowDialogue(obj.GetExplanation());
+            if (!obj.itemDescription.Contains("Explanation:"))
+            {
+                obj.itemDescription += "\n\nExplanation: "+ obj.explanation;
+            }
         }
+
+        //update inventory 
+        if (InventoryManager.Instance != null)
+        {
+            InventoryManager.Instance.UpdateItemWithExplanation(obj.GetObjectID(), obj.explanation);
+        }
+    }
+
+    private void ShowEnemyDialogue(string text)
+    {
+        if (enemyDialogueBox == null || enemyDialogueText == null) return;
+
+        enemyDialogueBox.SetActive(true);
+        currentFullText = text;
+
+        if (typingRoutine != null)
+            StopCoroutine(typingRoutine);
+
+        typingRoutine = StartCoroutine(TypeText(text));
+    }
+
+    private IEnumerator TypeText(string fullText)
+    {
+        isTyping = true;
+        enemyDialogueText.text = string.Empty;
+
+        foreach (char letter in fullText)
+        {
+            enemyDialogueText.text += letter;
+            yield return new WaitForSeconds(typingSpeed);
+
+            if (!isTyping) yield break; //break early if skipping
+        }
+
+        isTyping = false;
+
+        yield return new WaitForSeconds(dialogueDuration);
+
+        enemyDialogueBox.SetActive(false);
+        typingRoutine = null;
+
+        if (scrollPanel != null)
+            scrollPanel.SetActive(true); //renable quetsions
+    }
+
+    private void FinishTypingInstantly()
+    {
+        isTyping = false;
+        enemyDialogueText.text = currentFullText;
+
+        if (typingRoutine != null)
+            StopCoroutine(typingRoutine);
+
+        typingRoutine = StartCoroutine(HideAfterDelay());
+    }
+
+    private IEnumerator HideAfterDelay()
+    {
+        yield return new WaitForSeconds(dialogueDuration);
+        enemyDialogueBox.SetActive(false);
+        typingRoutine = null;
+
+        if (scrollPanel != null)
+            scrollPanel.SetActive(true);
+    }
+
+    private IEnumerator ReEnableScrollPanelAfterDelay()
+    {
+        yield return new WaitForSeconds(4f);
+        if (scrollPanel != null)
+            scrollPanel.SetActive(true);
     }
 
     public void EndInteraction()
     {
+        //hide scroll pane
+        if (scrollPanel != null)
+            scrollPanel.SetActive(false);
+
+        ShowEnemyDialogue("Okay, let me know if you have more questions.");
+
+        //start coroutine that waits for dialogue to finish
+        StartCoroutine(WaitForClosingDialogue());
+    }
+
+    private IEnumerator WaitForClosingDialogue()
+    {
+        //wait while text is typing
+        while (isTyping)
+            yield return null;
+
+        //wait for autoclose or until player clicks
+        float timer = 0f;
+        bool skipped = false;
+
+        while (timer < dialogueDuration && !skipped)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                skipped = true;
+                break;
+            }
+
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        //hide dialogue box
+        if (enemyDialogueBox != null)
+            enemyDialogueBox.SetActive(false);
+
+        //finish
+        FinalizeEndInteraction();
+    }
+
+    private void FinalizeEndInteraction()
+    {
         inConversation = false;
 
-        //hide dialogue UI
-        dialogueUI.SetActive(false);
+        //hide dialogue ui
+        if (dialogueUI != null)
+            dialogueUI.SetActive(false);
 
         //clear question buttons
         foreach (Transform child in buttonContainer)
@@ -126,16 +283,17 @@ public class EnemyInteraction : MonoBehaviour
                 Destroy(child.gameObject);
         }
 
-        //re enable player movement
-        playermovement.enabled = true;
+        //enable gameUI
+        gameUI.SetActive(true);
 
-        //re enable camera look
+        //renable player movement
+        playermovement.enabled = true;
         playerCam.enabled = true;
         Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = true;
+        Cursor.visible = false;
 
         //resume enemy AI
-        var agent = GetComponent<NavMeshAgent>();
+        var agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         if (agent != null) agent.isStopped = false;
         enemyWander.enabled = true;
     }

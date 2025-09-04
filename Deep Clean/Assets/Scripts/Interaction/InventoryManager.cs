@@ -36,7 +36,7 @@ public class InventoryManager : MonoBehaviour
     }
 
     public bool AddItem(string itemID, EvidenceType type, string description, string dialogue, string explanation, bool isPhoto = false, Sprite itemIcon = null)
-    {
+    { 
         if (collectedItems.Count >= maxItems)
         {
             Debug.Log("Inventory full! cannot take more items.");
@@ -55,12 +55,51 @@ public class InventoryManager : MonoBehaviour
        });
 
        Debug.Log("Collected evidence: " + itemID + "(" + type + ")");
-       InventoryUIController.Instance.RefreshUI(); //update UI with new item
+       
+       if (InventoryUIController.Instance != null)
+            InventoryUIController.Instance.RefreshUI();
+
        return true;
+    }
+
+    public void RemoveItem(string itemID)
+    {
+        for (int i = 0; i < collectedItems.Count; i++)
+        {
+            if (collectedItems[i].itemID == itemID)
+            {
+                collectedItems.RemoveAt(i);
+                break;
+            }
+        }
     }
 
     public List<CollectedEntry> GetAllItems()
     {
         return collectedItems;
+    }
+
+    public void UpdateItemWithExplanation(string itemID, string explanation)
+    {
+        foreach (var entry in collectedItems)
+        {
+            if (entry.itemID == itemID)
+            {
+                entry.explanation = explanation;
+
+                //add explanation to description if not already there
+                if (!string.IsNullOrEmpty(explanation) && !entry.itemDescription.Contains("Explanation:"))
+                {
+                    entry.itemDescription += "\n\nExplanation: " + explanation;
+                }
+
+                //refresh UI so player sees update
+                if (InventoryUIController.Instance != null)
+                    InventoryUIController.Instance.RefreshUI();
+
+                Debug.Log($"Updated {itemID} with explanation.");
+                return;
+            }
+        }
     }
 }

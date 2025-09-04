@@ -226,8 +226,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.024279919, y: 0.016917875, z: 0.0068982537}
-  m_Center: {x: 6.777639e-12, y: -0.00045297667, z: 0.0031906501}
+  m_Size: {x: 0.024279919, y: 0.016917875, z: 0.0006084215}
+  m_Center: {x: 7.8329433e-13, y: -0.00045297644, z: 0.000045733523}
 --- !u!114 &6453944110446494403
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -242,6 +242,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectID: PlaneTicket
   itemIcon: {fileID: 21300000, guid: 0c20d5b5d60b76044bda4e85d3781bf5, type: 3}
+  questionName: 
   evidenceType: 2
   itemDescription: This is a plane ticket
   playerDialogue: 'A ticket to Thailand? '

@@ -13,15 +13,33 @@ public class InventoryUIController : MonoBehaviour
     public TMP_Text descriptionText;
     public Image selectedItemImage;
 
+    [Header("Drop Button")]
+    public GameObject dropButton;
+    private InventoryManager.CollectedEntry selectedItem;
+    public Transform playerTransform;
+
+    [System.Serializable]
+    public class ItemPrefab
+    {
+        public string itemID;
+        public Interactable prefab;
+    }
+    public List<ItemPrefab> itemPrefabs;
+
     private List<GameObject> spawnedSlots = new List<GameObject>();
 
-    void Start()
+    void Awake()
     {
         Instance = this;
+
+        //auto refresh
+        RefreshUI();
     }
 
     public void RefreshUI()
     {
+        if (InventoryManager.Instance == null) return;
+
         //clear old slots
         foreach (var slot in spawnedSlots)
         {
@@ -52,18 +70,24 @@ public class InventoryUIController : MonoBehaviour
             Button button = slot.GetComponent<Button>();
             button.onClick.AddListener(() => 
             {
-                ShowDescription(item.itemDescription);
+                ShowDescription(item.itemDescription, item);
                 ShowSelectedImage(item.itemIcon);
             });
         }
     }
 
-    private void ShowDescription(string desc)
+    private void ShowDescription(string desc, InventoryManager.CollectedEntry item)
     {
+        selectedItem = item;
+
         if (descriptionText != null)
         {
             descriptionText.text = desc;
         }
+
+        //show drop button
+        if (dropButton != null)
+            dropButton.SetActive(true);
     }
 
     private void ShowSelectedImage(Sprite icon)
@@ -73,5 +97,66 @@ public class InventoryUIController : MonoBehaviour
             selectedItemImage.sprite = icon;
             selectedItemImage.enabled = (icon != null);
         }
+    }
+
+    public void DropSelectedItem()
+    {
+        if (selectedItem == null) return;
+
+        //remove from inventory
+        InventoryManager.Instance.RemoveItem(selectedItem.itemID);
+
+        //spawn object at players feet
+        Interactable objPrefab = FindInteractablePrefab(selectedItem.itemID);
+        if (objPrefab != null && playerTransform != null)
+        {
+            Vector3 dropPos = playerTransform.position + playerTransform.forward * 1f;
+            
+            //instantiate the object
+            Interactable droppedObj = Instantiate(objPrefab, dropPos, Quaternion.identity);
+            droppedObj.gameObject.SetActive(true);
+
+            //give rigidbody
+            Rigidbody rb = droppedObj.gameObject.AddComponent<Rigidbody>();
+            if (rb == null)
+            {
+                rb = droppedObj.gameObject.AddComponent<Rigidbody>();
+            }
+
+            //enable gravity and reset velocity
+            rb.useGravity = true;
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+
+            //copy inventory data onto dropped object
+            droppedObj.itemDescription = selectedItem.itemDescription;
+            droppedObj.playerDialogue = selectedItem.playerDialogue;
+            droppedObj.explanation = selectedItem.explanation;
+            droppedObj.evidenceType = selectedItem.type;
+            droppedObj.itemIcon = selectedItem.itemIcon;
+        }
+
+        //clear selection
+        selectedItem = null;
+        if (dropButton != null) dropButton.SetActive(false);
+
+        //clear ui
+        if (descriptionText != null) descriptionText.text = "";
+        if (selectedItemImage != null)
+        {
+            selectedItemImage.sprite = null;
+            selectedItemImage.enabled = false;
+        }
+
+        RefreshUI();
+    }
+
+    private Interactable FindInteractablePrefab(string itemID)
+    {
+        foreach (var entry in itemPrefabs)
+        {
+            if (entry.itemID == itemID) return entry.prefab;
+        }
+        return null;
     }
 }

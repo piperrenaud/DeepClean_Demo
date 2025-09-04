@@ -12,6 +12,21 @@ public class InteractableDialogue : MonoBehaviour
     private Coroutine dialogueRoutine;
     private bool isTyping = false;
     private string currentFullText;
+    
+    void Update()
+    {
+        if (dialogueBox.activeSelf && Input.GetMouseButtonDown(0))
+        {
+            if (isTyping)
+            {
+                FinishTypingInstantly();
+            }
+            else
+            {
+                dialogueBox.SetActive(false);
+            }
+        }
+    }
 
     public void ShowDialogue(string text)
     {

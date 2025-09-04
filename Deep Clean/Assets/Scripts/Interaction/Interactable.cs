@@ -109,7 +109,18 @@ public class Interactable : MonoBehaviour
         transform.localPosition = new Vector3(0, -0.5f, holdDistance);
         transform.localRotation = Quaternion.identity;
 
+        //diable boxcollider
         if (boxCollider != null) boxCollider.enabled = false;
+
+        //disable rigidbody
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.isKinematic = true;
+            rb.useGravity = false;
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
     }
 
     public void DropObject()
@@ -128,7 +139,18 @@ public class Interactable : MonoBehaviour
             savedToolIndex = -1;
         }
 
+        //enable boxcollider
         if (boxCollider != null) boxCollider.enabled = true;
+
+        //enable rigidbody
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.isKinematic = false;
+            rb.useGravity = true;
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
     }
 
     public void RotateObject()
@@ -146,6 +168,13 @@ public class Interactable : MonoBehaviour
     public void Take()
     {
         Debug.Log("Taking: " + objectID);
+
+        //mark as discovered
+        if (!isDiscovered)
+        {
+            isDiscovered = true;
+            DiscoveryManager.Instance.RegisterDiscovery(this);
+        }
 
         if (InventoryManager.Instance != null)
         {
