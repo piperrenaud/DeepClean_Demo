@@ -4,6 +4,7 @@ public class PlayerMovement : MonoBehaviour
 {
     public float moveSpeed = 3f;
     public Transform orientation;
+    public Animator animator;
 
     [HideInInspector] public float currentSpeed; 
 
@@ -15,6 +16,12 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         HandleMovement();
+
+        transform.rotation = Quaternion.Slerp(
+            transform.rotation,
+            orientation.rotation,
+            Time.deltaTime * 10f
+        );
     }
 
     void HandleMovement()
@@ -32,6 +39,11 @@ public class PlayerMovement : MonoBehaviour
 
         Vector3 move = (forward * moveZ + right * moveX).normalized;
 
+        //move player
         transform.Translate(move * currentSpeed * Time.deltaTime, Space.World);
+
+        //walking anim
+        bool isWalking = move.magnitude > 0f;
+        animator.SetBool("isWalking", isWalking);
     }
 }
