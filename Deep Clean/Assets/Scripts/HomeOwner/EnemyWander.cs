@@ -22,12 +22,17 @@ public class EnemyWander : MonoBehaviour
 
     [Header("Movement")]
     public float turnSpeed = 120f; //degrees/sec
+    public float walkSpeed = 2f;
 
     [Header("References")]
     public Animator animator;
     public float suspicion = 0f;
     public int playerRoomID;
     public PlayerRoomTracker playerTracker;
+
+    [Header("Audio")]
+    public AudioSource audioSource;
+    public AudioClip walkingSound;
 
     private NavMeshAgent agent;
     private TaskPoint currentTargetPoint;
@@ -43,6 +48,7 @@ public class EnemyWander : MonoBehaviour
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        agent.speed = walkSpeed;
         PickNextTask();
     }
 
@@ -77,6 +83,7 @@ public class EnemyWander : MonoBehaviour
         if (!agent.pathPending && agent.remainingDistance < 0.5f && currentTargetPoint != null)
         {
             animator.SetBool("Walking", false);
+            HandleWalkingSound(false);
             
             StartCoroutine(DoTaskRoutine(currentTargetPoint.taskName));
             currentTargetPoint = null;
@@ -202,6 +209,7 @@ public class EnemyWander : MonoBehaviour
         // Stop and wait while door opens
         agent.isStopped = true;
         animator.SetBool("Walking", false);
+        HandleWalkingSound(true);
 
         door.OpenDoor();
         yield return new WaitForSeconds(1f); // match your "Opening" animation length
@@ -210,6 +218,7 @@ public class EnemyWander : MonoBehaviour
         agent.isStopped = false;
         agent.SetDestination(currentTargetPoint.transform.position);
         animator.SetBool("Walking", true);
+        HandleWalkingSound(true);
 
         // Wait until the enemy has moved fully past the door before closing
         while (Vector3.Distance(transform.position, door.transform.position) < waitDistance)
@@ -265,6 +274,7 @@ public class EnemyWander : MonoBehaviour
         if (currentTargetPoint == null) return;
         agent.SetDestination(currentTargetPoint.transform.position);
         animator.SetBool("Walking", true);
+        HandleWalkingSound(true);
     }
 
     public void PauseMovement(float seconds)
@@ -273,6 +283,26 @@ public class EnemyWander : MonoBehaviour
         pauseTimer = seconds;
         agent.isStopped = true;
         animator.SetBool("Walking", false);
+    }
+
+    void HandleWalkingSound(bool isWalking)
+    {
+        if (isWalking)
+        {
+            if (!audioSource.isPlaying)
+            {
+                audioSource.clip = walkingSound;
+                audioSource.loop = true;
+                audioSource.Play();
+            }
+        }
+        else
+        {
+            if (audioSource.isPlaying && audioSource.clip == walkingSound)
+            {
+                audioSource.Stop();
+            }
+        }
     }
 
     void OnDrawGizmos()

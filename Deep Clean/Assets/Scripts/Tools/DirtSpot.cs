@@ -18,6 +18,8 @@ public class DirtSpot : MonoBehaviour
     private float currentDirtiness;
     private bool isBeingCleaned = false;
     private CleaningTool currentTool;
+    private Transform toolWorldTransform;
+    private bool isSprayed = false;
     
     void Start()
     {
@@ -33,11 +35,12 @@ public class DirtSpot : MonoBehaviour
         }
     }
     
-    public void StartCleaning(CleaningTool tool)
+    public void StartCleaning(CleaningTool tool, Transform toolTransform)
     {
         if (currentDirtiness <= 0) return;
         
         currentTool = tool;
+        toolWorldTransform = toolTransform; // store transform for distance checks
         isBeingCleaned = true;
         
 
@@ -61,7 +64,7 @@ public class DirtSpot : MonoBehaviour
     {
         if (currentTool == null) return;
         
-        float distance = Vector3.Distance(transform.position, currentTool.transform.position);
+        float distance = Vector3.Distance(transform.position, toolWorldTransform.position);
         if (distance > requiredToolDistance)
         {
             StopCleaning();
@@ -95,6 +98,17 @@ public class DirtSpot : MonoBehaviour
         {
             progressBar.value = 1f - (currentDirtiness / maxDirtiness);
         }
+    }
+
+    public void Spray()
+    {
+        if (currentDirtiness <= 0) return;
+        isSprayed = true;
+    }
+
+    public bool CanBeWiped()
+    {
+        return isSprayed && currentDirtiness > 0;
     }
     
     private void OnDirtCleaned()

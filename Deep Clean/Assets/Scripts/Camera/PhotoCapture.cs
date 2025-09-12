@@ -17,7 +17,6 @@ public class PhotoCapture : MonoBehaviour
     [SerializeField] private Image photoDisplayArea;
     [SerializeField] private GameObject photoFrame;
     [SerializeField] private GameObject cameraUI;
-    [SerializeField] private GameObject crossHair;
 
     [Header("Camera UI Elements")]
     [SerializeField] private Image innerFrame;
@@ -101,7 +100,6 @@ public class PhotoCapture : MonoBehaviour
     IEnumerator CapturePhoto()
     {
         cameraUI.SetActive(false);
-        crossHair.SetActive(false);
         viewingPhoto = true;
 
         yield return new WaitForEndOfFrame();
@@ -152,7 +150,6 @@ public class PhotoCapture : MonoBehaviour
         viewingPhoto = false;
         photoFrame.SetActive(false);
         cameraUI.SetActive(true);
-        crossHair.SetActive(true);
     }
 
     void SavePhoto(Texture2D texture, bool isEvidence)

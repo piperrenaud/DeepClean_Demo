@@ -2,11 +2,19 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float moveSpeed = 3f;
+    public float moveSpeed = 2f;
+    public float crouchSpeed = 1f;
     public Transform orientation;
     public Animator animator;
+    public Animator camAnimator;
+
+    [Header("Audio")]
+    public AudioSource audioSource;
+    public AudioClip walkingSound;
 
     [HideInInspector] public float currentSpeed; 
+
+    private bool isCrouching = false;
 
     void Start()
     {
@@ -16,6 +24,7 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         HandleMovement();
+        HandleCrouch();
 
         transform.rotation = Quaternion.Slerp(
             transform.rotation,
@@ -45,5 +54,39 @@ public class PlayerMovement : MonoBehaviour
         //walking anim
         bool isWalking = move.magnitude > 0f;
         animator.SetBool("isWalking", isWalking);
+
+        //audio
+        if (isWalking)
+        {
+            if (!audioSource.isPlaying)
+            {
+                audioSource.clip = walkingSound;
+                audioSource.loop = true;
+                audioSource.Play();
+            }
+        }
+        else
+        {
+            if (audioSource.isPlaying && audioSource.clip == walkingSound)
+            {
+                audioSource.Stop();
+            }
+        }
+    }
+
+    void HandleCrouch()
+    {
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            isCrouching = true;
+            camAnimator.SetBool("isCrouching", true);
+            currentSpeed = crouchSpeed;
+        }
+        else
+        {
+            isCrouching = false;
+            camAnimator.SetBool("isCrouching", false);
+            currentSpeed = moveSpeed;
+        }
     }
 }

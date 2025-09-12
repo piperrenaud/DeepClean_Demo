@@ -16,7 +16,7 @@ AvatarMask:
   - m_Path: Armature/Hip
     m_Weight: 1
   - m_Path: Armature/Hip/Leg_Upper.L
-    m_Weight: 1
+    m_Weight: 0
   - m_Path: Armature/Hip/Leg_Upper.L/Leg_Lower.L
     m_Weight: 1
   - m_Path: Armature/Hip/Leg_Upper.L/Leg_Lower.L/Foot.L
@@ -24,7 +24,7 @@ AvatarMask:
   - m_Path: Armature/Hip/Leg_Upper.L/Leg_Lower.L/Foot.L/Toes.L
     m_Weight: 1
   - m_Path: Armature/Hip/Leg_Upper.R
-    m_Weight: 1
+    m_Weight: 0
   - m_Path: Armature/Hip/Leg_Upper.R/Leg_Lower.R
     m_Weight: 1
   - m_Path: Armature/Hip/Leg_Upper.R/Leg_Lower.R/Foot.R
@@ -50,9 +50,9 @@ AvatarMask:
   - m_Path: Armature/Hip/Spine/Chest/Neck
     m_Weight: 1
   - m_Path: Armature/Hip/Spine/Chest/Neck/Head
-    m_Weight: 1
+    m_Weight: 0
   - m_Path: Armature/root
-    m_Weight: 1
+    m_Weight: 0
   - m_Path: BaseBody
     m_Weight: 1
   - m_Path: Gloves

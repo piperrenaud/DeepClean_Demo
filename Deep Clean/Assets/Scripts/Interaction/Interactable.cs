@@ -25,8 +25,6 @@ public class Interactable : MonoBehaviour
     public Animator doorAnimator;
 
     private bool isHeld = false;
-    private ToolManager toolManager;
-    private int savedToolIndex = -1;
 
     private Transform originalParent;
     private Vector3 originalPosition;
@@ -43,8 +41,6 @@ public class Interactable : MonoBehaviour
 
     void Start()
     {
-        toolManager = FindFirstObjectByType<ToolManager>();
-
         highlighter = GetComponent<InteractableHighlighter>();
         dialogue = GetComponent<InteractableDialogue>();
         inspection = GetComponent<InteractableInspection>();
@@ -91,12 +87,6 @@ public class Interactable : MonoBehaviour
 
     public void PickUpObject(Transform playerTransform)
     {
-        if (toolManager != null)
-        {
-            savedToolIndex = toolManager.GetCurrentToolIndex();
-            if (savedToolIndex != -1) toolManager.ForcePutAwayCurrentTool();
-        }
-
         if (canBeInspected && inspection != null) inspection.ShowUI(itemDescription);
 
         isHeld = true;
@@ -132,12 +122,6 @@ public class Interactable : MonoBehaviour
         transform.position = originalPosition;
         transform.rotation = originalRotation;
         transform.localScale = originalScale;
-
-        if (toolManager != null && savedToolIndex != -1)
-        {
-            toolManager.ForcePickUpTool(savedToolIndex);
-            savedToolIndex = -1;
-        }
 
         //enable boxcollider
         if (boxCollider != null) boxCollider.enabled = true;
@@ -190,12 +174,6 @@ public class Interactable : MonoBehaviour
         }
 
         if (inspection != null) inspection.HideUI();
-
-        if (toolManager != null && savedToolIndex != -1)
-        {
-            toolManager.ForcePickUpTool(savedToolIndex);
-            savedToolIndex = -1;
-        }
 
         if (boxCollider != null) boxCollider.enabled = true;
 
