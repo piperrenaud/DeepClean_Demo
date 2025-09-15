@@ -134,6 +134,7 @@ public class InventoryUIController : MonoBehaviour
             droppedObj.explanation = selectedItem.explanation;
             droppedObj.evidenceType = selectedItem.type;
             droppedObj.itemIcon = selectedItem.itemIcon;
+            droppedObj.gameObject.tag = "DroppedItem";
         }
 
         //clear selection

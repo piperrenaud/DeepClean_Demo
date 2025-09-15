@@ -3,6 +3,8 @@ using UnityEngine.AI;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.UI;
+using TMPro;
 
 public class EnemyWander : MonoBehaviour
 {
@@ -26,14 +28,29 @@ public class EnemyWander : MonoBehaviour
 
     [Header("References")]
     public Animator animator;
-    public float suspicion = 0f;
     public int playerRoomID;
     public PlayerRoomTracker playerTracker;
+    public Transform player;
 
     [Header("Audio")]
     public AudioSource audioSource;
     public AudioClip walkingSound;
 
+    [Header("Suspicion/Detection")]
+    public float suspicion = 0f;
+    public float viewRadius = 5f;
+    [Range(0, 360)] public float viewAngle = 90f;
+    public LayerMask playerMask; //player
+    public LayerMask obstructionMask; //walls/funiture
+
+    [Header("UI")]
+    public Slider suspicionSlider;
+    public GameObject notificationCanvas;
+    public GameObject dialogueCanvas;
+    public TMP_Text dialogueText;
+    public float dialogueDisplayTime = 5f;
+
+    private HashSet<GameObject> seenDroppedItems = new HashSet<GameObject>();
     private NavMeshAgent agent;
     private TaskPoint currentTargetPoint;
     private float timer;
@@ -43,6 +60,7 @@ public class EnemyWander : MonoBehaviour
     private bool isPaused = false;
     private float pauseTimer = 0f;
     private DoorController targetDoor;
+    private bool isReacting = false;
 
 
     void Start()
@@ -50,10 +68,22 @@ public class EnemyWander : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         agent.speed = walkSpeed;
         PickNextTask();
+
+        if (player == null)
+        {
+            GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+            if (playerObj != null)
+            {
+                player = playerObj.transform;
+            }
+        }
     }
 
     void Update()
     {
+        HandleSuspicion();
+        UpdateSuspicion();
+
         if (isPaused)
         {
             pauseTimer -= Time.deltaTime;
@@ -237,7 +267,7 @@ public class EnemyWander : MonoBehaviour
 
         foreach (Vector3 corner in path.corners)
         {
-            foreach (var door in FindObjectsOfType<DoorController>())
+            foreach (var door in FindObjectsByType<DoorController>(FindObjectsSortMode.None))
             {
                 float dist = Vector3.Distance(corner, door.transform.position);
                 if (dist < 2.5f)
@@ -277,12 +307,18 @@ public class EnemyWander : MonoBehaviour
         HandleWalkingSound(true);
     }
 
-    public void PauseMovement(float seconds)
+    private IEnumerator PauseFor(float seconds, System.Action onComplete = null)
     {
         isPaused = true;
         pauseTimer = seconds;
         agent.isStopped = true;
         animator.SetBool("Walking", false);
+
+        yield return new WaitForSeconds(seconds);
+
+        isPaused = false;
+        agent.isStopped = false;
+        onComplete?.Invoke();
     }
 
     void HandleWalkingSound(bool isWalking)
@@ -305,6 +341,156 @@ public class EnemyWander : MonoBehaviour
         }
     }
 
+    void HandleSuspicion()
+    {
+        Collider[] hits = Physics.OverlapSphere(transform.position, viewRadius, playerMask);
+
+        if (hits.Length > 0)
+        {
+            Transform target = hits[0].transform;
+            Vector3 dirToTarget = (target.position - transform.position).normalized;
+
+            if (Vector3.Angle(transform.forward, dirToTarget) < viewAngle / 2)
+            {
+                float distToTarget = Vector3.Distance(transform.position, target.position);
+
+                if (!Physics.Raycast(transform.position, dirToTarget, distToTarget, obstructionMask))
+                {
+                    //events
+                    return;
+                }
+            }
+        }
+
+        //check dropped objects
+        Collider[] dropped = Physics.OverlapSphere(transform.position, viewRadius);
+        foreach (var obj in dropped)
+        {
+            if (obj.CompareTag("DroppedItem") && !seenDroppedItems.Contains(obj.gameObject))
+            {
+                Vector3 dirToObj = (obj.transform.position - transform.position).normalized;
+                float distToObj = Vector3.Distance(transform.position, obj.transform.position);
+
+                if (!isReacting && Vector3.Angle(transform.forward, dirToObj) < viewAngle / 2 && !Physics.Raycast(transform.position, dirToObj, distToObj, obstructionMask))
+                {
+                    isReacting = true;
+                    suspicion += 10f;
+                    seenDroppedItems.Add(obj.gameObject);
+                    StartCoroutine(ShowDroppedItemDialogue(obj.gameObject));
+                    Debug.Log("Enemy saw dropped item");
+
+                    //pause then continue
+                    StartCoroutine(PauseFor(4f, () =>
+                    {
+                        isReacting = false;
+                        if (currentTargetPoint != null)
+                        {
+                            StartWalking();
+                        }
+                    }));
+                }
+            }
+        }
+        suspicion = Mathf.Clamp(suspicion, 0, 100f);
+    }
+
+    private IEnumerator ShowDroppedItemDialogue(GameObject droppedItem)
+    {
+        StartCoroutine(SuspicionIncreased());
+        if (dialogueCanvas != null && dialogueText != null)
+        {
+            //get item name from interactable script
+            Interactable itemData = droppedItem.GetComponent<Interactable>();
+            string itemName = itemData != null ? itemData.itemDescription : "item";
+
+            dialogueText.text = $"Why is my {itemName} on the ground...";
+            dialogueCanvas.SetActive(true);
+
+            yield return new WaitForSeconds(dialogueDisplayTime);
+            dialogueCanvas.SetActive(false);
+        }
+    }
+
+    public IEnumerator SuspicionIncreased()
+    {
+        notificationCanvas.SetActive(true);
+        yield return new WaitForSeconds(1f);
+        notificationCanvas.SetActive(false);
+    }
+
+    void UpdateSuspicion()
+    {
+        if (suspicionSlider != null)
+        {
+            suspicionSlider.value = suspicion;
+        }
+    }
+
+    public void HandlePhotoTaken()
+    {
+        //raise suspicion in players in view/radar
+        float distToPlayer = Vector3.Distance(transform.position, player.position);
+        Vector3 eyePos = transform.position + Vector3.up * 1.6f;
+        Vector3 dirToPlayer = (player.position - eyePos).normalized;
+
+        if (distToPlayer < viewRadius && !Physics.Raycast(eyePos, dirToPlayer, distToPlayer, obstructionMask))
+        {
+            suspicion += 5f;
+            suspicion = Mathf.Clamp(suspicion, 0, 100f);
+            StartCoroutine(SuspicionIncreased());
+            Debug.Log("Enemy saw player take a photo");
+        }
+    }
+
+    public void OnPlayerCaught()
+    {
+        StopAllCoroutines();
+        agent.isStopped = true;
+
+        foreach (var param in animator.parameters)
+        {
+            if (param.type == AnimatorControllerParameterType.Bool)
+            {
+                animator.SetBool(param.name, false);
+            }
+        }
+
+        isTurning = false;
+        animator.SetTrigger("ForceStand");
+        StartCoroutine(PhotoCaughtRoutine());
+    }
+
+    public IEnumerator PhotoCaughtRoutine()
+    {
+        Vector3 dirToPlayer = (player.position - transform.position).normalized;
+        Quaternion lookRotation = Quaternion.LookRotation(new Vector3(dirToPlayer.x, 0, dirToPlayer.z));
+        float elapsed = 0f;
+        float turnDuration = 0.5f;
+        Quaternion startRotation = transform.rotation;
+
+        while (elapsed < turnDuration)
+        {
+            transform.rotation = Quaternion.Slerp(startRotation, lookRotation, elapsed / turnDuration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.rotation = lookRotation;
+
+        //show dialgue
+        if (dialogueCanvas != null && dialogueText != null)
+        {
+            dialogueText.text = "Are you taking photos?";
+            dialogueCanvas.SetActive(true);
+            yield return new WaitForSeconds(5f);
+            dialogueCanvas.SetActive(false);
+        }
+
+        //resume normal behavior
+        PickNextTask();
+        agent.isStopped = false;
+    }
+
     void OnDrawGizmos()
     {
         if (agent == null || agent.path == null) return;
@@ -319,6 +505,28 @@ public class EnemyWander : MonoBehaviour
         if (corners.Length > 0)
         {
             Gizmos.DrawSphere(corners[corners.Length - 1], 0.2f);
+        }
+
+        //draw detection radius
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, viewRadius);
+        //draw detection cone
+        Vector3 forward = transform.forward;
+        Vector3 leftBoundary = Quaternion.Euler(0, -viewAngle / 2, 0) * forward;
+        Vector3 rightBoundary = Quaternion.Euler(0, viewAngle / 2, 0) * forward;
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(transform.position, transform.position + leftBoundary * viewRadius);
+        Gizmos.DrawLine(transform.position, transform.position + rightBoundary * viewRadius);
+
+        //highlight dropped items in view
+        Gizmos.color = Color.magenta;
+        var dropped = GameObject.FindGameObjectsWithTag("DroppedItem");
+        foreach (var obj in dropped)
+        {
+            if (Vector3.Distance(transform.position, obj.transform.position) <= viewRadius)
+            {
+                Gizmos.DrawWireSphere(obj.transform.position, 0.3f);
+            }
         }
     }
 }

@@ -10,15 +10,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 9c324beac0201054a9fa602dc960cfe9, type: 3}
       propertyPath: m_LocalScale.x
-      value: -45.036896
+      value: 0.119900085
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9c324beac0201054a9fa602dc960cfe9, type: 3}
       propertyPath: m_LocalScale.y
-      value: -8.64748
+      value: 0.023021871
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9c324beac0201054a9fa602dc960cfe9, type: 3}
       propertyPath: m_LocalScale.z
-      value: -22.636438
+      value: 0.060264163
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9c324beac0201054a9fa602dc960cfe9, type: 3}
       propertyPath: m_LocalPosition.x
@@ -69,11 +69,45 @@ PrefabInstance:
       value: Camera
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 9c324beac0201054a9fa602dc960cfe9, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 9c324beac0201054a9fa602dc960cfe9, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9c324beac0201054a9fa602dc960cfe9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5648306567013950317}
   m_SourcePrefab: {fileID: 100100000, guid: 9c324beac0201054a9fa602dc960cfe9, type: 3}
+--- !u!1 &2279412398980545733 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 9c324beac0201054a9fa602dc960cfe9, type: 3}
+  m_PrefabInstance: {fileID: 1397083806465655188}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5648306567013950317
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2279412398980545733}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 797e01833beb00248aa66ccdb4b371f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  photoDisplayArea: {fileID: 0}
+  photoFrame: {fileID: 0}
+  cameraUI: {fileID: 0}
+  innerFrame: {fileID: 0}
+  defaultFrameColor: {r: 1, g: 1, b: 1, a: 1}
+  validFrameColor: {r: 0, g: 1, b: 0, a: 1}
+  cameraFlash: {fileID: 0}
+  flashTime: 0
+  fadingAnimator: {fileID: 0}
+  cameraAudio: {fileID: 0}

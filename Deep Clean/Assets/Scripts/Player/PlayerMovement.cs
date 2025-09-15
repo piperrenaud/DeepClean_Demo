@@ -14,8 +14,6 @@ public class PlayerMovement : MonoBehaviour
 
     [HideInInspector] public float currentSpeed; 
 
-    private bool isCrouching = false;
-
     void Start()
     {
         currentSpeed = moveSpeed;
@@ -78,13 +76,11 @@ public class PlayerMovement : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.LeftShift))
         {
-            isCrouching = true;
             camAnimator.SetBool("isCrouching", true);
             currentSpeed = crouchSpeed;
         }
         else
         {
-            isCrouching = false;
             camAnimator.SetBool("isCrouching", false);
             currentSpeed = moveSpeed;
         }

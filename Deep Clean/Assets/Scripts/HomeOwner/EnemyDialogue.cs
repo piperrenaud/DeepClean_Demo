@@ -19,7 +19,7 @@ public class EnemyDialogue : MonoBehaviour
 
     private Interactable FindObjectByID(string id)
     {
-        Interactable[] all = FindObjectsOfType<Interactable>(true);
+        Interactable[] all = FindObjectsByType<Interactable>(FindObjectsInactive.Include, FindObjectsSortMode.None);
         foreach (var obj in all)
         {
             if (obj.GetObjectID() == id)

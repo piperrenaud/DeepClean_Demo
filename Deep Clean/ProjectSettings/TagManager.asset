@@ -8,6 +8,7 @@ TagManager:
   - Enemy
   - Evidence
   - PersistentButton
+  - DroppedItem
   layers:
   - Default
   - TransparentFX
@@ -22,8 +23,8 @@ TagManager:
   - Bin
   - Grabbable
   - Board
-  - 
-  - 
+  - Obstruction
+  - Player
   - 
   - 
   - 

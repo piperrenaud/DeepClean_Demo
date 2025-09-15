@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
     
     IEnumerator Start()
     {
-        DirtSpot[] spots = FindObjectsOfType<DirtSpot>();
+        DirtSpot[] spots = FindObjectsByType<DirtSpot>(FindObjectsSortMode.None);
         allDirtSpots.AddRange(spots);
 
         playerRoomTracker = FindObjectOfType<PlayerRoomTracker>();

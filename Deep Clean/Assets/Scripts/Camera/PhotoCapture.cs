@@ -33,6 +33,9 @@ public class PhotoCapture : MonoBehaviour
     [Header("Audio")]
     [SerializeField] private AudioSource cameraAudio;
 
+    [Header("References")]
+    public EnemyWander enemyWander;
+
     private Texture2D screenCapture;
     private bool viewingPhoto;
 
@@ -123,6 +126,8 @@ public class PhotoCapture : MonoBehaviour
         }
 
         SavePhoto(screenCapture, isEvidence);
+        enemyWander.OnPlayerCaught();
+        enemyWander.HandlePhotoTaken();
         ShowPhoto();
     }
 
