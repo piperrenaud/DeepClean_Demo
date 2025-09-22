@@ -13,7 +13,8 @@ public class DirtSpot : MonoBehaviour
     
     [Header("Visual Components")]
     public SpriteRenderer dirtRenderer;
-    public Slider progressBar; 
+    public Slider progressBar;
+    public ParticleSystem dirtParticles;
 
     private float currentDirtiness;
     private bool isBeingCleaned = false;
@@ -76,6 +77,8 @@ public class DirtSpot : MonoBehaviour
         currentDirtiness = Mathf.Max(0, currentDirtiness - cleaningAmount);
         
         UpdateVisuals();
+        dirtParticles.transform.position = transform.position;
+        dirtParticles.Play();
         
         if (currentDirtiness <= 0)
         {

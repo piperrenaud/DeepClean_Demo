@@ -62,7 +62,6 @@ public class EnemyWander : MonoBehaviour
     private DoorController targetDoor;
     private bool isReacting = false;
 
-
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -94,7 +93,7 @@ public class EnemyWander : MonoBehaviour
             }
             return;
         }
-        
+
         if (isTurning)
         {
             //rotate towards next waypoint
@@ -114,7 +113,7 @@ public class EnemyWander : MonoBehaviour
         {
             animator.SetBool("Walking", false);
             HandleWalkingSound(false);
-            
+
             StartCoroutine(DoTaskRoutine(currentTargetPoint.taskName));
             currentTargetPoint = null;
         }
@@ -356,8 +355,26 @@ public class EnemyWander : MonoBehaviour
 
                 if (!Physics.Raycast(transform.position, dirToTarget, distToTarget, obstructionMask))
                 {
-                    //events
-                    return;
+                    //player is visible
+                    GameObject held = PlayerHeldItem.Current;
+                    if (held != null && held.layer != LayerMask.NameToLayer("Rubbish"))
+                    {
+                        if (!isReacting)
+                        {
+                            isReacting = true;
+                            suspicion += 15;
+                            StartCoroutine(SuspicionIncreased());
+                            StartCoroutine(ShowHeldItemDialogue(held));
+
+                            StartCoroutine(PauseFor(4f, () =>
+                            {
+                                isReacting = false;
+                                if (currentTargetPoint != null) StartWalking();
+                            }));
+                        }
+                    }
+
+                    return; //dont drop through to item checks
                 }
             }
         }
@@ -391,7 +408,23 @@ public class EnemyWander : MonoBehaviour
                 }
             }
         }
+
         suspicion = Mathf.Clamp(suspicion, 0, 100f);
+    }
+
+    private IEnumerator ShowHeldItemDialogue(GameObject heldItem)
+    {
+        if (dialogueCanvas != null && dialogueText != null)
+        {
+            Interactable itemData = heldItem.GetComponent<Interactable>();
+            string itemName = itemData != null ? itemData.itemDescription : "item";
+
+            dialogueText.text = $"Where did my {itemName} go?";
+            dialogueCanvas.SetActive(true);
+
+            yield return new WaitForSeconds(dialogueDisplayTime);
+            dialogueCanvas.SetActive(false);
+        }
     }
 
     private IEnumerator ShowDroppedItemDialogue(GameObject droppedItem)

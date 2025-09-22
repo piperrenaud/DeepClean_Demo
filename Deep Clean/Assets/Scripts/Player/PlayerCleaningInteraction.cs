@@ -78,30 +78,29 @@ public class PlayerCleaningInteraction : MonoBehaviour
         targetedDirt = dirt;
 
         Transform rag = cleaningTool.rag.transform;
-        Animator ragAnimator = rag.GetComponent<Animator>();
+        Transform ragModel = rag.GetChild(0);
+        Animator ragAnimator = ragModel.GetComponent<Animator>();
         Transform originalParent = rag.parent;
 
-        // Store original transform
+        //og transforms
         Vector3 originalLocalPos = rag.localPosition;
         Quaternion originalLocalRot = rag.localRotation;
 
-        // Move rag above dirt (once) and look at it
-        rag.parent = dirt.transform; // detach from player hand temporarily
-        Vector3 startPos = dirt.transform.position + Vector3.up * ragDistance;
-        rag.position = startPos;
-        rag.rotation = dirt.transform.rotation;
+        //reparent and put above dirt
+        rag.parent = dirt.transform;
+        rag.localPosition = Vector3.up * ragDistance;
+        rag.localRotation = Quaternion.identity;
 
-        // Play rag cleaning animation
+        //rag anim
         ragAnimator.SetBool("IsCleaning", true);
 
         audioSource.clip = wipeSound;
         audioSource.loop = true;
         audioSource.Play();
 
-        // Get cleaning tool data
         CleaningTool toolData = cleaningTool.rag.GetComponent<CleaningTool>();
 
-        // Clean while right-click held and dirt not fully cleaned
+        //cleaning
         while (Input.GetMouseButton(1) && !dirt.IsFullyCleaned())
         {
             dirt.StartCleaning(toolData, rag);
@@ -110,23 +109,23 @@ public class PlayerCleaningInteraction : MonoBehaviour
 
         audioSource.Stop();
         audioSource.loop = false;
-
         ragAnimator.SetBool("IsCleaning", false);
 
-        // Smoothly move back to original parent
+        //move back to original parent
         float moveDuration = 0.2f;
         float elapsed = 0f;
         Vector3 ragStartPos = rag.position;
+        Quaternion ragStartRot = rag.rotation;
 
         while (elapsed < moveDuration)
         {
             rag.position = Vector3.Lerp(ragStartPos, originalParent.position, elapsed / moveDuration);
-            rag.rotation = Quaternion.Slerp(rag.rotation, originalParent.rotation, elapsed / moveDuration);
+            rag.rotation = Quaternion.Slerp(ragStartRot, originalParent.rotation, elapsed / moveDuration);
             elapsed += Time.deltaTime;
             yield return null;
         }
 
-        // Re-parent and reset local transform
+        //reset transform
         rag.parent = originalParent;
         rag.localPosition = originalLocalPos;
         rag.localRotation = originalLocalRot;

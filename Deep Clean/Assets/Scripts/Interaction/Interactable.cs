@@ -1,6 +1,11 @@
 using UnityEngine;
 using UnityEditor;
 
+public static class PlayerHeldItem
+{
+    public static GameObject Current;
+}
+
 public class Interactable : MonoBehaviour
 {
     [Header("Inventory Settings")]
@@ -66,7 +71,7 @@ public class Interactable : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.E) && doorAnimator == null)
             {
                 if (dialogue.IsTyping()) dialogue.FinishTypingInstantly();
-                else 
+                else
                 {
                     dialogue.ShowDialogue(playerDialogue);
 
@@ -90,6 +95,8 @@ public class Interactable : MonoBehaviour
         if (canBeInspected && inspection != null) inspection.ShowUI(itemDescription);
 
         isHeld = true;
+
+        PlayerHeldItem.Current = this.gameObject;
 
         originalParent = transform.parent;
         originalPosition = transform.position;
@@ -117,6 +124,7 @@ public class Interactable : MonoBehaviour
     {
         if (inspection != null) inspection.HideUI();
         isHeld = false;
+        PlayerHeldItem.Current = null;
 
         transform.SetParent(originalParent);
         transform.position = originalPosition;
@@ -179,6 +187,7 @@ public class Interactable : MonoBehaviour
 
         gameObject.SetActive(false);
         isHeld = false;
+        PlayerHeldItem.Current = null;
     }
 
     public void ToggleDoor()
