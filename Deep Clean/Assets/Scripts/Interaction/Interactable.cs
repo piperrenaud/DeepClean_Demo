@@ -159,8 +159,6 @@ public class Interactable : MonoBehaviour
 
     public void Take()
     {
-        Debug.Log("Taking: " + objectID);
-
         //mark as discovered
         if (!isDiscovered)
         {
@@ -184,6 +182,12 @@ public class Interactable : MonoBehaviour
         if (inspection != null) inspection.HideUI();
 
         if (boxCollider != null) boxCollider.enabled = true;
+
+        EnemyWander[] enemies = FindObjectsByType<EnemyWander>(FindObjectsSortMode.None);
+        foreach (var enemy in enemies)
+        {
+            enemy.OnItemTaken(this.gameObject);
+        }
 
         gameObject.SetActive(false);
         isHeld = false;

@@ -126,7 +126,6 @@ public class PhotoCapture : MonoBehaviour
         }
 
         SavePhoto(screenCapture, isEvidence);
-        enemyWander.OnPlayerCaught();
         enemyWander.HandlePhotoTaken();
         ShowPhoto();
     }
@@ -148,6 +147,8 @@ public class PhotoCapture : MonoBehaviour
         cameraFlash.SetActive(true);
         yield return new WaitForSeconds(flashTime);
         cameraFlash.SetActive(false);
+        yield return new WaitForSeconds(2f);
+        RemovePhoto();
     }
 
     void RemovePhoto()
@@ -162,9 +163,7 @@ public class PhotoCapture : MonoBehaviour
         byte[] bytes = texture.EncodeToPNG();
         string fileName = $"photo_{photoCounter}.png";
         string filePath = Path.Combine(Application.persistentDataPath, fileName);
-
         File.WriteAllBytes(filePath, bytes);
-        Debug.Log("Saved photo to: "+ filePath);
 
         //save metadata
         PhotoData data = new PhotoData
@@ -175,6 +174,10 @@ public class PhotoCapture : MonoBehaviour
 
         string json = JsonUtility.ToJson(data);
         File.WriteAllText(Path.Combine(Application.persistentDataPath, fileName + ".json"), json);
+
+        //add to inventory
+        Sprite photoSprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f), 100f);
+        InventoryManager.Instance.AddItem(fileName, EvidenceType.Photo, isEvidence ? "Evidence photo" : "Photo", "", "", true, photoSprite);
 
         photoCounter++;
     }

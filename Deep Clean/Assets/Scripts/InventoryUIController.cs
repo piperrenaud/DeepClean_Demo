@@ -8,12 +8,14 @@ public class InventoryUIController : MonoBehaviour
     public static InventoryUIController Instance;
 
     [Header("UI References")]
-    public Transform gridParent;
+    public Transform itemGridParent;
+    public Transform photoGridParent;
     public GameObject slotPrefab;
+    public GameObject photoSlotPrefab;
     public TMP_Text descriptionText;
     public Image selectedItemImage;
 
-    [Header("Drop Button")]
+    [Header("X Button")]
     public GameObject dropButton;
     private InventoryManager.CollectedEntry selectedItem;
     public Transform playerTransform;
@@ -26,13 +28,12 @@ public class InventoryUIController : MonoBehaviour
     }
     public List<ItemPrefab> itemPrefabs;
 
-    private List<GameObject> spawnedSlots = new List<GameObject>();
+    private List<GameObject> itemSlots = new List<GameObject>();
+    private List<GameObject> photoSlots = new List<GameObject>();
 
     void Awake()
     {
         Instance = this;
-
-        //auto refresh
         RefreshUI();
     }
 
@@ -41,39 +42,53 @@ public class InventoryUIController : MonoBehaviour
         if (InventoryManager.Instance == null) return;
 
         //clear old slots
-        foreach (var slot in spawnedSlots)
-        {
-            Destroy(slot);
-        }
-        spawnedSlots.Clear();
+        foreach (var slot in itemSlots) Destroy(slot);
+        itemSlots.Clear();
+        foreach (var slot in photoSlots) Destroy(slot);
+        photoSlots.Clear();
 
         //rebuild grid
-        List<InventoryManager.CollectedEntry> items = InventoryManager.Instance.GetAllItems();
-        foreach (var item in items)
+        List<InventoryManager.CollectedEntry> allEntries = InventoryManager.Instance.GetAllItems();
+
+        //poplate regular items
+        foreach (var item in allEntries)
         {
-            GameObject slot = Instantiate(slotPrefab, gridParent);
-            spawnedSlots.Add(slot);
+            if (item.isPhoto) continue;
 
-            //set text
-            TMP_Text label = slot.transform.Find("ItemName")?.GetComponent<TMP_Text>();
-            if (label != null) label.text = "";
-
-            //set icon
-            Image icon = slot.transform.Find("Icon")?.GetComponent<Image>();
-            if (icon != null) 
-            {
-                if (item.itemIcon != null) icon.sprite = item.itemIcon;
-                else icon.sprite = null;
-            }
-
-            //button click shows description
-            Button button = slot.GetComponent<Button>();
-            button.onClick.AddListener(() => 
-            {
-                ShowDescription(item.itemDescription, item);
-                ShowSelectedImage(item.itemIcon);
-            });
+            GameObject slot = Instantiate(slotPrefab, itemGridParent);
+            itemSlots.Add(slot);
+            SetupSlot(slot, item);
         }
+
+        //poplate photo grid
+        foreach (var photo in allEntries)
+        {
+            if (!photo.isPhoto) continue;
+
+            GameObject slot = Instantiate(photoSlotPrefab, photoGridParent);
+            photoSlots.Add(slot);
+            SetupSlot(slot, photo);
+        }
+    }
+
+    private void SetupSlot(GameObject slot, InventoryManager.CollectedEntry entry)
+    {
+        //set icon
+        Image icon = slot.transform.Find("Icon")?.GetComponent<Image>();
+        if (icon != null) icon.sprite = entry.itemIcon;
+
+        //set label
+        TMP_Text label = slot.transform.Find("ItemName")?.GetComponent<TMP_Text>();
+        if (label != null) label.text = "";
+
+        //button click
+        Button button = slot.GetComponent<Button>();
+        button.onClick.RemoveAllListeners();
+        button.onClick.AddListener(() =>
+        {
+            ShowDescription(entry.itemDescription, entry);
+            ShowSelectedImage(entry.itemIcon);
+        });
     }
 
     private void ShowDescription(string desc, InventoryManager.CollectedEntry item)
@@ -139,7 +154,7 @@ public class InventoryUIController : MonoBehaviour
 
         //clear selection
         selectedItem = null;
-        if (dropButton != null) dropButton.SetActive(false);
+         if (dropButton != null) dropButton.SetActive(false);
 
         //clear ui
         if (descriptionText != null) descriptionText.text = "";

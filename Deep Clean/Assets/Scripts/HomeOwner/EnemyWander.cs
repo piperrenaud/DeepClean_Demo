@@ -16,6 +16,16 @@ public class EnemyWander : MonoBehaviour
         public int roomID;
     }
 
+    [System.Serializable]
+    public class ExpectedItem
+    {
+        public GameObject item;
+        public Vector3 originalPos;
+        public int roomID;
+        public string missingDialogue;
+        public bool isMissing = false;
+    }
+    public List<ExpectedItem> expectedItems;
 
     [Header("Waypoints/Tasks")]
     public List<TaskPoint> taskPoints;
@@ -38,7 +48,7 @@ public class EnemyWander : MonoBehaviour
 
     [Header("Suspicion/Detection")]
     public float suspicion = 0f;
-    public float viewRadius = 5f;
+    public float viewRadius = 20f;
     [Range(0, 360)] public float viewAngle = 90f;
     public LayerMask playerMask; //player
     public LayerMask obstructionMask; //walls/funiture
@@ -82,6 +92,7 @@ public class EnemyWander : MonoBehaviour
     {
         HandleSuspicion();
         UpdateSuspicion();
+        CheckForMissingItems();
 
         if (isPaused)
         {
@@ -137,7 +148,7 @@ public class EnemyWander : MonoBehaviour
         //start task anim
         animator.SetBool(taskName, true);
         float waitTime = Random.Range(minTaskTime, maxTaskTime);
-        Debug.Log("[EnemyWander] Performing task '" + taskName + "' for " + waitTime + "s");
+        Debug.Log("[EnemyWander] is '" + taskName + "' for " + waitTime + "s");
         yield return new WaitForSeconds(waitTime);
         //stop anim
         animator.SetBool(taskName, false);
@@ -166,7 +177,6 @@ public class EnemyWander : MonoBehaviour
         {
             //always pick players current room
             candidates = taskPoints.Where(p => p.roomID == playerRoomID).ToList();
-            Debug.Log("[EnemyWander] Suspicion 100 → Following player. Candidates: " + candidates.Count);
         }
         else if (suspicion >= 71f)
         {
@@ -175,20 +185,17 @@ public class EnemyWander : MonoBehaviour
             if (Random.value < chanceStayNearPlayer)
             {
                 candidates = taskPoints.Where(p => p.roomID == playerRoomID).ToList();
-                Debug.Log("[EnemyWander] Suspicion 41–70 → Chose player’s room. Candidates: " + candidates.Count);
 
             }
             else
             {
                 candidates = taskPoints;
-                Debug.Log("[EnemyWander] Suspicion 41–70 → Random patrol. Candidates: " + candidates.Count);
             }
         }
         else
         {
             //0-40 = rnadom
             candidates = taskPoints;
-            Debug.Log("[EnemyWander] Suspicion 0–40 → Random patrol. Candidates: " + candidates.Count);
         }
 
         //if no valid points found
@@ -342,43 +349,6 @@ public class EnemyWander : MonoBehaviour
 
     void HandleSuspicion()
     {
-        Collider[] hits = Physics.OverlapSphere(transform.position, viewRadius, playerMask);
-
-        if (hits.Length > 0)
-        {
-            Transform target = hits[0].transform;
-            Vector3 dirToTarget = (target.position - transform.position).normalized;
-
-            if (Vector3.Angle(transform.forward, dirToTarget) < viewAngle / 2)
-            {
-                float distToTarget = Vector3.Distance(transform.position, target.position);
-
-                if (!Physics.Raycast(transform.position, dirToTarget, distToTarget, obstructionMask))
-                {
-                    //player is visible
-                    GameObject held = PlayerHeldItem.Current;
-                    if (held != null && held.layer != LayerMask.NameToLayer("Rubbish"))
-                    {
-                        if (!isReacting)
-                        {
-                            isReacting = true;
-                            suspicion += 15;
-                            StartCoroutine(SuspicionIncreased());
-                            StartCoroutine(ShowHeldItemDialogue(held));
-
-                            StartCoroutine(PauseFor(4f, () =>
-                            {
-                                isReacting = false;
-                                if (currentTargetPoint != null) StartWalking();
-                            }));
-                        }
-                    }
-
-                    return; //dont drop through to item checks
-                }
-            }
-        }
-
         //check dropped objects
         Collider[] dropped = Physics.OverlapSphere(transform.position, viewRadius);
         foreach (var obj in dropped)
@@ -394,7 +364,7 @@ public class EnemyWander : MonoBehaviour
                     suspicion += 10f;
                     seenDroppedItems.Add(obj.gameObject);
                     StartCoroutine(ShowDroppedItemDialogue(obj.gameObject));
-                    Debug.Log("Enemy saw dropped item");
+                    Debug.Log("[EnemyWander] Enemy saw dropped item");
 
                     //pause then continue
                     StartCoroutine(PauseFor(4f, () =>
@@ -412,19 +382,81 @@ public class EnemyWander : MonoBehaviour
         suspicion = Mathf.Clamp(suspicion, 0, 100f);
     }
 
-    private IEnumerator ShowHeldItemDialogue(GameObject heldItem)
+    private void CheckForMissingItems()
     {
+        foreach (var expected in expectedItems)
+        {
+            if (expected.isMissing && !isReacting)
+            {
+                float dist = Vector3.Distance(transform.position, expected.originalPos);
+                Vector3 dirToObj = (expected.originalPos - transform.position).normalized;
+
+                if (dist < viewRadius)
+                {
+                    expected.isMissing = false;
+                    Debug.Log("[Enemy Wander] Enemy reacting to missing item: " + expected.item.name);
+                    StartCoroutine(ReactToMissingItem(expected));
+                }
+            }
+        }
+    }
+
+    public void OnItemTaken(GameObject item)
+    {
+        string takenID = item.GetComponent<Interactable>().GetObjectID();
+        foreach (var expected in expectedItems)
+        {
+            string expectedID = expected.item.GetComponent<Interactable>().GetObjectID();
+            if (expectedID == takenID && !expected.isMissing)
+            {
+                expected.isMissing = true;
+            }
+        }
+    }
+
+    private IEnumerator ReactToMissingItem(ExpectedItem expected)
+    {
+        isReacting = true;
+        suspicion += 5f;
+        Debug.Log("add 5 suspicion");
+        StartCoroutine(SuspicionIncreased());
+
+        agent.isStopped = true;
+        animator.SetBool("Walking", false);
+
+        //look item direction
+        Vector3 dir = expected.originalPos - transform.position;
+        Quaternion lookRotation = Quaternion.LookRotation(new Vector3(dir.x, 0, dir.z));
+        float elapsed = 0f;
+        float turnDuration = 0.5f;
+        Quaternion startRot = transform.rotation;
+
+        while (elapsed < turnDuration)
+        {
+            transform.rotation = Quaternion.Slerp(startRot, lookRotation, elapsed / turnDuration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.rotation = lookRotation;
+
+
+        //show dialogue
         if (dialogueCanvas != null && dialogueText != null)
         {
-            Interactable itemData = heldItem.GetComponent<Interactable>();
-            string itemName = itemData != null ? itemData.itemDescription : "item";
-
-            dialogueText.text = $"Where did my {itemName} go?";
+            dialogueText.text = expected.missingDialogue;
             dialogueCanvas.SetActive(true);
-
             yield return new WaitForSeconds(dialogueDisplayTime);
             dialogueCanvas.SetActive(false);
         }
+
+        yield return new WaitForSeconds(0.5f);
+
+        isReacting = false;
+        agent.isStopped = false;
+
+        //resume tasks
+        if (currentTargetPoint != null) StartWalking();
     }
 
     private IEnumerator ShowDroppedItemDialogue(GameObject droppedItem)
@@ -461,16 +493,21 @@ public class EnemyWander : MonoBehaviour
 
     public void HandlePhotoTaken()
     {
+        if (player == null) return;
+
         //raise suspicion in players in view/radar
         float distToPlayer = Vector3.Distance(transform.position, player.position);
         Vector3 eyePos = transform.position + Vector3.up * 1.6f;
         Vector3 dirToPlayer = (player.position - eyePos).normalized;
 
-        if (distToPlayer < viewRadius && !Physics.Raycast(eyePos, dirToPlayer, distToPlayer, obstructionMask))
+        //check if inside radius (2.5f instead of view radius cuz idk somethings wrong)
+        if (distToPlayer < 2.5f && !Physics.Raycast(eyePos, dirToPlayer, distToPlayer, obstructionMask))
         {
+            //only react if in view
             suspicion += 5f;
             suspicion = Mathf.Clamp(suspicion, 0, 100f);
             StartCoroutine(SuspicionIncreased());
+            OnPlayerCaught();
             Debug.Log("Enemy saw player take a photo");
         }
     }
