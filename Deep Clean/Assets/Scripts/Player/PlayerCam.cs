@@ -10,6 +10,9 @@ public class PlayerCam : MonoBehaviour
     float xRotation;
     float yRotation;
 
+    private bool isForcedLook = false;
+    private Transform lookTarget;
+
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -21,7 +24,17 @@ public class PlayerCam : MonoBehaviour
         //turn off movement if invetory open
         if (InventoryToggle.inventoryOpen) return;
 
-        //mouse input
+        if (isForcedLook && lookTarget != null)
+        {
+            Vector3 dir = (lookTarget.position - transform.position).normalized;
+            Quaternion targetRot = Quaternion.LookRotation(dir);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * 5f);
+
+            Vector3 euler = transform.rotation.eulerAngles;
+            orientation.rotation = Quaternion.Euler(0, euler.y, 0);
+            return;
+        }
+        
         float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * sensX;
         float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * sensY;
 
@@ -32,5 +45,17 @@ public class PlayerCam : MonoBehaviour
         //rotate cam and orientation
         transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
         orientation.rotation = Quaternion.Euler(0, yRotation, 0);
+    }
+
+    public void ForceLookAt(Transform target)
+    {
+        isForcedLook = true;
+        lookTarget = target;
+    }
+
+    public void ReleaseLook()
+    {
+        isForcedLook = false;
+        lookTarget = null;
     }
 }

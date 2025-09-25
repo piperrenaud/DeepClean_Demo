@@ -137,6 +137,8 @@ public class EnemyWander : MonoBehaviour
 
     IEnumerator DoTaskRoutine(string taskName)
     {
+        if (isReacting) yield break;
+
         //use turning anims to face task points forward dir
         Vector3 forwardDir = currentTargetPoint.transform.forward;
         FaceDirection(forwardDir);
@@ -557,6 +559,87 @@ public class EnemyWander : MonoBehaviour
         }
 
         //resume normal behavior
+        PickNextTask();
+        agent.isStopped = false;
+    }
+
+    public IEnumerator FacePlayer()
+    {
+        if (player == null) yield break;
+
+        agent.isStopped = true;
+        isReacting = true;
+        foreach (var param in animator.parameters)
+        {
+            if (param.type == AnimatorControllerParameterType.Bool)
+            {
+                animator.SetBool(param.name, false);
+            }
+        }
+        animator.SetTrigger("ForceStand");
+
+        Vector3 dirToPlayer = (player.position - transform.position).normalized;
+        Quaternion targetRot = Quaternion.LookRotation(new Vector3(dirToPlayer.x, 0, dirToPlayer.z));
+        Quaternion startRot = transform.rotation;
+
+        float elapsed = 0f;
+        float turnDuration = 0.5f;
+
+        while (elapsed < turnDuration)
+        {
+            transform.rotation = Quaternion.Slerp(startRot, targetRot, elapsed / turnDuration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.rotation = targetRot;
+        StartCoroutine(WalkToPlayer());
+    }
+
+    public IEnumerator WalkToPlayer(float stopDistance = 3f)
+    {
+        if (player == null) yield break;
+
+        Vector3 dirToPlayer = (player.position - transform.position).normalized;
+        Vector3 targetPos = player.position - dirToPlayer * stopDistance;
+        targetPos.y = transform.position.y;
+
+        agent.isStopped = false;
+        agent.SetDestination(targetPos);
+        animator.SetBool("Walking", true);
+        HandleWalkingSound(true);
+
+        //walk to player
+        while (Vector3.Distance(transform.position, targetPos) > 0.1f)
+        {
+            Vector3 dir = (player.position - transform.position).normalized;
+            if (dir.sqrMagnitude > 0.01f)
+            {
+                Quaternion lookRot = Quaternion.LookRotation(new Vector3(dir.x, 0, dir.z));
+                transform.rotation = Quaternion.Slerp(transform.rotation, lookRot, Time.deltaTime * turnSpeed / 100f);
+            }
+            yield return null;
+        }
+
+        agent.isStopped = true;
+        animator.SetBool("Walking", false);
+        HandleWalkingSound(false);
+
+        //dialogue moment
+        if (dialogueCanvas != null && dialogueText != null)
+        {
+            dialogueText.text = "You're moving on already? This room's still dirty. Clean it up a bit first.";
+            dialogueCanvas.SetActive(true);
+            yield return new WaitForSeconds(5f);
+            dialogueCanvas.SetActive(false);
+        }
+
+        //unblock player movement
+        PlayerMovement pm = player.GetComponent<PlayerMovement>();
+        if (pm != null) pm.UnblockMovement();
+
+        //resume task
+        isReacting = false;
         PickNextTask();
         agent.isStopped = false;
     }

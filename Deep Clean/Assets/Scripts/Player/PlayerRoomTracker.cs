@@ -28,6 +28,20 @@ public class PlayerRoomTracker : MonoBehaviour
         if (livingKitchenCleanliness < 50f)
         {
             Debug.Log("you need to clean the living room/kitchen to 50% first");
+
+            PlayerMovement pm = GetComponent<PlayerMovement>();
+            if (pm != null && GameManager.Instance.enemy != null)
+            {
+                pm.BlockMovement(GameManager.Instance.enemy);
+
+                EnemyWander enemyWander = GameManager.Instance.enemy.GetComponentInParent<EnemyWander>();
+                if (enemyWander != null)
+                {
+                    enemyWander.StopAllCoroutines();
+                    enemyWander.StartCoroutine(enemyWander.FacePlayer());
+                }
+            }
+
             return;
         }
 
@@ -54,6 +68,20 @@ public class PlayerRoomTracker : MonoBehaviour
                 if (firstRoomCleanliness < 50f)
                 {
                     Debug.Log("clean the first chosen room to 50% first!!");
+
+                    PlayerMovement pm = GetComponent<PlayerMovement>();
+                    if (pm != null && GameManager.Instance.enemy != null)
+                    {
+                        pm.BlockMovement(GameManager.Instance.enemy);
+
+                        EnemyWander enemyWander = GameManager.Instance.enemy.GetComponentInParent<EnemyWander>();
+                        if (enemyWander != null)
+                        {
+                            enemyWander.StopAllCoroutines();
+                            enemyWander.StartCoroutine(enemyWander.FacePlayer());
+                        }
+                    }
+
                     return;
                 }
             }

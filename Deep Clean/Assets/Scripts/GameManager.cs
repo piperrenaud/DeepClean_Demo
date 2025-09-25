@@ -12,8 +12,10 @@ public class GameManager : MonoBehaviour
     [Header("Game Settings")]
     public TMP_Text progressText;
     public Slider overallProgressBar;
-    public Slider roomProgressBar;
-    public TMP_Text roomProgressText;
+
+
+    [Header("References")]
+    public Transform enemy;
 
     private List<DirtSpot> allDirtSpots = new List<DirtSpot>();
     private int cleanedSpots = 0;
@@ -32,7 +34,7 @@ public class GameManager : MonoBehaviour
         DirtSpot[] spots = FindObjectsByType<DirtSpot>(FindObjectsSortMode.None);
         allDirtSpots.AddRange(spots);
 
-        playerRoomTracker = FindObjectOfType<PlayerRoomTracker>();
+        playerRoomTracker = FindFirstObjectByType<PlayerRoomTracker>();
         
         totalDirtAmount = allDirtSpots.Sum(s => s.maxDirtiness);
 
@@ -81,19 +83,6 @@ public class GameManager : MonoBehaviour
 
             float roomTotal = roomSpots.Sum(s => s.GetMaxDirt());
             float roomCleaned = roomSpots.Sum(s => s.GetAmountCleaned());
-
-            if (roomProgressBar != null)
-            {
-                roomProgressBar.minValue = 0f;
-                roomProgressBar.maxValue = roomTotal;
-                roomProgressBar.value = roomCleaned;
-            }
-
-            if (roomProgressText != null)
-            {
-                float roomPercent = (roomTotal > 0) ? (roomCleaned / roomTotal) * 100f : 0f;
-                roomProgressText.text = $"{roomPercent:0.0}%";
-            }
         }
     }
 
