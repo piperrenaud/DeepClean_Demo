@@ -212,31 +212,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bd41603c3e9b0b549bfcf05bcc82bf65, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.209
+      value: 0.15711021
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bd41603c3e9b0b549bfcf05bcc82bf65, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.357
+      value: -1.986
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bd41603c3e9b0b549bfcf05bcc82bf65, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.756
+      value: 1.4830236
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bd41603c3e9b0b549bfcf05bcc82bf65, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.0037700324
+      value: -0.18282317
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bd41603c3e9b0b549bfcf05bcc82bf65, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.0037700324
+      value: 0.18282326
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bd41603c3e9b0b549bfcf05bcc82bf65, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.7070968
+      value: -0.68306345
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bd41603c3e9b0b549bfcf05bcc82bf65, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.7070968
+      value: -0.68306345
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bd41603c3e9b0b549bfcf05bcc82bf65, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -248,7 +248,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bd41603c3e9b0b549bfcf05bcc82bf65, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -179.389
+      value: -209.968
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: bd41603c3e9b0b549bfcf05bcc82bf65, type: 3}
       propertyPath: m_Name
@@ -305,9 +305,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectID: Ledger
   itemIcon: {fileID: 21300000, guid: 1a4a4b893f55b164fb066c662e00c747, type: 3}
+  questionName: 
   evidenceType: 1
-  itemDescription: this is a ledger
-  playerDialogue: This ledger says a lot about "cargo" and "transit"...
+  itemDescription: A ledger tucked in a drawer. Most entries mention 'cargo' and
+    'transit'.
+  playerDialogue: Lots of notes about cargo and shipments... someones keeping very
+    careful track of them.
   explanation: 
   canBeInspected: 1
   holdDistance: 2.5
@@ -378,4 +381,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inspectionUI: {fileID: 0}
+  description: {fileID: 0}
+  gameUI: {fileID: 0}
   typingSpeed: 0.01

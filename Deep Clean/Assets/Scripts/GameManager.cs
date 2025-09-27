@@ -67,7 +67,7 @@ public class GameManager : MonoBehaviour
         if (progressText != null)
         {
             float progressPercent = (totalDirtAmount > 0) ? (totalDirtCleaned / totalDirtAmount) * 100f : 0f;
-            progressText.text = $"{progressPercent:0.0}%";
+            progressText.text = $"{progressPercent:0}%";
         }
         
         if (overallProgressBar != null)

@@ -24,6 +24,7 @@ public class EnemyDialogue : MonoBehaviour
         {
             if (obj.GetObjectID() == id)
                 return obj;
+            Debug.Log(obj.name + " questionName: '" + obj.questionName + "'");
         }
         return null;
     }

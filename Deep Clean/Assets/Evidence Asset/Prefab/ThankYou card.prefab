@@ -203,9 +203,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectID: ThankYou card
   itemIcon: {fileID: 21300000, guid: e11711f0b5517a643be18d87f05d1205, type: 3}
+  questionName: 
   evidenceType: 3
-  itemDescription: this is a post card
-  playerDialogue: this looks like a thank you note
+  itemDescription: A postcard with a short thank-you note from a friend. It's cheerful
+    and personal.
+  playerDialogue: A postcard from a friend... nice to see.
   explanation: 
   canBeInspected: 1
   holdDistance: 2.5
@@ -255,6 +257,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inspectionUI: {fileID: 0}
+  description: {fileID: 0}
+  gameUI: {fileID: 0}
   typingSpeed: 0.01
 --- !u!1 &7280669355293790824
 GameObject:

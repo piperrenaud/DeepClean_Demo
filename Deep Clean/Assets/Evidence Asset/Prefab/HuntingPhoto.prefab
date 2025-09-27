@@ -130,7 +130,7 @@ MonoBehaviour:
   questionName: 
   evidenceType: 3
   itemDescription: 
-  playerDialogue: Huh, looks like he hunts
+  playerDialogue: Looks like he hunts a lot... and got a cut.
   explanation: 
   canBeInspected: 0
   holdDistance: 2.5

@@ -11,7 +11,6 @@ public class PauseMenuController : MonoBehaviour
     public Button quitButton;
 
     public Button ragIcon;
-    public Button vaccumIcon;
     public Button rubbishBagIcon;
     public Button cameraIcon;
 
@@ -37,7 +36,6 @@ public class PauseMenuController : MonoBehaviour
 
         //assign hover events for icons
         AddHoverEvents(ragIcon, ragDesc);
-        AddHoverEvents(vaccumIcon, vaccumDesc);
         AddHoverEvents(rubbishBagIcon, rubbishBagDesc);
         AddHoverEvents(cameraIcon, cameraDesc);
     }

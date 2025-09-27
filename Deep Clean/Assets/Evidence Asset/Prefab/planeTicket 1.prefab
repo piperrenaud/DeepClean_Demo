@@ -244,8 +244,8 @@ MonoBehaviour:
   itemIcon: {fileID: 21300000, guid: 0c20d5b5d60b76044bda4e85d3781bf5, type: 3}
   questionName: 
   evidenceType: 2
-  itemDescription: This is a plane ticket
-  playerDialogue: 'A ticket to Thailand? '
+  itemDescription: "A plane ticket to Thailand. This must be where he's off to tommorrow.\t"
+  playerDialogue: Looks like someone's leaving soon.
   explanation: 
   canBeInspected: 1
   holdDistance: 2.5
@@ -295,6 +295,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inspectionUI: {fileID: 0}
+  description: {fileID: 0}
+  gameUI: {fileID: 0}
   typingSpeed: 0.01
 --- !u!1 &2089701086682946959
 GameObject:

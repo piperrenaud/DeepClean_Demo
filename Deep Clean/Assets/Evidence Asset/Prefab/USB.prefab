@@ -330,9 +330,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectID: USB
   itemIcon: {fileID: 21300000, guid: 730b994a9e87bc347ab71ddb69a836f3, type: 3}
+  questionName: 
   evidenceType: 1
-  itemDescription: This is a USB
-  playerDialogue: This is in a strange place. I wonder whats on it?
+  itemDescription: A small USB stick, tucked away in a corner. It looks like someone
+    didn't want it to be found.
+  playerDialogue: I wonder whats on this...maybe it has some secrets.
   explanation: 
   canBeInspected: 1
   holdDistance: 2.5
@@ -382,4 +384,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inspectionUI: {fileID: 0}
+  description: {fileID: 0}
+  gameUI: {fileID: 0}
   typingSpeed: 0.01

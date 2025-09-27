@@ -71,6 +71,7 @@ public class EnemyInteraction : MonoBehaviour
 
     void StartInteraction()
     {
+        enemyWander.HandleWalkingSound(false);
         inConversation = true;
 
         //disable gameUI
@@ -111,6 +112,7 @@ public class EnemyInteraction : MonoBehaviour
         }
 
         List<Interactable> discoveredObjects = enemyDialogue.GetDiscoveredObjects();
+        Debug.Log("Discovered objects count: " + discoveredObjects.Count);
 
         if (discoveredObjects.Count == 0)
         {
@@ -120,8 +122,20 @@ public class EnemyInteraction : MonoBehaviour
 
         foreach (var obj in discoveredObjects)
         {
+            Debug.Log(obj.name + " questionName='" + obj.questionName + "' length=" + obj.questionName.Length);
+
             //onyl spawn if questionName not empty
-            if (string.IsNullOrEmpty(obj.questionName)) continue;
+            if (string.IsNullOrEmpty(obj.questionName))
+            {
+                Debug.Log("no quetison name");
+                continue;
+            }
+
+            if (questionButtonPrefab == null)
+            {
+                Debug.LogError("questionButtonPrefab not assigned!");
+                continue;
+            }
 
             GameObject buttonObj = Instantiate(questionButtonPrefab, buttonContainer);
             TMPro.TMP_Text buttonText = buttonObj.GetComponentInChildren<TMPro.TMP_Text>();

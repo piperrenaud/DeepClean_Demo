@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.UI;
 using TMPro;
+using Unity.VisualScripting.FullSerializer;
 
 public class EnemyWander : MonoBehaviour
 {
@@ -55,6 +56,7 @@ public class EnemyWander : MonoBehaviour
 
     [Header("UI")]
     public Slider suspicionSlider;
+    public TMP_Text suspicionText;
     public GameObject notificationCanvas;
     public GameObject dialogueCanvas;
     public TMP_Text dialogueText;
@@ -264,7 +266,7 @@ public class EnemyWander : MonoBehaviour
             yield return null;
         }
 
-        door.CloseDoor();
+        //door.CloseDoor();
         yield return new WaitForSeconds(1f);
     }
 
@@ -329,7 +331,7 @@ public class EnemyWander : MonoBehaviour
         onComplete?.Invoke();
     }
 
-    void HandleWalkingSound(bool isWalking)
+    public void HandleWalkingSound(bool isWalking)
     {
         if (isWalking)
         {
@@ -491,6 +493,15 @@ public class EnemyWander : MonoBehaviour
         {
             suspicionSlider.value = suspicion;
         }
+
+        if (suspicionText != null)
+        {
+            if (suspicion <= 0) suspicionText.text = "0%";
+            else
+            {
+                suspicionText.text = $"{suspicion:0}%";
+            }
+        }
     }
 
     public void HandlePhotoTaken()
@@ -600,24 +611,38 @@ public class EnemyWander : MonoBehaviour
     {
         if (player == null) yield break;
 
-        Vector3 dirToPlayer = (player.position - transform.position).normalized;
-        Vector3 targetPos = player.position - dirToPlayer * stopDistance;
-        targetPos.y = transform.position.y;
-
         agent.isStopped = false;
-        agent.SetDestination(targetPos);
         animator.SetBool("Walking", true);
         HandleWalkingSound(true);
 
-        //walk to player
-        while (Vector3.Distance(transform.position, targetPos) > 0.1f)
+        //target position infront of player
+        Vector3 dirToEnemy = (transform.position - player.position).normalized;
+        Vector3 desiredPos = player.position + dirToEnemy * stopDistance;
+        desiredPos.y = player.position.y;
+
+        //raycast from player to enemy to check for walls
+        Vector3 rayDir = (desiredPos - player.position).normalized;
+        float rayDist = Vector3.Distance(player.position, desiredPos);
+
+        if (Physics.Raycast(player.position + Vector3.up * 0.5f, rayDir, out RaycastHit hit, rayDist, LayerMask.GetMask("Obstruction")))
         {
+            //if blocked, move enemy 
+            desiredPos = hit.point - rayDir * 0.5f;
+            desiredPos.y = transform.position.y;
+        }
+
+        agent.SetDestination(desiredPos);
+
+        while (agent.pathPending || agent.remainingDistance > 0.2f)
+        {
+            // rotate towards player
             Vector3 dir = (player.position - transform.position).normalized;
             if (dir.sqrMagnitude > 0.01f)
             {
                 Quaternion lookRot = Quaternion.LookRotation(new Vector3(dir.x, 0, dir.z));
                 transform.rotation = Quaternion.Slerp(transform.rotation, lookRot, Time.deltaTime * turnSpeed / 100f);
             }
+
             yield return null;
         }
 
@@ -625,7 +650,7 @@ public class EnemyWander : MonoBehaviour
         animator.SetBool("Walking", false);
         HandleWalkingSound(false);
 
-        //dialogue moment
+        // dialogue moment
         if (dialogueCanvas != null && dialogueText != null)
         {
             dialogueText.text = "You're moving on already? This room's still dirty. Clean it up a bit first.";
@@ -634,11 +659,11 @@ public class EnemyWander : MonoBehaviour
             dialogueCanvas.SetActive(false);
         }
 
-        //unblock player movement
+        // unblock player
         PlayerMovement pm = player.GetComponent<PlayerMovement>();
         if (pm != null) pm.UnblockMovement();
 
-        //resume task
+        // resume task
         isReacting = false;
         PickNextTask();
         agent.isStopped = false;

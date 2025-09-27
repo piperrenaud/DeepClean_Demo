@@ -578,12 +578,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectID: StorageUnitKey
   itemIcon: {fileID: 21300000, guid: 035c924cf1f467a448f490465ce66826, type: 3}
+  questionName: 
   evidenceType: 1
-  itemDescription: This is a set of keys
-  playerDialogue: These look like keys for a storage unit
+  itemDescription: A small set of metal keys with a storage unit tag attached. I
+    wonder if Mr Michaels know they're here.
+  playerDialogue: There are keys over here. I wonder what they open.
   explanation: 
   canBeInspected: 1
-  holdDistance: 2.5
+  holdDistance: 2
   rotationSpeed: 100
   doorAnimator: {fileID: 0}
 --- !u!114 &2039620165599339578
@@ -630,4 +632,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inspectionUI: {fileID: 0}
+  description: {fileID: 0}
+  gameUI: {fileID: 0}
   typingSpeed: 0.01

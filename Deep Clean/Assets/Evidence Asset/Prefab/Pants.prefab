@@ -507,12 +507,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87fb38b488b1c4e46a642bb1adb8c97a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectID: 
+  objectID: Pants
   itemIcon: {fileID: 0}
+  questionName: Ask about bloodstained pants
   evidenceType: 3
-  itemDescription: These are pants
-  playerDialogue: Are these pants covered in blood?
-  explanation: 
+  itemDescription: A pair of pants draped over a chair. Theres a bloodstain on one
+    leg.
+  playerDialogue: Blood... something bad must have happened.
+  explanation: The pants? That blood's from a hunting trip, there's even a photo
+    of me somewhere. I just haven't gotten around to washing them yet.
   canBeInspected: 0
   holdDistance: 2.5
   rotationSpeed: 100

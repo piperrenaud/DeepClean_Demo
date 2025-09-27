@@ -125,9 +125,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectID: 
   itemIcon: {fileID: 0}
+  questionName: 
   evidenceType: 0
   itemDescription: 
-  playerDialogue: There seems to be a knife missing...
+  playerDialogue: A knife set, but its not complete... that's odd.
   explanation: 
   canBeInspected: 0
   holdDistance: 2.5

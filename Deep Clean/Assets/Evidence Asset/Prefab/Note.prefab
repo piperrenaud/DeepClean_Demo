@@ -404,10 +404,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectID: Note
   itemIcon: {fileID: 21300000, guid: c6ffe5a0e9addb243a496a533d5dabbf, type: 3}
+  questionName: Ask about foreign note
   evidenceType: 2
-  itemDescription: "this is a note in another language\t"
-  playerDialogue: Hmm... I wonder what this says?
-  explanation: 
+  itemDescription: A note written in a foreign language. I don't know what it says,
+    but it seems important.
+  playerDialogue: A note in a language I don't recognize... should I try to translate
+    it?
+  explanation: Ah, that? It's just a note from a friend I met abroad... you know,
+    we like to exchange messages in their language. Nothing important, really.
   canBeInspected: 1
   holdDistance: 1.5
   rotationSpeed: 100
@@ -456,4 +460,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inspectionUI: {fileID: 0}
+  description: {fileID: 0}
+  gameUI: {fileID: 0}
   typingSpeed: 0.01
