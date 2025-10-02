@@ -7,7 +7,6 @@ public class TimeController : MonoBehaviour
     [Header("Time Settings")]
     [SerializeField] private float timeMultiplier;
     [SerializeField] private float startHour;
-    [SerializeField] private TMP_Text timeText;
 
     [Header("Sun and Moon")]
     [SerializeField] private Light sunLight;
@@ -21,6 +20,10 @@ public class TimeController : MonoBehaviour
     [SerializeField] private Color dayAmbientLight;
     [SerializeField] private Color nightAmbientLight;
     [SerializeField] private AnimationCurve lightChangeCurve;
+
+    [Header("Skybox Control")]
+    [SerializeField] private Material skyboxMaterial;
+    [SerializeField] private string blendPropertyName = "BlendValue";
 
     private TimeSpan sunriseTime;
     private TimeSpan sunsetTime;
@@ -43,11 +46,6 @@ public class TimeController : MonoBehaviour
     private void UpdateTimeOfDay()
     {
         currentTime = currentTime.AddSeconds(Time.deltaTime * timeMultiplier);
-
-        if (timeText != null)
-        {
-            timeText.text = currentTime.ToString("HH:mm");
-        }
     }
 
     private void RotateSun()
@@ -60,7 +58,6 @@ public class TimeController : MonoBehaviour
             TimeSpan timeSinceSunrise = CalculateTimeDifference(sunriseTime, currentTime.TimeOfDay);
 
             double percentage = timeSinceSunrise.TotalMinutes / sunriseToSunsetDuration.TotalMinutes;
-
             sunLightRotation = Mathf.Lerp(0, 180, (float)percentage);
         }
         else
@@ -69,7 +66,6 @@ public class TimeController : MonoBehaviour
             TimeSpan timeSinceSunset = CalculateTimeDifference(sunsetTime, currentTime.TimeOfDay);
 
             double percentage = timeSinceSunset.TotalMinutes / sunsetToSunriseDuration.TotalMinutes;
-
             sunLightRotation = Mathf.Lerp(180, 360, (float)percentage);
         }
 
@@ -79,9 +75,16 @@ public class TimeController : MonoBehaviour
     private void UpdateLightSettings()
     {
         float dotProduct = Vector3.Dot(sunLight.transform.forward, Vector3.down);
-        sunLight.intensity = Mathf.Lerp(0, maxSunlightIntensity, lightChangeCurve.Evaluate(dotProduct));
-        moonLight.intensity = Mathf.Lerp(maxMoonLightIntensity, 0, lightChangeCurve.Evaluate(dotProduct));
-        RenderSettings.ambientLight = Color.Lerp(nightAmbientLight, dayAmbientLight, lightChangeCurve.Evaluate(dotProduct));
+        float evaluated = lightChangeCurve.Evaluate(dotProduct);
+
+        sunLight.intensity = Mathf.Lerp(0, maxSunlightIntensity, evaluated);
+        moonLight.intensity = Mathf.Lerp(maxMoonLightIntensity, 0, evaluated);
+        RenderSettings.ambientLight = Color.Lerp(nightAmbientLight, dayAmbientLight, evaluated);
+
+        if (skyboxMaterial != null)
+        {
+            skyboxMaterial.SetFloat(blendPropertyName, evaluated);
+        }
     }
 
     private TimeSpan CalculateTimeDifference(TimeSpan fromTime, TimeSpan toTime)
@@ -95,4 +98,8 @@ public class TimeController : MonoBehaviour
 
         return difference;
     }
+
+    public DateTime GetCurrentTime() { return currentTime; }
+    public TimeSpan GetSunriseTime() { return sunriseTime; }
+    public TimeSpan GetSunsetTime() { return sunsetTime; }
 }

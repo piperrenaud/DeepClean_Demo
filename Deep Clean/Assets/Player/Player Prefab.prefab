@@ -462,6 +462,8 @@ MonoBehaviour:
   camAnimator: {fileID: 0}
   audioSource: {fileID: 3301791828213693810}
   walkingSound: {fileID: 8300000, guid: cd52cf1c4efd26442a9caa8d6e8a73aa, type: 3}
+  playerCamera: {fileID: 0}
+  spawnPoint: {fileID: 0}
   currentSpeed: 0
 --- !u!114 &2097460929974710760
 MonoBehaviour:
@@ -757,9 +759,9 @@ GameObject:
   - component: {fileID: 2873129026545896344}
   - component: {fileID: 3880351155584785937}
   - component: {fileID: 8383132790583506626}
+  - component: {fileID: 8799446794371111553}
   - component: {fileID: 881607838127773416}
   - component: {fileID: 2606736375252271117}
-  - component: {fileID: 8799446794371111553}
   - component: {fileID: 3312626498051829157}
   - component: {fileID: 3221688567293779755}
   m_Layer: 0
@@ -844,6 +846,21 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3630275345384106713}
   m_Enabled: 1
+--- !u!114 &8799446794371111553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3630275345384106713}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bc809c0c017e76408939d9989ddf817, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sensX: 400
+  sensY: 400
+  orientation: {fileID: 3574891303045228191}
 --- !u!114 &881607838127773416
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -904,21 +921,6 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
---- !u!114 &8799446794371111553
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3630275345384106713}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5bc809c0c017e76408939d9989ddf817, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sensX: 400
-  sensY: 400
-  orientation: {fileID: 3574891303045228191}
 --- !u!95 &3312626498051829157
 Animator:
   serializedVersion: 7

@@ -574,12 +574,13 @@ public class EnemyWander : MonoBehaviour
         agent.isStopped = false;
     }
 
-    public IEnumerator FacePlayer()
+    public IEnumerator FacePlayer(string dialogueOverride = null)
     {
         if (player == null) yield break;
 
         agent.isStopped = true;
         isReacting = true;
+
         foreach (var param in animator.parameters)
         {
             if (param.type == AnimatorControllerParameterType.Bool)
@@ -604,10 +605,10 @@ public class EnemyWander : MonoBehaviour
         }
 
         transform.rotation = targetRot;
-        StartCoroutine(WalkToPlayer());
+        StartCoroutine(WalkToPlayer(3f, dialogueOverride));
     }
 
-    public IEnumerator WalkToPlayer(float stopDistance = 3f)
+    public IEnumerator WalkToPlayer(float stopDistance = 3f, string dialogueOverride = null)
     {
         if (player == null) yield break;
 
@@ -653,7 +654,7 @@ public class EnemyWander : MonoBehaviour
         // dialogue moment
         if (dialogueCanvas != null && dialogueText != null)
         {
-            dialogueText.text = "You're moving on already? This room's still dirty. Clean it up a bit first.";
+            dialogueText.text = dialogueOverride ?? "You're moving on already? This room's still dirty. Clean it up a bit first.";
             dialogueCanvas.SetActive(true);
             yield return new WaitForSeconds(5f);
             dialogueCanvas.SetActive(false);
