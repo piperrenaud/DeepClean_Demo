@@ -106,7 +106,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2556030554656776337}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.558512, y: 0.43366396, z: 0.43366405, w: 0.55851185}
+  m_LocalRotation: {x: -0.55851215, y: 0.43366373, z: 0.43366373, w: 0.55851215}
   m_LocalPosition: {x: 8.584072, y: -0.34100008, z: -6.422}
   m_LocalScale: {x: 8.2742, y: 8.274199, z: 11.660787}
   m_ConstrainProportionsScale: 0
@@ -114,7 +114,7 @@ Transform:
   - {fileID: 3236404095175490058}
   - {fileID: 1516076562499700202}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 75.656}
 --- !u!33 &6474516512724644341
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -182,7 +182,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectID: Pill Bottle
-  itemIcon: {fileID: 21300000, guid: bd14a5826bf74914998d15149921cb31, type: 3}
+  itemIcon: {fileID: 21300000, guid: 64b1d75fce49c8740902803394de002b, type: 3}
   questionName: 
   evidenceType: 3
   itemDescription: "A small pill bottle with the name 'Ben on it. It doesn't belong

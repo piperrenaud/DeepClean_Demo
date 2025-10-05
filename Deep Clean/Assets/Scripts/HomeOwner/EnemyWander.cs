@@ -39,6 +39,7 @@ public class EnemyWander : MonoBehaviour
 
     [Header("References")]
     public Animator animator;
+    public Animator notificationAnimator;
     public int playerRoomID;
     public PlayerRoomTracker playerTracker;
     public Transform player;
@@ -423,7 +424,7 @@ public class EnemyWander : MonoBehaviour
         isReacting = true;
         suspicion += 5f;
         Debug.Log("add 5 suspicion");
-        StartCoroutine(SuspicionIncreased());
+        notificationAnimator.SetTrigger("Notify");
 
         agent.isStopped = true;
         animator.SetBool("Walking", false);
@@ -465,7 +466,7 @@ public class EnemyWander : MonoBehaviour
 
     private IEnumerator ShowDroppedItemDialogue(GameObject droppedItem)
     {
-        StartCoroutine(SuspicionIncreased());
+        notificationAnimator.SetTrigger("Notify");
         if (dialogueCanvas != null && dialogueText != null)
         {
             //get item name from interactable script
@@ -478,13 +479,6 @@ public class EnemyWander : MonoBehaviour
             yield return new WaitForSeconds(dialogueDisplayTime);
             dialogueCanvas.SetActive(false);
         }
-    }
-
-    public IEnumerator SuspicionIncreased()
-    {
-        notificationCanvas.SetActive(true);
-        yield return new WaitForSeconds(1f);
-        notificationCanvas.SetActive(false);
     }
 
     void UpdateSuspicion()
@@ -519,7 +513,8 @@ public class EnemyWander : MonoBehaviour
             //only react if in view
             suspicion += 5f;
             suspicion = Mathf.Clamp(suspicion, 0, 100f);
-            StartCoroutine(SuspicionIncreased());
+            notificationAnimator.SetTrigger("Notify");
+
             OnPlayerCaught();
             Debug.Log("Enemy saw player take a photo");
         }

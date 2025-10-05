@@ -127,7 +127,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectID: Missing Knife
-  itemIcon: {fileID: 21300000, guid: 9d549a648076bf14bacd0c89e22d4bcc, type: 3}
+  itemIcon: {fileID: 21300000, guid: 3d1780acacdfb0347a75b959650e7bff, type: 3}
   questionName: Ask about Knife
   evidenceType: 3
   itemDescription: A sharp knofe, lying somewhere it clearly shouldn'y be. It doesn't

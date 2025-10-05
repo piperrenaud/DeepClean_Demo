@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
         Instance = this;
     }
     
-    IEnumerator Start()
+    void Start()
     {
         DirtSpot[] spots = FindObjectsByType<DirtSpot>(FindObjectsSortMode.None);
         allDirtSpots.AddRange(spots);
@@ -44,8 +44,6 @@ public class GameManager : MonoBehaviour
             overallProgressBar.maxValue = totalDirtAmount;
             overallProgressBar.value = 0f;
         }
-
-        yield return null;
 
         UpdateUI();
     }
@@ -106,5 +104,10 @@ public class GameManager : MonoBehaviour
     private void OnGameComplete()
     {
         Debug.Log("All dirt cleaned! Game complete!");
+    }
+
+    public bool IsCleaningComplete()
+    {
+        return cleanedSpots >= allDirtSpots.Count;
     }
 }

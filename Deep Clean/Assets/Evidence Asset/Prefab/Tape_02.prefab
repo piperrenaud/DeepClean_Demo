@@ -128,7 +128,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectID: Tape_02
-  itemIcon: {fileID: 21300000, guid: 5ec4be0800ae895419f697cea4955ade, type: 3}
+  itemIcon: {fileID: 21300000, guid: 8b9a9f9713bd30146aebf43419ac191c, type: 3}
   questionName: 
   evidenceType: 3
   itemDescription: Two rolls of tape. Thats more than usual - maybe someone's planning

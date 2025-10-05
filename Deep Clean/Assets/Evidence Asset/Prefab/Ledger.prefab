@@ -304,7 +304,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectID: Ledger
-  itemIcon: {fileID: 21300000, guid: 1a4a4b893f55b164fb066c662e00c747, type: 3}
+  itemIcon: {fileID: 21300000, guid: ec4bfa706cb74ef45871fee7b17e829f, type: 3}
   questionName: 
   evidenceType: 1
   itemDescription: A ledger tucked in a drawer. Most entries mention 'cargo' and

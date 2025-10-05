@@ -403,7 +403,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectID: Note
-  itemIcon: {fileID: 21300000, guid: c6ffe5a0e9addb243a496a533d5dabbf, type: 3}
+  itemIcon: {fileID: 21300000, guid: 3a04e3b248ac7c743801d492f7100b19, type: 3}
   questionName: Ask about foreign note
   evidenceType: 2
   itemDescription: A note written in a foreign language. I don't know what it says,

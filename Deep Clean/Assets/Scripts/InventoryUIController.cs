@@ -74,7 +74,7 @@ public class InventoryUIController : MonoBehaviour
     private void SetupSlot(GameObject slot, InventoryManager.CollectedEntry entry)
     {
         //set icon
-        Image icon = slot.transform.Find("Icon")?.GetComponent<Image>();
+        Image icon = slot.transform.Find("Image")?.GetComponent<Image>();
         if (icon != null) icon.sprite = entry.itemIcon;
 
         //set label

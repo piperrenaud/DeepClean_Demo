@@ -577,7 +577,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectID: StorageUnitKey
-  itemIcon: {fileID: 21300000, guid: 035c924cf1f467a448f490465ce66826, type: 3}
+  itemIcon: {fileID: 21300000, guid: 30f9e04a68c01004181c13999429d9c5, type: 3}
   questionName: 
   evidenceType: 1
   itemDescription: A small set of metal keys with a storage unit tag attached. I
