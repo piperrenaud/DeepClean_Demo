@@ -43,6 +43,7 @@ public class EnemyWander : MonoBehaviour
     public int playerRoomID;
     public PlayerRoomTracker playerTracker;
     public Transform player;
+    public PlayerCameraTool playerCameraTool;
 
     [Header("Audio")]
     public AudioSource audioSource;
@@ -540,6 +541,8 @@ public class EnemyWander : MonoBehaviour
 
     public IEnumerator PhotoCaughtRoutine()
     {
+        StartCoroutine(playerCameraTool.PutdownRoutine());
+        
         Vector3 dirToPlayer = (player.position - transform.position).normalized;
         Quaternion lookRotation = Quaternion.LookRotation(new Vector3(dirToPlayer.x, 0, dirToPlayer.z));
         float elapsed = 0f;

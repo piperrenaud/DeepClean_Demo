@@ -1,11 +1,17 @@
 using UnityEngine;
 using System.Collections.Generic;
+using TMPro;
 
 public class InventoryManager : MonoBehaviour
 {
     public static InventoryManager Instance;
 
-    public int maxItems = 32;
+    [Header("Inventory Limits")]
+    public int maxObjects = 6;
+    public int maxPhotos = 6;
+
+    public Animator notificationAnimator;
+    public TMP_Text notificationText;
 
     [System.Serializable]
     public class CollectedEntry
@@ -37,10 +43,18 @@ public class InventoryManager : MonoBehaviour
 
     public bool AddItem(string itemID, EvidenceType type, string description, string dialogue, string explanation, bool isPhoto = false, Sprite itemIcon = null)
     { 
-        if (collectedItems.Count >= maxItems)
+        int objectCount = collectedItems.FindAll(i => !i.isPhoto).Count;
+        int photoCount = collectedItems.FindAll(i => i.isPhoto).Count;
+
+        if (!isPhoto && objectCount >= maxObjects)
         {
-            Debug.Log("Inventory full! cannot take more items.");
-            return false; //reject adding
+            Debug.Log("Object inventory full!. Cant take more objects.");
+            return false;
+        }
+        else if (isPhoto && photoCount >= maxPhotos)
+        {
+            Debug.Log("Photo inventory full! Cannot take more photos.");
+            return false;
         }
 
        collectedItems.Add(new CollectedEntry
@@ -51,7 +65,7 @@ public class InventoryManager : MonoBehaviour
         playerDialogue = dialogue,
         explanation = explanation,
         isPhoto = isPhoto,
-        itemIcon = itemIcon != null ? itemIcon : null
+        itemIcon = itemIcon
        });
 
        Debug.Log("Collected evidence: " + itemID + "(" + type + ")");
@@ -71,6 +85,11 @@ public class InventoryManager : MonoBehaviour
                 collectedItems.RemoveAt(i);
                 break;
             }
+        }
+
+        if (InventoryUIController.Instance != null)
+        {
+            InventoryUIController.Instance.RefreshUI();
         }
     }
 
@@ -101,5 +120,25 @@ public class InventoryManager : MonoBehaviour
                 return;
             }
         }
+    }
+
+    public bool IsFull(bool isPhoto)
+    {
+        if (isPhoto)
+        {
+            int photoCount = collectedItems.FindAll(i => i.isPhoto).Count;
+            return photoCount >= maxPhotos;
+        }
+        else
+        {
+            int objectCount = collectedItems.FindAll(i => !i.isPhoto).Count;
+            return objectCount >= maxObjects;
+        }
+    }
+
+    public void Notify(string text)
+    {
+        notificationText.text = text;
+        notificationAnimator.SetTrigger("Notify");
     }
 }

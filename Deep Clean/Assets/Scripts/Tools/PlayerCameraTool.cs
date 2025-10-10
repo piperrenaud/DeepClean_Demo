@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerCameraTool : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class PlayerCameraTool : MonoBehaviour
     public GameObject cameraUI;
     public GameObject gameUI;
     public GameObject crosshair;
+    public PhotoCapture photoCapture;
 
     private bool isHeld = false;
 
@@ -42,7 +44,7 @@ public class PlayerCameraTool : MonoBehaviour
     }
 
     public IEnumerator PutdownRoutine()
-    {
+    {        
         animator.SetTrigger("PutdownCam");
         yield return new WaitForSeconds(0.05f);
 
@@ -51,5 +53,8 @@ public class PlayerCameraTool : MonoBehaviour
         gameUI.SetActive(true);
         crosshair.SetActive(true);
         isHeld = false;
+
+        photoCapture.viewingPhoto = false;
+        photoCapture.photoFrame.SetActive(false);
     }
 }

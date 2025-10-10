@@ -159,6 +159,12 @@ public class Interactable : MonoBehaviour
 
     public void Take()
     {
+        if (InventoryManager.Instance.IsFull(false))
+        {
+            InventoryManager.Instance.Notify("Object Inventory Full!");
+            return;
+        }
+
         //mark as discovered
         if (!isDiscovered)
         {

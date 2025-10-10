@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using System.IO;
+using TMPro;
 
 [System.Serializable]
 public class PhotoData
@@ -15,13 +16,14 @@ public class PhotoCapture : MonoBehaviour
 {
     [Header("Photo Taker")]
     [SerializeField] private Image photoDisplayArea;
-    [SerializeField] private GameObject photoFrame;
+    [SerializeField] public GameObject photoFrame;
     [SerializeField] private GameObject cameraUI;
 
     [Header("Camera UI Elements")]
     [SerializeField] private Image innerFrame;
     [SerializeField] private Color defaultFrameColor = Color.white;
     [SerializeField] private Color validFrameColor = Color.green;
+    [SerializeField] private TMP_Text photosLeftText;
 
     [Header("Flash Effect")]
     [SerializeField] private GameObject cameraFlash;
@@ -37,10 +39,9 @@ public class PhotoCapture : MonoBehaviour
     public EnemyWander enemyWander;
 
     private Texture2D screenCapture;
-    private bool viewingPhoto;
+    public bool viewingPhoto;
 
     private static int photoCounter = 0;
-
 
     void Start()
     {
@@ -102,6 +103,12 @@ public class PhotoCapture : MonoBehaviour
 
     IEnumerator CapturePhoto()
     {
+        if (InventoryManager.Instance.IsFull(true))
+        {
+            InventoryManager.Instance.Notify("Photo Inventory Full!");
+            yield break;
+        }
+
         cameraUI.SetActive(false);
         viewingPhoto = true;
 
@@ -124,6 +131,10 @@ public class PhotoCapture : MonoBehaviour
                 Debug.Log("Captured photo of Evidence!");
             }
         }
+
+        int photosLeft = 5 - photoCounter;
+
+        photosLeftText.text = photosLeft.ToString();
 
         SavePhoto(screenCapture, isEvidence);
         enemyWander.HandlePhotoTaken();
@@ -151,7 +162,7 @@ public class PhotoCapture : MonoBehaviour
         RemovePhoto();
     }
 
-    void RemovePhoto()
+    public void RemovePhoto()
     {
         viewingPhoto = false;
         photoFrame.SetActive(false);
