@@ -10,9 +10,6 @@ public class InventoryManager : MonoBehaviour
     public int maxObjects = 6;
     public int maxPhotos = 6;
 
-    public Animator notificationAnimator;
-    public TMP_Text notificationText;
-
     [System.Serializable]
     public class CollectedEntry
     {
@@ -27,6 +24,8 @@ public class InventoryManager : MonoBehaviour
 
     // Keep track of collected items
     private List<CollectedEntry> collectedItems = new List<CollectedEntry>();
+
+    private Dictionary<string, Interactable> storedObjects = new Dictionary<string, Interactable>();
 
     void Awake()
     {
@@ -136,9 +135,17 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    public void Notify(string text)
+    public void RegisterItemObject(string itemID, Interactable obj)
     {
-        notificationText.text = text;
-        notificationAnimator.SetTrigger("Notify");
+        if (!storedObjects.ContainsKey(itemID))
+        {
+            storedObjects[itemID] = obj;
+        }
+    }
+
+    public Interactable GetOriginalObject(string itemID)
+    {
+        storedObjects.TryGetValue(itemID, out var obj);
+        return obj;
     }
 }

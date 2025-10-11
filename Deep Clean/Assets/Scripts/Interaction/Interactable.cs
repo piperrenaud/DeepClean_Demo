@@ -40,7 +40,7 @@ public class Interactable : MonoBehaviour
     private InteractableDialogue dialogue;
     private InteractableInspection inspection;
 
-    private BoxCollider boxCollider;
+    private Collider objCollider;
 
     private bool isDiscovered = false;
 
@@ -49,7 +49,7 @@ public class Interactable : MonoBehaviour
         highlighter = GetComponent<InteractableHighlighter>();
         dialogue = GetComponent<InteractableDialogue>();
         inspection = GetComponent<InteractableInspection>();
-        boxCollider = GetComponent<BoxCollider>();
+        objCollider = GetComponent<Collider>();
 
         originalScale = transform.localScale;
     }
@@ -107,7 +107,7 @@ public class Interactable : MonoBehaviour
         transform.localRotation = Quaternion.identity;
 
         //diable boxcollider
-        if (boxCollider != null) boxCollider.enabled = false;
+        if (objCollider != null) objCollider.enabled = false;
 
         //disable rigidbody
         Rigidbody rb = GetComponent<Rigidbody>();
@@ -132,7 +132,7 @@ public class Interactable : MonoBehaviour
         transform.localScale = originalScale;
 
         //enable boxcollider
-        if (boxCollider != null) boxCollider.enabled = true;
+        if (objCollider != null) objCollider.enabled = true;
 
         //enable rigidbody
         Rigidbody rb = GetComponent<Rigidbody>();
@@ -161,7 +161,7 @@ public class Interactable : MonoBehaviour
     {
         if (InventoryManager.Instance.IsFull(false))
         {
-            InventoryManager.Instance.Notify("Object Inventory Full!");
+            GameManager.Instance.Notify("Object Inventory Full!");
             return;
         }
 
@@ -183,11 +183,13 @@ public class Interactable : MonoBehaviour
                 false,
                 itemIcon
             );
+
+            InventoryManager.Instance.RegisterItemObject(objectID, this);
         }
 
         if (inspection != null) inspection.HideUI();
 
-        if (boxCollider != null) boxCollider.enabled = true;
+        if (objCollider != null) objCollider.enabled = true;
 
         EnemyWander[] enemies = FindObjectsByType<EnemyWander>(FindObjectsSortMode.None);
         foreach (var enemy in enemies)

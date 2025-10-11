@@ -270,6 +270,9 @@ PrefabInstance:
       addedObject: {fileID: 8886385091749991310}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bd41603c3e9b0b549bfcf05bcc82bf65, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 4715839008524875143}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bd41603c3e9b0b549bfcf05bcc82bf65, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 3369274804664555088}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bd41603c3e9b0b549bfcf05bcc82bf65, type: 3}
       insertIndex: -1
@@ -316,6 +319,33 @@ MonoBehaviour:
   holdDistance: 2.5
   rotationSpeed: 100
   doorAnimator: {fileID: 0}
+--- !u!54 &4715839008524875143
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6677228676846240653}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!65 &3369274804664555088
 BoxCollider:
   m_ObjectHideFlags: 0

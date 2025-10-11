@@ -12,7 +12,6 @@ public class InteractableInspection : MonoBehaviour
     private Coroutine dialogueRoutine;
     private bool isTyping = false;
 
-
     public void ShowUI(string description)
     {
         if (inspectionUI == null || description == null) return;

@@ -1,113 +1,117 @@
-using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
-using System.Collections.Generic;
-using System.Collections;
-using System.Linq;
+using UnityEngine; 
+using UnityEngine.UI; 
+using TMPro; 
+using System.Collections.Generic; 
+using System.Collections; 
+using System.Linq; 
 
-public class GameManager : MonoBehaviour
-{
-    public static GameManager Instance { get; private set; }
+public class GameManager : MonoBehaviour 
+{ 
+    public static GameManager Instance { get; private set; } 
     
-    [Header("Game Settings")]
-    public TMP_Text progressText;
+    [Header("Game Settings")] 
+    public TMP_Text progressText; 
     public Slider overallProgressBar;
-
-
-    [Header("References")]
-    public Transform enemy;
-
-    private List<DirtSpot> allDirtSpots = new List<DirtSpot>();
-    private int cleanedSpots = 0;
-    private float totalDirtAmount = 0f;
-    private float totalDirtCleaned = 0f;
-
-    private PlayerRoomTracker playerRoomTracker;
+    public Animator notificationAnimator;
+    public TMP_Text notificationText; 
     
-    void Awake()
-    {
+    [Header("References")] 
+    public Transform enemy; 
+
+    private List<DirtSpot> allDirtSpots = new List<DirtSpot>(); 
+    private int cleanedSpots = 0; 
+    private float totalDirtAmount = 0f; 
+    private float totalDirtCleaned = 0f; 
+    private float maxRubbishAmount = 0f;
+    private float totalRubbishCollected = 0f;
+    private PlayerRoomTracker playerRoomTracker; 
+    
+    void Awake() 
+    { 
         Instance = this;
-    }
+    } 
     
-    void Start()
-    {
-        DirtSpot[] spots = FindObjectsByType<DirtSpot>(FindObjectsSortMode.None);
-        allDirtSpots.AddRange(spots);
+    void Start() 
+    { 
+        DirtSpot[] spots = FindObjectsByType<DirtSpot>(FindObjectsSortMode.None); 
+        allDirtSpots.AddRange(spots); 
 
-        playerRoomTracker = FindFirstObjectByType<PlayerRoomTracker>();
+        int rubbishLayer = LayerMask.NameToLayer("Rubbish");
+        GameObject[] allRubbishObjects = FindObjectsByType<GameObject>(FindObjectsSortMode.None);
+        maxRubbishAmount = allRubbishObjects.Count(obj => obj.layer == rubbishLayer);
+                
+        totalDirtAmount = allDirtSpots.Count(); 
+        if (overallProgressBar != null) 
+        { 
+            overallProgressBar.minValue = 0f; 
+            overallProgressBar.maxValue = totalDirtAmount + maxRubbishAmount; 
+            overallProgressBar.value = 0f; 
+        } 
         
-        totalDirtAmount = allDirtSpots.Sum(s => s.maxDirtiness);
-
-        if (overallProgressBar != null)
-        {
-            overallProgressBar.minValue = 0f;
-            overallProgressBar.maxValue = totalDirtAmount;
-            overallProgressBar.value = 0f;
-        }
-
-        UpdateUI();
-    }
+        UpdateUI(); 
+    } 
     
-    public void OnDirtSpotCleaned(DirtSpot dirtSpot)
-    {
-        cleanedSpots++;    
-        totalDirtCleaned += dirtSpot.maxDirtiness;
-
-        UpdateUI();
-        CheckGameComplete();
-    }
-    
-    public void UpdateUI()
-    {
-        //overall
-        totalDirtCleaned = allDirtSpots.Sum(s => s.GetAmountCleaned());
-
-        if (progressText != null)
-        {
-            float progressPercent = (totalDirtAmount > 0) ? (totalDirtCleaned / totalDirtAmount) * 100f : 0f;
-            progressText.text = $"{progressPercent:0}%";
-        }
+    public void OnDirtSpotCleaned(DirtSpot dirtSpot) 
+    { 
+        cleanedSpots++; 
+        totalDirtCleaned++;
         
-        if (overallProgressBar != null)
-        {
-            overallProgressBar.value = totalDirtCleaned;
-        }
-
-        //per room
-        if (playerRoomTracker != null)
-        {
-            int currentRoom = playerRoomTracker.currentRoomID;
-            var roomSpots = allDirtSpots.Where(s => s.roomID == currentRoom).ToList();
-
-            float roomTotal = roomSpots.Sum(s => s.GetMaxDirt());
-            float roomCleaned = roomSpots.Sum(s => s.GetAmountCleaned());
-        }
-    }
-
-    public float GetRoomCleanliness(int roomID)
-    {
-        var roomSpots = allDirtSpots.Where(s => s.roomID == roomID).ToList();
-        float roomTotal = roomSpots.Sum(s => s.GetMaxDirt());
-        float roomCleaned = roomSpots.Sum(s => s.GetAmountCleaned());
-
-        return (roomTotal > 0f) ? (roomCleaned / roomTotal) * 100f : 100f;
-    }
+        UpdateUI(); 
+        CheckGameComplete(); 
+    } 
     
-    private void CheckGameComplete()
-    {
-        if (cleanedSpots >= allDirtSpots.Count)
-        {
-            OnGameComplete();
-        }
-    }
+    public void UpdateUI() 
+    { 
+        totalDirtCleaned = allDirtSpots.Sum(s => s.GetAmountCleaned()); 
+
+        float totalProgress = totalDirtCleaned + totalRubbishCollected;
+
+        float progressPercent = (totalDirtAmount + maxRubbishAmount > 0) ? (totalProgress / (totalDirtAmount + maxRubbishAmount)) * 100f : 0f; 
+        progressText.text = $"{progressPercent:0}%"; 
+        
+        if (overallProgressBar != null) 
+        { 
+            overallProgressBar.maxValue = totalDirtAmount + maxRubbishAmount; 
+            overallProgressBar.value = totalProgress;
+            Debug.Log("Total dirt in scene: " + totalDirtAmount);
+            Debug.Log("Total rubbish in scene: " + maxRubbishAmount);
+            Debug.Log("Total progress: " + totalProgress);
+        } 
+    } 
     
-    private void OnGameComplete()
+    public float GetCurrentCleanliness() 
+    {   
+        return 100 * ((totalDirtCleaned + totalRubbishCollected) / (totalDirtAmount + maxRubbishAmount)); 
+    } 
+    
+    private void CheckGameComplete() 
+    { 
+        if (cleanedSpots >= allDirtSpots.Count) 
+        { 
+            OnGameComplete(); 
+        } 
+    } 
+    
+    private void OnGameComplete() 
+    { 
+        Debug.Log("All dirt cleaned! Game complete!"); 
+    } 
+    
+    public bool IsCleaningComplete() 
+    { 
+        return cleanedSpots >= allDirtSpots.Count; 
+    } 
+
+    public void Notify(string text)
     {
-        Debug.Log("All dirt cleaned! Game complete!");
+        notificationText.text = text;
+        notificationAnimator.SetTrigger("Notify");
     }
 
-    public bool IsCleaningComplete()
+    public void RubbishAdded()
     {
-        return cleanedSpots >= allDirtSpots.Count;
+        totalRubbishCollected++;;
+        Debug.Log("total rubbish collected: " + totalRubbishCollected);
+        UpdateUI();
     }
 }

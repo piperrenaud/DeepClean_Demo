@@ -47,7 +47,7 @@ public class DirtSpot : MonoBehaviour
 
         if (progressBar != null)
         {
-            progressBar.gameObject.SetActive(true);
+            //progressBar.gameObject.SetActive(true);
         }
 
         AudioManager.Instance?.PlayCleaningSound();
@@ -99,7 +99,7 @@ public class DirtSpot : MonoBehaviour
         
         if (progressBar != null)
         {
-            progressBar.value = 1f - (currentDirtiness / maxDirtiness);
+           // progressBar.value = 1f - (currentDirtiness / maxDirtiness);
         }
     }
 
@@ -129,7 +129,7 @@ public class DirtSpot : MonoBehaviour
     
     public float GetCleaningProgress() { return 1f - (currentDirtiness / maxDirtiness); }
     public bool IsFullyCleaned() { return currentDirtiness <= 0; }
-    public float GetAmountCleaned() { return maxDirtiness - currentDirtiness; }
+    public float GetAmountCleaned() { return (maxDirtiness/100) - (currentDirtiness/100); }
     public float GetRemainingDirt() { return currentDirtiness; }
     public float GetMaxDirt() { return maxDirtiness; }
 }

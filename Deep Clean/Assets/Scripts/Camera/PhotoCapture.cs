@@ -105,7 +105,7 @@ public class PhotoCapture : MonoBehaviour
     {
         if (InventoryManager.Instance.IsFull(true))
         {
-            InventoryManager.Instance.Notify("Photo Inventory Full!");
+            GameManager.Instance.Notify("Photo Inventory Full!");
             yield break;
         }
 

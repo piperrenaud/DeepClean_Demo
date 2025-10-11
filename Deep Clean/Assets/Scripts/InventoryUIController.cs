@@ -122,41 +122,60 @@ public class InventoryUIController : MonoBehaviour
         InventoryManager.Instance.RemoveItem(selectedItem.itemID);
 
         //spawn object at players feet
-        Interactable objPrefab = FindInteractablePrefab(selectedItem.itemID);
-        if (objPrefab != null && playerTransform != null)
+        Interactable originalObj = InventoryManager.Instance.GetOriginalObject(selectedItem.itemID);
+        Vector3 dropPos = playerTransform.position + playerTransform.forward * 1f;
+
+        if (originalObj != null)
         {
-            Vector3 dropPos = playerTransform.position + playerTransform.forward * 1f;
             
-            //instantiate the object
-            Interactable droppedObj = Instantiate(objPrefab, dropPos, Quaternion.identity);
-            droppedObj.gameObject.SetActive(true);
+            //reuse og object
+            originalObj.transform.position = dropPos;
+            originalObj.transform.rotation = Quaternion.identity;
+            originalObj.gameObject.SetActive(true);
 
             //give rigidbody
-            Rigidbody rb = droppedObj.gameObject.AddComponent<Rigidbody>();
-            if (rb == null)
+            Rigidbody rb = originalObj.GetComponent<Rigidbody>();
+            if (rb != null)
             {
-                rb = droppedObj.gameObject.AddComponent<Rigidbody>();
+                rb.isKinematic = false;
+                rb.useGravity = true;
+                rb.linearVelocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
             }
 
-            //enable gravity and reset velocity
-            rb.useGravity = true;
-            rb.linearVelocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
+            Collider col = originalObj.GetComponent<Collider>();
+            if (col != null) col.enabled = true;
+        }
+        else
+        {
+            // Fallback: if no original object found, spawn from prefab
+            Interactable objPrefab = FindInteractablePrefab(selectedItem.itemID);
+            if (objPrefab != null)
+            {
+                Interactable droppedObj = Instantiate(objPrefab, dropPos, Quaternion.identity);
+                droppedObj.transform.localScale = objPrefab.transform.localScale;
+                droppedObj.gameObject.SetActive(true);
 
-            //copy inventory data onto dropped object
-            droppedObj.itemDescription = selectedItem.itemDescription;
-            droppedObj.playerDialogue = selectedItem.playerDialogue;
-            droppedObj.explanation = selectedItem.explanation;
-            droppedObj.evidenceType = selectedItem.type;
-            droppedObj.itemIcon = selectedItem.itemIcon;
-            droppedObj.gameObject.tag = "DroppedItem";
+                Rigidbody rb = droppedObj.GetComponent<Rigidbody>();
+                if (rb == null)
+                    rb = droppedObj.gameObject.AddComponent<Rigidbody>();
+
+                rb.useGravity = true;
+                rb.linearVelocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+
+                droppedObj.itemDescription = selectedItem.itemDescription;
+                droppedObj.playerDialogue = selectedItem.playerDialogue;
+                droppedObj.explanation = selectedItem.explanation;
+                droppedObj.evidenceType = selectedItem.type;
+                droppedObj.itemIcon = selectedItem.itemIcon;
+                droppedObj.gameObject.tag = "DroppedItem";
+            }
         }
 
         //clear selection
         selectedItem = null;
-         if (dropButton != null) dropButton.SetActive(false);
-
-        //clear ui
+        if (dropButton != null) dropButton.SetActive(false);
         if (descriptionText != null) descriptionText.text = "";
         if (selectedItemImage != null)
         {

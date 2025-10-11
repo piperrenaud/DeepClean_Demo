@@ -12,10 +12,11 @@ GameObject:
   - component: {fileID: 1794286319292482269}
   - component: {fileID: 4540299880061826583}
   - component: {fileID: 5757869682788042316}
+  - component: {fileID: 2939169346226248805}
   - component: {fileID: 4949607475629042727}
   - component: {fileID: 5250247846342666652}
   - component: {fileID: 3201337435382374586}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: I_CannedFood_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30,7 +31,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2594811017049069506}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -112,6 +113,33 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -3520668679709327983, guid: 5cfb34e4d2a9de24584acb510151a41a, type: 3}
+--- !u!54 &2939169346226248805
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2594811017049069506}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!114 &4949607475629042727
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -125,9 +153,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectID: I_CannedFood_01
+  itemIcon: {fileID: 21300000, guid: c16c7352fb1b0d348882b0b35aa0c235, type: 3}
+  questionName: 
   evidenceType: 0
-  evidenceDescription: this is canned food
+  itemDescription: An empty food can. The label's worn off, but its looks like its
+    been scraped clean.
+  playerDialogue: 
   explanation: 
+  canBeInspected: 1
   holdDistance: 2.5
   rotationSpeed: 100
   doorAnimator: {fileID: 0}
@@ -159,4 +192,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inspectionUI: {fileID: 0}
+  description: {fileID: 0}
+  gameUI: {fileID: 0}
   typingSpeed: 0.01

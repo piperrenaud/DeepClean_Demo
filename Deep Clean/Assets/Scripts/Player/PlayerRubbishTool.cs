@@ -72,6 +72,8 @@ public class PlayerRubbishTool : MonoBehaviour
 
     public IEnumerator TieRoutine()
     {
+        GameManager.Instance.Notify("Bag is full!");
+        
         animator.SetTrigger("Tie");
         yield return new WaitForSeconds(0.1f);
 
@@ -94,7 +96,9 @@ public class PlayerRubbishTool : MonoBehaviour
     // Called by CollectRubbish when E is pressed on a bin
     public void EmptyBagAtBin()
     {
-        if (!hasBag) return;
+        if (!hasBag || CurrentBag.IsEmpty()) return;
+
+        int collected = CurrentBag.currentAmount;
 
         if (!CurrentBag.isTied)
         {

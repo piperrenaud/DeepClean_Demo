@@ -16,7 +16,7 @@ public class PlayerRoomTracker : MonoBehaviour
         int currentRoom = currentRoomID;
 
         //living room + kitchen is one big room
-        float livingKitchenCleanliness = GameManager.Instance.GetRoomCleanliness(0); //0 = living room
+        float currentCleanliness = GameManager.Instance.GetCurrentCleanliness(); 
         if (targetRoom == 0 || targetRoom == 2)
         {
             currentRoomID = targetRoom;
@@ -25,9 +25,9 @@ public class PlayerRoomTracker : MonoBehaviour
         }
 
         //must clean living + kitchen to 50%
-        if (livingKitchenCleanliness < 50f)
+        if (currentCleanliness < 50f)
         {
-            Debug.Log("you need to clean the living room/kitchen to 50% first");
+            Debug.Log("you need to clean the living room/kitchen to 50% first: " + currentCleanliness);
 
             PlayerMovement pm = GetComponent<PlayerMovement>();
             if (pm != null && GameManager.Instance.enemy != null)
@@ -64,8 +64,7 @@ public class PlayerRoomTracker : MonoBehaviour
             int finalRoom = (targetRoom == 1 || targetRoom == 3) ? targetRoom : -1;
             if (finalRoom != -1 && firstOptionRoomChosen != finalRoom)
             {
-                float firstRoomCleanliness = GameManager.Instance.GetRoomCleanliness(firstOptionRoomChosen.Value);
-                if (firstRoomCleanliness < 50f)
+                if (currentCleanliness < 75f)
                 {
                     Debug.Log("clean the first chosen room to 50% first!!");
 

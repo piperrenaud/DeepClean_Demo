@@ -22,15 +22,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d295e9e8a8c5b8f4886c5b3c21609552, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 9.278
+      value: 4.514
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d295e9e8a8c5b8f4886c5b3c21609552, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.141
+      value: 0.10700035
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d295e9e8a8c5b8f4886c5b3c21609552, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.436
+      value: -0.002
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d295e9e8a8c5b8f4886c5b3c21609552, type: 3}
       propertyPath: m_LocalRotation.w
@@ -78,13 +78,13 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d295e9e8a8c5b8f4886c5b3c21609552, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 5310132005947444212}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d295e9e8a8c5b8f4886c5b3c21609552, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3490074440044348347}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d295e9e8a8c5b8f4886c5b3c21609552, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 143731158639407536}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d295e9e8a8c5b8f4886c5b3c21609552, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8992755853585180039}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d295e9e8a8c5b8f4886c5b3c21609552, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6082203724773524506}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d295e9e8a8c5b8f4886c5b3c21609552, type: 3}
       insertIndex: -1
       addedObject: {fileID: 488558980425163601}
@@ -97,6 +97,55 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: d295e9e8a8c5b8f4886c5b3c21609552, type: 3}
   m_PrefabInstance: {fileID: 8900912639903814023}
   m_PrefabAsset: {fileID: 0}
+--- !u!64 &5310132005947444212
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8594852926190349526}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -4974420191060515613, guid: d295e9e8a8c5b8f4886c5b3c21609552, type: 3}
+--- !u!54 &3490074440044348347
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8594852926190349526}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!114 &143731158639407536
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -109,55 +158,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87fb38b488b1c4e46a642bb1adb8c97a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectID: I_OpenPizzaBox (1)
+  objectID: I_OpenPizzaBox
+  itemIcon: {fileID: 21300000, guid: 2daf977fffaea854d8ac5fd4956ffe9e, type: 3}
+  questionName: 
   evidenceType: 0
-  evidenceDescription: this is a used pizza box
+  itemDescription: A greasy pizza box. I can still smell the cheese.
+  playerDialogue: 
   explanation: 
+  canBeInspected: 1
   holdDistance: 2.5
   rotationSpeed: 100
   doorAnimator: {fileID: 0}
---- !u!65 &8992755853585180039
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8594852926190349526}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.576004, y: 0.548634, z: 0.5760045}
-  m_Center: {x: 0, y: 0.12900934, z: -0.0067277253}
---- !u!65 &6082203724773524506
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8594852926190349526}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.576004, y: 0.548634, z: 0.5760045}
-  m_Center: {x: 0, y: 0.12900934, z: -0.0067277253}
 --- !u!114 &488558980425163601
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -186,4 +197,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inspectionUI: {fileID: 0}
+  description: {fileID: 0}
+  gameUI: {fileID: 0}
   typingSpeed: 0.01

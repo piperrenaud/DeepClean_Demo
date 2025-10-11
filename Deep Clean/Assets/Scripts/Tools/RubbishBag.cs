@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class RubbishBag : MonoBehaviour
 {
-    public int maxCapacity = 15;
+    public int maxCapacity = 25;
     public int currentAmount = 0;
     public bool isTied = false;
 
@@ -15,6 +15,8 @@ public class RubbishBag : MonoBehaviour
 
         currentAmount += weight;
         currentRotation += 45.0f;
+
+        GameManager.Instance.RubbishAdded();
 
         return true;
     }
