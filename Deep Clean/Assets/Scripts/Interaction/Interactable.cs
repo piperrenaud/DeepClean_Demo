@@ -21,6 +21,7 @@ public class Interactable : MonoBehaviour
 
     [Header("Interaction Settings")]
     public bool canBeInspected = true;
+    public bool isComputer = false;
 
     [Header("Pickup Settings")]
     public float holdDistance = 2.5f;
@@ -39,6 +40,7 @@ public class Interactable : MonoBehaviour
     private InteractableHighlighter highlighter;
     private InteractableDialogue dialogue;
     private InteractableInspection inspection;
+    private PlayerCam playerCam;
 
     private Collider objCollider;
 
@@ -52,6 +54,8 @@ public class Interactable : MonoBehaviour
         objCollider = GetComponent<Collider>();
 
         originalScale = transform.localScale;
+
+        playerCam = FindObjectOfType<PlayerCam>();
     }
 
     void Update()
@@ -68,7 +72,7 @@ public class Interactable : MonoBehaviour
 
         if (highlighter.IsHovering())
         {
-            if (Input.GetKeyDown(KeyCode.E) && doorAnimator == null)
+            if (Input.GetKeyDown(KeyCode.E) && doorAnimator == null && !isComputer)
             {
                 if (dialogue.IsTyping()) dialogue.FinishTypingInstantly();
                 else
@@ -83,9 +87,15 @@ public class Interactable : MonoBehaviour
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.E) && doorAnimator != null)
+            if (Input.GetKeyDown(KeyCode.E) && doorAnimator != null && !isComputer)
             {
                 ToggleDoor();
+            }
+
+            if (Input.GetKeyDown(KeyCode.E) && isComputer)
+            {
+                CameraTravel cameraTravel = playerCam.GetComponent<CameraTravel>();
+                cameraTravel.TravelToViewPoint();
             }
         }
     }

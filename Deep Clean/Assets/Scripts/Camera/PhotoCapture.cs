@@ -115,12 +115,12 @@ public class PhotoCapture : MonoBehaviour
         yield return new WaitForEndOfFrame();
 
         Rect regionToRead = new Rect(0, 0, Screen.width, Screen.height);
-
         screenCapture.ReadPixels(regionToRead, 0, 0, false);
         screenCapture.Apply();
 
         //check if object in center is evidence
         bool isEvidence = false;
+        string interactableID = null;
         Camera mainCam = Camera.main;
         Ray ray = mainCam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         if (Physics.Raycast(ray, out RaycastHit hit, 100f))
@@ -130,13 +130,18 @@ public class PhotoCapture : MonoBehaviour
                 isEvidence = true;
                 Debug.Log("Captured photo of Evidence!");
             }
+
+            Interactable interactable = hit.collider.GetComponent<Interactable>();
+            if (interactable != null)
+            {
+                interactableID = interactable.objectID;
+            }
         }
 
         int photosLeft = 5 - photoCounter;
-
         photosLeftText.text = photosLeft.ToString();
 
-        SavePhoto(screenCapture, isEvidence);
+        SavePhoto(screenCapture, isEvidence, interactableID);
         enemyWander.HandlePhotoTaken();
         ShowPhoto();
     }
@@ -169,9 +174,13 @@ public class PhotoCapture : MonoBehaviour
         cameraUI.SetActive(true);
     }
 
-    void SavePhoto(Texture2D texture, bool isEvidence)
+    void SavePhoto(Texture2D texture, bool isEvidence, string interactableID = null)
     {
-        byte[] bytes = texture.EncodeToPNG();
+        Texture2D textureCopy = new Texture2D(texture.width, texture.height, texture.format, false);
+        textureCopy.SetPixels(texture.GetPixels());
+        textureCopy.Apply();
+
+        byte[] bytes = textureCopy.EncodeToPNG();
         string fileName = $"photo_{photoCounter}.png";
         string filePath = Path.Combine(Application.persistentDataPath, fileName);
         File.WriteAllBytes(filePath, bytes);
@@ -187,8 +196,10 @@ public class PhotoCapture : MonoBehaviour
         File.WriteAllText(Path.Combine(Application.persistentDataPath, fileName + ".json"), json);
 
         //add to inventory
-        Sprite photoSprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f), 100f);
-        InventoryManager.Instance.AddItem(fileName, EvidenceType.Photo, isEvidence ? "Evidence photo" : "Photo", "", "", true, photoSprite);
+        Sprite photoSprite = Sprite.Create(textureCopy, new Rect(0, 0, textureCopy.width, textureCopy.height), new Vector2(0.5f, 0.5f), 100f);
+        string description = interactableID;
+
+        InventoryManager.Instance.AddItem(fileName, EvidenceType.Photo, description, "", "", true, photoSprite);
 
         photoCounter++;
     }
