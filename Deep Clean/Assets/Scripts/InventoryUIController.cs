@@ -33,8 +33,33 @@ public class InventoryUIController : MonoBehaviour
 
     void Awake()
     {
-        Instance = this;
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else if (Instance != this)
+        {
+            Destroy(gameObject);
+        }
+
+        //UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;
+            
         RefreshUI();
+    }
+
+    void Start()
+    {
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+        {
+            playerTransform = player.transform;
+            Debug.Log("FoundPlayer");
+        }
+        else
+        {
+            Debug.Log("p[layer] not found");
+        }
     }
 
     public void RefreshUI()
@@ -193,5 +218,11 @@ public class InventoryUIController : MonoBehaviour
             if (entry.itemID == itemID) return entry.prefab;
         }
         return null;
+    }
+
+    private void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
+    {
+        if (InventoryManager.Instance != null)
+            RefreshUI();
     }
 }

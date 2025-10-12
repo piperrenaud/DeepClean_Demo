@@ -9,6 +9,15 @@ public class InventoryToggle : MonoBehaviour
 
     public static bool inventoryOpen { get; private set; } = false;
 
+    void Start()
+    {
+        InventoryUIController uiController = FindObjectOfType<InventoryUIController>();
+        if (uiController != null)
+        {
+            inventoryUI = uiController.gameObject;
+        }
+    }
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Tab))

@@ -27,17 +27,18 @@ public class InventoryManager : MonoBehaviour
 
     private Dictionary<string, Interactable> storedObjects = new Dictionary<string, Interactable>();
 
-    void Awake()
+    private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject); // Persist between scenes
         }
-        else
+        else if (Instance != this)
         {
             Destroy(gameObject);
         }
+
     }
 
     public bool AddItem(string itemID, EvidenceType type, string description, string dialogue, string explanation, bool isPhoto = false, Sprite itemIcon = null)

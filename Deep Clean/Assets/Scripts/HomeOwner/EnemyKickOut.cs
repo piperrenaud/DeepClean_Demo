@@ -11,8 +11,9 @@ public class EnemyKickOut : MonoBehaviour
     [SerializeField] private Transform player;
     [SerializeField] private EnemyWander enemyWander;
     [SerializeField] private GameObject enemyParent;
+    [SerializeField] private Transform enemyHead;
     [SerializeField] private MonoBehaviour playerMovement;
-    [SerializeField] private MonoBehaviour playerCamera;
+    [SerializeField] private PlayerCam playerCamera;
 
 
     [Header("Cutscenes + Dialogue")]
@@ -32,10 +33,13 @@ public class EnemyKickOut : MonoBehaviour
     private bool maxSuspicion;
     private bool houseCleaned;
     private string dialogue;
+    private Animator enemyAnimator;
 
     void Start()
     {
         cutsceneParent.SetActive(false);
+
+        enemyAnimator = enemyParent.GetComponent<Animator>();
     }
 
     void Update()
@@ -70,10 +74,14 @@ public class EnemyKickOut : MonoBehaviour
 
     private IEnumerator StartKickOut(string dialogue)
     {
+        playerCamera.ForceLookAt(enemyHead);
+        yield return new WaitForSeconds(1f);
+
         if (playerMovement != null) playerMovement.enabled = false;
         if (playerCamera != null) playerCamera.enabled = false;
 
         yield return StartCoroutine(enemyWander.FacePlayer(dialogue));
+        enemyAnimator.Play("Breathing_idle");
 
         if (houseCleaned)
         {

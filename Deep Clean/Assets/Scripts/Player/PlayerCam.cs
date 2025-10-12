@@ -32,6 +32,9 @@ public class PlayerCam : MonoBehaviour
 
             Vector3 euler = transform.rotation.eulerAngles;
             orientation.rotation = Quaternion.Euler(0, euler.y, 0);
+
+            Debug.Log("turning to look");
+            
             return;
         }
         

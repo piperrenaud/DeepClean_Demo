@@ -5,15 +5,15 @@ using System.Collections;
 public class StartGameManager : MonoBehaviour
 {
     public PlayableDirector introScene;
-    public GameObject startFadeIn;
+    public GameObject fadeFromBlack;
     public GameObject[] gameplayObjects;
     public GameObject instructions;
-
-    private Animator fadeInAnimator;
+    public GameObject cutsceneParent;
 
     void Start()
     {
-        startFadeIn.SetActive(false);
+        cutsceneParent.SetActive(true);
+        fadeFromBlack.SetActive(false);
         instructions.SetActive(false);
 
         foreach (GameObject obj in gameplayObjects)
@@ -24,16 +24,12 @@ public class StartGameManager : MonoBehaviour
             }            
         }
 
-        fadeInAnimator = startFadeIn.GetComponent<Animator>();
-
         introScene.stopped += OnCutsceneEnd;
         introScene.Play();
     }
 
     void OnCutsceneEnd(PlayableDirector director)
     {
-        startFadeIn.SetActive(true);
-
         foreach (GameObject obj in gameplayObjects)
         {
             if (obj != null)
@@ -47,8 +43,9 @@ public class StartGameManager : MonoBehaviour
 
     IEnumerator FadeAndInstructions()
     {
-        fadeInAnimator.Play("FadeFromBlack");
+        fadeFromBlack.SetActive(true);
         yield return new WaitForSeconds(1f);
         instructions.SetActive(true);
+        cutsceneParent.SetActive(false);
     }
 }
