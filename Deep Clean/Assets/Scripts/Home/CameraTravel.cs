@@ -4,70 +4,50 @@ using System.Collections;
 public class CameraTravel : MonoBehaviour
 {
     [Header("Travel Settings")]
-    [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private Transform viewpoint;
+    [SerializeField] private Transform playerViewPoint;
 
-    private bool isTravelling = false;
     private PlayerMovement playerMovement;
     private PlayerCam playerCam;
     private GameObject player;
+
+    private Transform originalParent;
 
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
         playerMovement = player.GetComponent<PlayerMovement>();
         playerCam = gameObject.GetComponent<PlayerCam>();
+
+        originalParent = transform.parent;
     }
 
     public void TravelToViewPoint()
     {
-        if (!isTravelling)
-        {
-            StartCoroutine(MoveCamera());
-        }
-    }
-
-    private IEnumerator MoveCamera()
-    {
-        isTravelling = true;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
 
         playerMovement.enabled = false;
         playerCam.enabled = false;
 
-        Rigidbody rb = player.GetComponent<Rigidbody>();
-        rb.isKinematic = true;
+        transform.parent = viewpoint;
+        gameObject.transform.localRotation = Quaternion.identity;
 
-        Animator anim = player.GetComponent<Animator>();
-        anim.enabled = false;
+        player.transform.position = playerViewPoint.position;
 
-        Vector3 startPos = player.transform.position;
-        Quaternion startRot = player.transform.rotation;
-
-        Vector3 targetPos = viewpoint.position;
-        Quaternion targetRot = viewpoint.rotation;
-
-        float journey = 0f;
-
-        while (journey < 1f)
-        {
-            journey += Time.deltaTime * moveSpeed;
-
-            player.transform.position = Vector3.Lerp(startPos, targetPos, Mathf.SmoothStep(0f, 1f, journey));
-            player.transform.rotation = Quaternion.Slerp(startRot, targetRot, Mathf.SmoothStep(0f, 1f, journey));
-
-            yield return null;
-        }
-
-        player.transform.position = targetPos;
-        player.transform.rotation = targetRot;
-
-        isTravelling = false;
-
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
-
-        yield return new WaitForSeconds(0.5f);
-        
         Computer.Instance.TurnOn();
+    }
+
+    public void ExitComputer()
+    {
+        Computer.Instance.TurnOff();
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
+        playerMovement.enabled = true;
+        playerCam.enabled = true;
+
+        transform.parent = originalParent;
     }
 }

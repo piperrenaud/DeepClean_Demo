@@ -95,7 +95,22 @@ public class Interactable : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.E) && isComputer)
             {
                 CameraTravel cameraTravel = playerCam.GetComponent<CameraTravel>();
-                cameraTravel.TravelToViewPoint();
+                if (cameraTravel != null)
+                {
+                    cameraTravel.TravelToViewPoint();
+                }
+
+                ComputerController computerController = gameObject.GetComponent<ComputerController>();
+                if (computerController != null)
+                {
+                    computerController.PlayAudio();
+                }
+
+                if (dialogue != null)
+                {
+                    if (dialogue.IsTyping()) dialogue.FinishTypingInstantly();
+                    else dialogue.ShowDialogue(playerDialogue);
+                }
             }
         }
     }
@@ -197,14 +212,30 @@ public class Interactable : MonoBehaviour
             InventoryManager.Instance.RegisterItemObject(objectID, this);
         }
 
+        EvidenceScoringManager.Instance.RegisterInteraction(this, EvidenceType.Take); // or Photo
+
         if (inspection != null) inspection.HideUI();
 
         if (objCollider != null) objCollider.enabled = true;
 
-        EnemyWander[] enemies = FindObjectsByType<EnemyWander>(FindObjectsSortMode.None);
-        foreach (var enemy in enemies)
-        {
+        EnemyWander[] enemies = FindObjectsByType<EnemyWander>(FindObjectsSortMode.None); 
+        foreach (var enemy in enemies) 
+        { 
+            if (enemy == null)
+            {
+                Debug.LogWarning("Null enemy found in list!");
+                continue;
+            }
+
+            Debug.Log($"Calling OnItemTaken on: {enemy.name}");
             enemy.OnItemTaken(this.gameObject);
+        }
+
+        //check if USB
+        if (objectID == "USB")
+        {
+            ComputerController computerController = FindObjectOfType<ComputerController>();
+            computerController.HandleUSBTaken();
         }
 
         gameObject.SetActive(false);

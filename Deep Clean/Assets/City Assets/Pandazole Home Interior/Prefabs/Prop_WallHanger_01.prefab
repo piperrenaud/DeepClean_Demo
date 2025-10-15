@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 1869362939363516044}
   - component: {fileID: 5201091651675806275}
   - component: {fileID: 7349179635393944445}
+  - component: {fileID: 1529423528872978622}
   m_Layer: 0
   m_Name: Prop_WallHanger_01
   m_TagString: Untagged
@@ -123,14 +124,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87fb38b488b1c4e46a642bb1adb8c97a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectID: 
+  objectID: MissingKnife
   itemIcon: {fileID: 0}
-  questionName: 
-  evidenceType: 0
-  itemDescription: 
-  playerDialogue: A knife set, but its not complete... that's odd.
-  explanation: 
-  canBeInspected: 0
+  questionName: Ask About Missing Knife
+  evidenceType: 2
+  itemDescription: A knife block hangs on the wall. One slot is conspicuously empty.
+    The missing knife could be related to the incident, but the block itself is too
+    large to carry. A photograph should suffice for documentation.
+  playerDialogue: "Looks like someone walked off with one. Can\u2019t carry the block,
+    but a photo will do\u2026 at least it proves there was a struggle."
+  explanation: Uhh...the neighbour borrowed it. I'm always giving to my neighbours.
+    I'm very nice you know.
+  canBeInspected: 1
+  isComputer: 0
   holdDistance: 2.5
   rotationSpeed: 100
   doorAnimator: {fileID: 0}
@@ -165,3 +171,19 @@ MonoBehaviour:
   dialogueText: {fileID: 0}
   typingSpeed: 0.01
   dialogueDuration: 3
+--- !u!114 &1529423528872978622
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 528670628828266748}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcf0b4d321651a441bb703db55c81496, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inspectionUI: {fileID: 0}
+  description: {fileID: 0}
+  gameUI: {fileID: 0}
+  typingSpeed: 0.01

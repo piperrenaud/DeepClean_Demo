@@ -141,7 +141,7 @@ public class PhotoCapture : MonoBehaviour
         int photosLeft = 5 - photoCounter;
         photosLeftText.text = photosLeft.ToString();
 
-        SavePhoto(screenCapture, isEvidence, interactableID);
+        SavePhoto(screenCapture, interactableID);
         enemyWander.HandlePhotoTaken();
         ShowPhoto();
     }
@@ -174,7 +174,7 @@ public class PhotoCapture : MonoBehaviour
         cameraUI.SetActive(true);
     }
 
-    void SavePhoto(Texture2D texture, bool isEvidence, string interactableID = null)
+    void SavePhoto(Texture2D texture, string interactableID = null)
     {
         Texture2D textureCopy = new Texture2D(texture.width, texture.height, texture.format, false);
         textureCopy.SetPixels(texture.GetPixels());
@@ -184,6 +184,18 @@ public class PhotoCapture : MonoBehaviour
         string fileName = $"photo_{photoCounter}.png";
         string filePath = Path.Combine(Application.persistentDataPath, fileName);
         File.WriteAllBytes(filePath, bytes);
+
+        //determine if this photo is of an "Evidence" object
+        bool isEvidence = false;
+        Interactable originalObj = null;
+        if (!string.IsNullOrEmpty(interactableID))
+        {
+            originalObj = InventoryManager.Instance.GetOriginalObject(interactableID);
+            if (originalObj != null)
+            {
+                isEvidence = originalObj.CompareTag("Evidence");
+            }
+        }
 
         //save metadata
         PhotoData data = new PhotoData
@@ -197,10 +209,23 @@ public class PhotoCapture : MonoBehaviour
 
         //add to inventory
         Sprite photoSprite = Sprite.Create(textureCopy, new Rect(0, 0, textureCopy.width, textureCopy.height), new Vector2(0.5f, 0.5f), 100f);
-        string description = interactableID;
 
-        InventoryManager.Instance.AddItem(fileName, EvidenceType.Photo, description, "", "", true, photoSprite);
+        //use EvidenceType.None for now, since folder sorting relies on tag
+        InventoryManager.Instance.AddItem(
+            fileName,
+            EvidenceType.None,
+            interactableID,
+            "", "",
+            true,
+            photoSprite
+        );
 
         photoCounter++;
+
+        if (originalObj != null)
+        {
+            EvidenceScoringManager.Instance.RegisterInteraction(originalObj, EvidenceType.Photo); 
+        }
+
     }
 }

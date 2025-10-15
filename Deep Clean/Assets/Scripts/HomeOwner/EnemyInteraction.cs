@@ -152,6 +152,9 @@ public class EnemyInteraction : MonoBehaviour
 
     private void AskAboutObject(Interactable obj)
     {
+        //increases sus
+        enemyWander.AddSuspicion(1f);
+
         //hide scroll panel while dialogue players
         if (scrollPanel != null)
             scrollPanel.SetActive(false);

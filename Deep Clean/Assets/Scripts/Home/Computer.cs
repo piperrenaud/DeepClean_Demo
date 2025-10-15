@@ -42,6 +42,11 @@ public class Computer : MonoBehaviour
         computerScreen.SetActive(true);
     }
 
+    public void TurnOff()
+    {
+        computerScreen.SetActive(false);
+    }
+
     public void RefreshCollectedItems()
     {
         if (InventoryManager.Instance == null)

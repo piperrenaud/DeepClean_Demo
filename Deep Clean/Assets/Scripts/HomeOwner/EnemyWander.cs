@@ -151,6 +151,8 @@ public class EnemyWander : MonoBehaviour
         while (isTurning)
             yield return null;
 
+        HandleTaskAction(taskName, true);
+
         //start task anim
         animator.SetBool(taskName, true);
         float waitTime = Random.Range(minTaskTime, maxTaskTime);
@@ -165,6 +167,8 @@ public class EnemyWander : MonoBehaviour
             yield return null;
             stateInfo = animator.GetCurrentAnimatorStateInfo(0);
         }
+
+        HandleTaskAction(taskName, false);
 
         yield return new WaitForSeconds(0.5f);
         PickNextTask();
@@ -409,10 +413,30 @@ public class EnemyWander : MonoBehaviour
 
     public void OnItemTaken(GameObject item)
     {
-        string takenID = item.GetComponent<Interactable>().GetObjectID();
+         var interactable = item.GetComponent<Interactable>();
+            if (interactable == null)
+            {
+                Debug.LogError($"Item '{item.name}' passed to OnItemTaken has no Interactable component!");
+                return;
+            }
+
+        string takenID = interactable.GetObjectID();
         foreach (var expected in expectedItems)
         {
-            string expectedID = expected.item.GetComponent<Interactable>().GetObjectID();
+            if (expected.item == null)
+            {
+                Debug.LogWarning($"Expected item missing reference on {this.name}");
+                continue;
+            }
+
+            var expectedInteractable = expected.item.GetComponent<Interactable>();
+            if (expectedInteractable == null)
+            {
+                Debug.LogWarning($"Expected item {expected.item.name} has no Interactable component!");
+                continue;
+            }
+
+            string expectedID = expectedInteractable.GetObjectID();
             if (expectedID == takenID && !expected.isMissing)
             {
                 expected.isMissing = true;
@@ -425,7 +449,7 @@ public class EnemyWander : MonoBehaviour
         isReacting = true;
         suspicion += 5f;
         Debug.Log("add 5 suspicion");
-        notificationAnimator.SetTrigger("Notify");
+        GameManager.Instance.Notify("Suspicion Increased!");
 
         agent.isStopped = true;
         animator.SetBool("Walking", false);
@@ -467,7 +491,7 @@ public class EnemyWander : MonoBehaviour
 
     private IEnumerator ShowDroppedItemDialogue(GameObject droppedItem)
     {
-        notificationAnimator.SetTrigger("Notify");
+        GameManager.Instance.Notify("Suspicion Increased!");
         if (dialogueCanvas != null && dialogueText != null)
         {
             //get item name from interactable script
@@ -514,7 +538,7 @@ public class EnemyWander : MonoBehaviour
             //only react if in view
             suspicion += 5f;
             suspicion = Mathf.Clamp(suspicion, 0, 100f);
-            notificationAnimator.SetTrigger("Notify");
+            GameManager.Instance.Notify("Suspicion Increased!");
 
             OnPlayerCaught();
             Debug.Log("Enemy saw player take a photo");
@@ -666,6 +690,44 @@ public class EnemyWander : MonoBehaviour
         isReacting = false;
         PickNextTask();
         agent.isStopped = false;
+    }
+
+    private void HandleTaskAction(string taskName, bool start)
+    {
+        switch (taskName)
+        {
+            case "Watching Lounge TV":
+                TVController tv = FindObjectOfType<TVController>();
+                if (tv != null)
+                {
+                    if (start) tv.TurnOn();
+                    else tv.TurnOff();
+                }
+                break;
+            case "Watching Room TV":
+                TVControllerRoom tvRoom = FindObjectOfType<TVControllerRoom>();
+                if (tvRoom != null)
+                {
+                    if (start) tvRoom.TurnOn();
+                    else tvRoom.TurnOff();
+                }
+                break;
+            case "Typing":
+                ComputerController computer = FindObjectOfType<ComputerController>();
+                if (computer != null)
+                {
+                    if (start) computer.TurnOn();
+                    else computer.TurnOff();
+                }
+                break;
+        }
+    }
+
+    public float GetSuspicion() { return suspicion; }
+    public void AddSuspicion(float num) 
+    { 
+        suspicion += num; 
+        GameManager.Instance.Notify("Suspicion Increased!");
     }
 
     void OnDrawGizmos()

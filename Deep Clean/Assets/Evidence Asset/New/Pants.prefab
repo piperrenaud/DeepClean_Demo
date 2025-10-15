@@ -462,6 +462,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b78f3b78b4a0d2641aae17dfd4b6bf2f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5383455337447558065}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b78f3b78b4a0d2641aae17dfd4b6bf2f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1424453103498508910}
   m_SourcePrefab: {fileID: 100100000, guid: b78f3b78b4a0d2641aae17dfd4b6bf2f, type: 3}
 --- !u!4 &6961950538740960179 stripped
 Transform:
@@ -508,15 +511,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectID: Pants
-  itemIcon: {fileID: 0}
+  itemIcon: {fileID: 21300000, guid: dda52cba8e5c04e40a1e57aa35963fca, type: 3}
   questionName: Ask about bloodstained pants
-  evidenceType: 3
-  itemDescription: A pair of pants draped over a chair. Theres a bloodstain on one
-    leg.
-  playerDialogue: Blood... something bad must have happened.
-  explanation: The pants? That blood's from a hunting trip, there's even a photo
-    of me somewhere. I just haven't gotten around to washing them yet.
-  canBeInspected: 0
+  evidenceType: 2
+  itemDescription: 'A pair of pants draped over a chair with a dark red stain on
+    the thigh. The pattern suggests contact with blood, but the pants are too bulky
+    to take. '
+  playerDialogue: "Well, that\u2019s a mess. No way I\u2019m stuffing these in my
+    bag, but a quick picture should keep this evidence safe."
+  explanation: Wait, what pants? Just forget about those, yeah? They're from an art
+    project.
+  canBeInspected: 1
+  isComputer: 0
   holdDistance: 2.5
   rotationSpeed: 100
   doorAnimator: {fileID: 0}
@@ -551,3 +557,19 @@ MonoBehaviour:
   highlightIntensity: 10
   showInteractionPrompt: 1
   interactionText: {fileID: 9023651245571389192}
+--- !u!114 &1424453103498508910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7770399914857517321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcf0b4d321651a441bb703db55c81496, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inspectionUI: {fileID: 0}
+  description: {fileID: 0}
+  gameUI: {fileID: 0}
+  typingSpeed: 0.01

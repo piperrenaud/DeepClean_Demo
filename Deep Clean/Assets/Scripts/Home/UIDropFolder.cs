@@ -19,6 +19,9 @@ public class UIDropFolder : MonoBehaviour, IDropHandler
 
         folderItems.Add(dragged.linkedItem);
         
+        string folderName = gameObject.name; // Make sure the folder GameObjects are named "Important" and "Rubbish"
+        EvidenceScoringManager.Instance.RegisterFolderPlacement(dragged.linkedItem, folderName);
+        
         GameObject newSlot = Instantiate(itemSlotPrefab, folderGridParent);
         newSlot.name = dragged.linkedItem.itemID + "_InFolder";
 
