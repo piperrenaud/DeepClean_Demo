@@ -22,7 +22,7 @@ public class TypewriterEffect : MonoBehaviour
         foreach (char letter in fullText)
         {
             textMeshPro.text += letter; 
-        
+            Debug.Log($"Typed: {letter}");
             yield return new WaitForSeconds(typingSpeed); 
         }
     }
