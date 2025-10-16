@@ -57,7 +57,6 @@ public class GameManager : MonoBehaviour
         totalDirtCleaned++;
         
         UpdateUI(); 
-        CheckGameComplete(); 
     } 
     
     public void UpdateUI() 
@@ -73,9 +72,6 @@ public class GameManager : MonoBehaviour
         { 
             overallProgressBar.maxValue = totalDirtAmount + maxRubbishAmount; 
             overallProgressBar.value = totalProgress;
-            Debug.Log("Total dirt in scene: " + totalDirtAmount);
-            Debug.Log("Total rubbish in scene: " + maxRubbishAmount);
-            Debug.Log("Total progress: " + totalProgress);
         } 
     } 
     
@@ -86,7 +82,7 @@ public class GameManager : MonoBehaviour
     
     private void CheckGameComplete() 
     { 
-        if (cleanedSpots >= allDirtSpots.Count) 
+        if (cleanedSpots >= (totalDirtAmount + maxRubbishAmount)) 
         { 
             OnGameComplete(); 
         } 
@@ -99,7 +95,7 @@ public class GameManager : MonoBehaviour
     
     public bool IsCleaningComplete() 
     { 
-        return cleanedSpots >= allDirtSpots.Count; 
+        return (totalDirtCleaned + totalRubbishCollected) == (totalDirtAmount + maxRubbishAmount); 
     } 
 
     public void Notify(string text)

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3523749540821242975}
   - component: {fileID: 1657932418998886549}
   - component: {fileID: 5293801087362134779}
-  - component: {fileID: 5536432550397115064}
+  - component: {fileID: 1665662414135723343}
   - component: {fileID: 4652381379992604938}
   - component: {fileID: 5028783148418804313}
   - component: {fileID: 3171011984259464877}
@@ -113,7 +113,7 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 1526772235586685655, guid: bdbf4ac4b7acd9f4d8d600b619ddf357, type: 3}
---- !u!54 &5536432550397115064
+--- !u!54 &1665662414135723343
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -161,6 +161,7 @@ MonoBehaviour:
   playerDialogue: 
   explanation: 
   canBeInspected: 1
+  isComputer: 0
   holdDistance: 2.5
   rotationSpeed: 100
   doorAnimator: {fileID: 0}

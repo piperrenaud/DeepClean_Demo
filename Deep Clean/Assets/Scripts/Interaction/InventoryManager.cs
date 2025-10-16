@@ -19,13 +19,18 @@ public class InventoryManager : MonoBehaviour
         public string playerDialogue;
         public string explanation;
         public bool isPhoto;
+        public bool isEvidence;
         public Sprite itemIcon;
     }
+
+    public EnemyWander enemyWander;
 
     // Keep track of collected items
     private List<CollectedEntry> collectedItems = new List<CollectedEntry>();
 
     private Dictionary<string, Interactable> storedObjects = new Dictionary<string, Interactable>();
+
+    private float suspicion = 0f;
 
     private void Awake()
     {
@@ -41,7 +46,12 @@ public class InventoryManager : MonoBehaviour
 
     }
 
-    public bool AddItem(string itemID, EvidenceType type, string description, string dialogue, string explanation, bool isPhoto = false, Sprite itemIcon = null)
+    void Update()
+    {
+        suspicion = enemyWander.GetSuspicion();
+    }
+
+    public bool AddItem(string itemID, EvidenceType type, string description, string dialogue, string explanation, bool isPhoto = false, bool isEvidence = false, Sprite itemIcon = null)
     { 
         int objectCount = collectedItems.FindAll(i => !i.isPhoto).Count;
         int photoCount = collectedItems.FindAll(i => i.isPhoto).Count;
@@ -65,6 +75,7 @@ public class InventoryManager : MonoBehaviour
         playerDialogue = dialogue,
         explanation = explanation,
         isPhoto = isPhoto,
+        isEvidence = isEvidence,
         itemIcon = itemIcon
        });
 
@@ -148,5 +159,15 @@ public class InventoryManager : MonoBehaviour
     {
         storedObjects.TryGetValue(itemID, out var obj);
         return obj;
+    }
+
+    public float GetSuspicion()
+    {
+        return suspicion;
+    }
+
+    public float GetCleanliness()
+    {
+        return GameManager.Instance.GetCurrentCleanliness();
     }
 }

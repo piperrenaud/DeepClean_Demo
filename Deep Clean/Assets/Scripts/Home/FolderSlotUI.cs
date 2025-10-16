@@ -39,6 +39,17 @@ public class FolderSlotUI : MonoBehaviour
         parentFolder = folder;
         sourceComputer = computer;
 
+        //remove this
+        if (linkedItem.isEvidence)
+        {
+            itemIcon.color = Color.yellow;
+        }
+        else
+        {
+            itemIcon.color = Color.white;
+        }
+        //remove above
+
         if (itemIcon != null && linkedItem != null)
         {
             itemIcon.sprite = linkedItem.itemIcon;

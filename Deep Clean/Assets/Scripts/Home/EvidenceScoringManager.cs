@@ -18,8 +18,11 @@ public class EvidenceScoringManager : MonoBehaviour
     //call when player takes/photographs object
     public void RegisterInteraction(Interactable item, EvidenceType actionType)
     {
-        if (item == null) return;
-
+        if (item == null) 
+        {
+            Debug.Log("here1");
+            return;
+        }
         float points = 0f;
 
         switch (item.evidenceType)
@@ -50,24 +53,9 @@ public class EvidenceScoringManager : MonoBehaviour
 
         bool correct = false;
 
-        Interactable originalObj = null;
-        if (!string.IsNullOrEmpty(item.itemDescription)) // itemDescription stores original objectID
-        {
-            originalObj = InventoryManager.Instance.GetOriginalObject(item.itemDescription);
-        }
-
-        if (originalObj != null)
-        {
-            bool isEvidence = originalObj.CompareTag("Evidence");
-
-            if (isEvidence && folderName == "Important") correct = true;
-            else if (!isEvidence && folderName == "Rubbish") correct = true;
-        }
-        else
-        {
-            // Photos of nothing or None objects
-            if (folderName == "Rubbish") correct = true;
-        }
+        if (item.isEvidence && folderName == "Important") correct = true;
+        
+        bool validRubbishPlacement = !item.isEvidence && folderName == "Rubbish";
 
         if (correct)
         {
@@ -75,9 +63,14 @@ public class EvidenceScoringManager : MonoBehaviour
             scoredFolderItems.Add(item.itemID);
             Debug.Log($"Folder placement correct for {item.itemID}! +1 point. Total: {totalPoints}");
         }
+        else if (validRubbishPlacement)
+        {
+            scoredFolderItems.Add(item.itemID);
+            Debug.Log("not evidence but its in the right folder");
+        }
         else
         {
-            Debug.Log($"Folder placement incorrect for {item.itemID}. No points awarded.");
+            Debug.Log("wrong folder placement");
         }
     }
 

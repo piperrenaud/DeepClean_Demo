@@ -121,17 +121,25 @@ public class PhotoCapture : MonoBehaviour
         //check if object in center is evidence
         bool isEvidence = false;
         string interactableID = null;
+        Interactable interactable = null;
+
         Camera mainCam = Camera.main;
         Ray ray = mainCam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+
         if (Physics.Raycast(ray, out RaycastHit hit, 100f))
         {
+            interactable = hit.collider.GetComponent<Interactable>();
+
             if (hit.collider.CompareTag("Evidence"))
             {
                 isEvidence = true;
                 Debug.Log("Captured photo of Evidence!");
             }
+            else
+            {
+                Debug.Log("Photo of non-evidence object");
+            }
 
-            Interactable interactable = hit.collider.GetComponent<Interactable>();
             if (interactable != null)
             {
                 interactableID = interactable.objectID;
@@ -141,7 +149,7 @@ public class PhotoCapture : MonoBehaviour
         int photosLeft = 5 - photoCounter;
         photosLeftText.text = photosLeft.ToString();
 
-        SavePhoto(screenCapture, interactableID);
+        SavePhoto(screenCapture, interactable, isEvidence);
         enemyWander.HandlePhotoTaken();
         ShowPhoto();
     }
@@ -174,7 +182,7 @@ public class PhotoCapture : MonoBehaviour
         cameraUI.SetActive(true);
     }
 
-    void SavePhoto(Texture2D texture, string interactableID = null)
+    void SavePhoto(Texture2D texture, Interactable target = null, bool isEvidenceFromRay = false)
     {
         Texture2D textureCopy = new Texture2D(texture.width, texture.height, texture.format, false);
         textureCopy.SetPixels(texture.GetPixels());
@@ -186,15 +194,11 @@ public class PhotoCapture : MonoBehaviour
         File.WriteAllBytes(filePath, bytes);
 
         //determine if this photo is of an "Evidence" object
-        bool isEvidence = false;
-        Interactable originalObj = null;
-        if (!string.IsNullOrEmpty(interactableID))
+        bool isEvidence = isEvidenceFromRay;
+
+        if (target != null)
         {
-            originalObj = InventoryManager.Instance.GetOriginalObject(interactableID);
-            if (originalObj != null)
-            {
-                isEvidence = originalObj.CompareTag("Evidence");
-            }
+            isEvidence = target.CompareTag("Evidence");
         }
 
         //save metadata
@@ -214,18 +218,18 @@ public class PhotoCapture : MonoBehaviour
         InventoryManager.Instance.AddItem(
             fileName,
             EvidenceType.None,
-            interactableID,
+            target != null ? target.itemDescription : null,
             "", "",
             true,
+            isEvidence,
             photoSprite
         );
 
         photoCounter++;
 
-        if (originalObj != null)
+        if (target != null)
         {
-            EvidenceScoringManager.Instance.RegisterInteraction(originalObj, EvidenceType.Photo); 
+            EvidenceScoringManager.Instance.RegisterInteraction(target, EvidenceType.Photo); 
         }
-
     }
 }

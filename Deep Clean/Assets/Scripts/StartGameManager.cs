@@ -56,7 +56,6 @@ public class StartGameManager : MonoBehaviour
         for (int i = 0; i < robberyDialogues.Length; i++)
         {
             robberyDialogues[i].SetActive(false);
-            Debug.Log("here");
         }
  
         for (int i = 0; i < murderDialogues.Length; i++)
@@ -196,5 +195,7 @@ public class StartGameManager : MonoBehaviour
         instructions.SetActive(true);
         cutsceneParent.SetActive(false);
         cutsceneCam.SetActive(false);
+
+        MusicManager.Instance.StartGameplay();
     }
 }

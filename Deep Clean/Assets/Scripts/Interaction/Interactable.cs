@@ -190,6 +190,8 @@ public class Interactable : MonoBehaviour
             return;
         }
 
+        bool isEvidence = gameObject.CompareTag("Evidence");
+
         //mark as discovered
         if (!isDiscovered)
         {
@@ -206,6 +208,7 @@ public class Interactable : MonoBehaviour
                 playerDialogue,
                 explanation,
                 false,
+                isEvidence,
                 itemIcon
             );
 
@@ -213,6 +216,11 @@ public class Interactable : MonoBehaviour
         }
 
         EvidenceScoringManager.Instance.RegisterInteraction(this, EvidenceType.Take); // or Photo
+
+        if (evidenceType == EvidenceType.None)
+        {
+            GameManager.Instance.RubbishAdded();
+        }
 
         if (inspection != null) inspection.HideUI();
 

@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 6256df9314d1dc94e88e9b32efe72011, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.458
+      value: -0.459
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6256df9314d1dc94e88e9b32efe72011, type: 3}
       propertyPath: m_LocalPosition.y
@@ -18,7 +18,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6256df9314d1dc94e88e9b32efe72011, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 4.65
+      value: 2.442
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6256df9314d1dc94e88e9b32efe72011, type: 3}
       propertyPath: m_LocalRotation.w
@@ -155,6 +155,7 @@ MonoBehaviour:
   playerDialogue: 
   explanation: 
   canBeInspected: 1
+  isComputer: 0
   holdDistance: 2.5
   rotationSpeed: 100
   doorAnimator: {fileID: 0}

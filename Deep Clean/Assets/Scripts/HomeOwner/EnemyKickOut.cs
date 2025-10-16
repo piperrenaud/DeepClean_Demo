@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
 using UnityEngine.Playables;
+using UnityEngine.SceneManagement;
 
 public class EnemyKickOut : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class EnemyKickOut : MonoBehaviour
 
     [Header("Cutscenes + Dialogue")]
     [SerializeField] private GameObject cutsceneParent;
+    [SerializeField] private GameObject cutsceneCam;
     [SerializeField] private PlayableDirector leavingNice;
     [SerializeField] private string leavingNiceDialogue;
     [SerializeField] private PlayableDirector leavingBad;
@@ -38,8 +40,9 @@ public class EnemyKickOut : MonoBehaviour
     void Start()
     {
         cutsceneParent.SetActive(false);
+        cutsceneCam.SetActive(false);
 
-        enemyAnimator = enemyParent.GetComponent<Animator>();
+        enemyAnimator = enemyParent.GetComponentInChildren<Animator>();
     }
 
     void Update()
@@ -68,47 +71,55 @@ public class EnemyKickOut : MonoBehaviour
                 dialogue = leavingNiceDialogue;
             }
 
-            StartCoroutine(StartKickOut(dialogue));
+            StartKickOut(dialogue);
         }
     }
 
-    private IEnumerator StartKickOut(string dialogue)
+    private void StartKickOut(string dialogue)
     {
         playerCamera.ForceLookAt(enemyHead);
-        yield return new WaitForSeconds(1f);
-
+        playerCamera.SetCanLook(false);
         if (playerMovement != null) playerMovement.enabled = false;
-        if (playerCamera != null) playerCamera.enabled = false;
 
-        yield return StartCoroutine(enemyWander.FacePlayer(dialogue));
+        StartCoroutine(enemyWander.FacePlayer(dialogue, true));
+    }
+
+    public void KickedOut()
+    {
         enemyAnimator.Play("Breathing_idle");
+
+        PlayableDirector currentCutscene = null;
+        cutsceneParent.SetActive(true);
+        cutsceneCam.SetActive(true);
+        enemyParent.SetActive(false);
+        playerParent.SetActive(false);
 
         if (houseCleaned)
         {
-            yield return new WaitForSeconds(8f);
-            cutsceneParent.SetActive(true);
-            enemyParent.SetActive(false);
-            playerParent.SetActive(false);
             Debug.Log("[EnemyKickOut] Leaving cause house is cleaned.");
-            leavingNice.Play();
+            currentCutscene = leavingNice;
         }
         else if (maxSuspicion)
         {
-            yield return new WaitForSeconds(8f);
-            cutsceneParent.SetActive(true);
-            enemyParent.SetActive(false);
-            playerParent.SetActive(false);
             Debug.Log("[EnemyKickOut] Leaving cause suspicion too high.");
-            kickedOut.Play();
+            currentCutscene = kickedOut;
         }
         else if (endOfDay)
         {
-            yield return new WaitForSeconds(8f);
-            cutsceneParent.SetActive(true);
-            enemyParent.SetActive(false);
-            playerParent.SetActive(false);
             Debug.Log("[EnemyKickOut] Leaving cause the days over.");
-            leavingBad.Play();
+            currentCutscene = leavingBad;
         }
+
+        if (currentCutscene != null)
+        {
+            currentCutscene.stopped += OnCutsceneFinished;
+            currentCutscene.Play();
+        }
+    }
+
+    private void OnCutsceneFinished(PlayableDirector director)
+    {
+        director.stopped -= OnCutsceneFinished;
+        SceneManager.LoadScene("Home");
     }
 }

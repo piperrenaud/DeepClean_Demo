@@ -30,8 +30,8 @@ public class EnemyWander : MonoBehaviour
 
     [Header("Waypoints/Tasks")]
     public List<TaskPoint> taskPoints;
-    public float minTaskTime = 3f;
-    public float maxTaskTime = 24f;
+    public float minTaskTime = 15f;
+    public float maxTaskTime = 60f;
 
     [Header("Movement")]
     public float turnSpeed = 120f; //degrees/sec
@@ -75,9 +75,11 @@ public class EnemyWander : MonoBehaviour
     private float pauseTimer = 0f;
     private DoorController targetDoor;
     private bool isReacting = false;
+    private EnemyKickOut enemyKickOut;
 
     void Start()
     {
+        enemyKickOut = GetComponent<EnemyKickOut>();
         agent = GetComponent<NavMeshAgent>();
         agent.speed = walkSpeed;
         PickNextTask();
@@ -596,7 +598,7 @@ public class EnemyWander : MonoBehaviour
         agent.isStopped = false;
     }
 
-    public IEnumerator FacePlayer(string dialogueOverride = null)
+    public IEnumerator FacePlayer(string dialogueOverride = null, bool end = false)
     {
         if (player == null) yield break;
 
@@ -627,10 +629,10 @@ public class EnemyWander : MonoBehaviour
         }
 
         transform.rotation = targetRot;
-        StartCoroutine(WalkToPlayer(3f, dialogueOverride));
+        StartCoroutine(WalkToPlayer(3f, dialogueOverride, end));
     }
 
-    public IEnumerator WalkToPlayer(float stopDistance = 3f, string dialogueOverride = null)
+    public IEnumerator WalkToPlayer(float stopDistance = 3f, string dialogueOverride = null, bool end = false)
     {
         if (player == null) yield break;
 
@@ -680,6 +682,12 @@ public class EnemyWander : MonoBehaviour
             dialogueCanvas.SetActive(true);
             yield return new WaitForSeconds(5f);
             dialogueCanvas.SetActive(false);
+        }
+
+        if (end)
+        {
+            enemyKickOut.KickedOut();
+            yield break;
         }
 
         // unblock player
