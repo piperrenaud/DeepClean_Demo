@@ -7,11 +7,13 @@ public class StartScene : MonoBehaviour
     public GameObject startDialogue;
     public GameObject fadeFromBlack;
     public GameObject[] texts;
+    public AudioSource audio;
 
     private TMP_Text textBox;
     private string fullText;
     private GameObject player;
     private PlayerMovement playerMovement;
+
 
     void Start()
     {
@@ -54,5 +56,7 @@ public class StartScene : MonoBehaviour
         playerMovement.enabled = true;
         startDialogue.SetActive(false);
         fadeFromBlack.SetActive(false);
+
+        audio.Play();
     }
 }

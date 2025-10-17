@@ -38,7 +38,7 @@ public class MusicManager : MonoBehaviour
         StartCoroutine(FadeOut());
     }
 
-    private IEnumerator FadeOut()
+    public IEnumerator FadeOut()
     {
         float startVolumeBG = backgroundMusic.volume;
         float startVolumeAMB = ambience.volume;

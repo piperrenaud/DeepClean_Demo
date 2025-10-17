@@ -25,7 +25,7 @@ public class PlayerRoomTracker : MonoBehaviour
         }
 
         //must clean living + kitchen to 50%
-        if (currentCleanliness < 50f)
+        if (currentCleanliness < 40f)
         {
             Debug.Log("you need to clean the living room/kitchen to 50% first: " + currentCleanliness);
 
@@ -64,7 +64,7 @@ public class PlayerRoomTracker : MonoBehaviour
             int finalRoom = (targetRoom == 1 || targetRoom == 3) ? targetRoom : -1;
             if (finalRoom != -1 && firstOptionRoomChosen != finalRoom)
             {
-                if (currentCleanliness < 75f)
+                if (currentCleanliness < 70f)
                 {
                     Debug.Log("clean the first chosen room to 50% first!!");
 

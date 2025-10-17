@@ -15,6 +15,7 @@ public class EnemyKickOut : MonoBehaviour
     [SerializeField] private Transform enemyHead;
     [SerializeField] private MonoBehaviour playerMovement;
     [SerializeField] private PlayerCam playerCamera;
+    [SerializeField] private MusicManager audioManager;
 
 
     [Header("Cutscenes + Dialogue")]
@@ -113,6 +114,7 @@ public class EnemyKickOut : MonoBehaviour
         if (currentCutscene != null)
         {
             currentCutscene.stopped += OnCutsceneFinished;
+            StartCoroutine(audioManager.FadeOut());
             currentCutscene.Play();
         }
     }

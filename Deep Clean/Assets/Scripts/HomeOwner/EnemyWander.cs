@@ -82,6 +82,14 @@ public class EnemyWander : MonoBehaviour
         enemyKickOut = GetComponent<EnemyKickOut>();
         agent = GetComponent<NavMeshAgent>();
         agent.speed = walkSpeed;
+
+        PickNextTask();
+    }
+
+    IEnumerator WaitSecond()
+    {
+        yield return new WaitForSeconds(0.1f);
+
         PickNextTask();
 
         if (player == null)
@@ -144,6 +152,7 @@ public class EnemyWander : MonoBehaviour
     IEnumerator DoTaskRoutine(string taskName)
     {
         if (isReacting) yield break;
+        if (currentTargetPoint == null) yield break;
 
         //use turning anims to face task points forward dir
         Vector3 forwardDir = currentTargetPoint.transform.forward;

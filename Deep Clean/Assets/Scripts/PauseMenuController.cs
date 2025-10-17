@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class PauseMenuController : MonoBehaviour
 {
@@ -32,7 +33,7 @@ public class PauseMenuController : MonoBehaviour
 
         //assign button listeners
         resumeButtons.onClick.AddListener(ResumeGame);
-        quitButton.onClick.AddListener(QuitGame);
+        quitButton.onClick.AddListener(QuitButton);
 
         //assign hover events for icons
         AddHoverEvents(ragIcon, ragDesc);
@@ -42,9 +43,8 @@ public class PauseMenuController : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.M)) //CHANGE TO Escape
+        if (Input.GetKeyDown(KeyCode.Escape)) //CHANGE TO Escape
         {
-            Debug.Log("hello");
             if (isPaused) ResumeGame();
             else PauseGame();
         }
@@ -70,10 +70,9 @@ public class PauseMenuController : MonoBehaviour
         Cursor.visible = false;
     }
 
-    private void QuitGame()
+    public void QuitButton()
     {
-        Debug.Log("Quit Game");
-        //Application.Quit();
+        SceneManager.LoadScene("Menu");
     }
 
     private void AddHoverEvents(Button iconButton, string description)

@@ -7,10 +7,14 @@ public class Questions : MonoBehaviour
 {
     public GameObject[] questions;
     public GameObject[] endings;
-    public GameObject[] clickAnywheres;
+    public GameObject clickAnywhere;
+    public GameObject finalScoreText;
+    public AudioSource audio;
 
     private int index = 0;
+    private float finalScore = 0;
     private bool ended = false;
+    private TMP_Text scoreText;
 
     void Start()
     {
@@ -19,10 +23,8 @@ public class Questions : MonoBehaviour
             question.SetActive(false);
         }
 
-        foreach (GameObject clickAnywhere in clickAnywheres)
-        {
-            clickAnywhere.SetActive(false);
-        }
+        clickAnywhere.SetActive(false);
+        finalScoreText.SetActive(false);
 
         foreach (GameObject ending in endings)
         {
@@ -30,6 +32,8 @@ public class Questions : MonoBehaviour
         }
 
         questions[0].SetActive(true);
+
+        scoreText = finalScoreText.GetComponent<TMP_Text>();
 
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
@@ -85,7 +89,7 @@ public class Questions : MonoBehaviour
         float cleanliness = InventoryManager.Instance.GetCleanliness();
 
         //combination
-        float finalScore = (evidenceScore * 0.5f) + (suspicionScore * 0.25f) + (cleanliness * 0.25f);
+        finalScore = (evidenceScore * 0.5f) + (suspicionScore * 0.25f) + (cleanliness * 0.25f);
 
         if (finalScore >= 80f)
         {
@@ -104,6 +108,20 @@ public class Questions : MonoBehaviour
         Debug.Log("Final Score: " + finalScore);
     }
 
+    private IEnumerator FadeOut()
+    {
+        float startVolume = audio.volume;
+
+        while (audio.volume > 0)
+        {
+            audio.volume -= startVolume * Time.deltaTime / 1f;
+            yield return null;
+        }
+
+        audio.Stop();
+        audio.volume = startVolume;
+    }
+
     public IEnumerator EndingScene(int index)
     {
         foreach (GameObject question in questions)
@@ -114,13 +132,17 @@ public class Questions : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
+        StartCoroutine(FadeOut());
+
         yield return new WaitForSeconds(1f);
 
         endings[index].SetActive(true);
+        scoreText.text = ($"Score: {finalScore:0}");
+        finalScoreText.SetActive(true);
 
         yield return new WaitForSeconds(5f);
 
-        clickAnywheres[index].SetActive(true);
+        clickAnywhere.SetActive(true);
         ended = true;
     }
 }

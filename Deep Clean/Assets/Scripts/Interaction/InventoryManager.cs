@@ -48,7 +48,10 @@ public class InventoryManager : MonoBehaviour
 
     void Update()
     {
-        suspicion = enemyWander.GetSuspicion();
+        if (enemyWander != null)
+        {
+            suspicion = enemyWander.GetSuspicion();
+        }
     }
 
     public bool AddItem(string itemID, EvidenceType type, string description, string dialogue, string explanation, bool isPhoto = false, bool isEvidence = false, Sprite itemIcon = null)
