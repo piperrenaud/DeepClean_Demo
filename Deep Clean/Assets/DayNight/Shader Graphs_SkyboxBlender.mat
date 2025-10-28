@@ -48,7 +48,11 @@ Material:
     m_Floats:
     - _BUILTIN_QueueControl: 0
     - _BUILTIN_QueueOffset: 0
+<<<<<<< Updated upstream
     - _BlendValue: 0.9534994
+=======
+    - _BlendValue: 0.92070657
+>>>>>>> Stashed changes
     - _TimeScale: 0.05
     m_Colors: []
   m_BuildTextureStacks: []
